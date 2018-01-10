@@ -21,8 +21,20 @@ spring.datasource.druid.password=root
 
 # mybatis
 ```
+#mybatis自动生成的实体类
 mybatis.type-aliases-package=com.xxx.xxx.model
+#mybatis自动生成的sql映射文件
 mybatis.mapper-locations=classpath:mapping/*.xml
+```
+
+# redis
+```
+#redis的数据库索引号[0-15]
+spring.redis.database=0
+spring.redis.host=192.168.x.x
+spring.redis.port=6379
+spring.redis.password=
+spring.redis.timeout=3000
 ```
 
 # mail
