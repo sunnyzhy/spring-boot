@@ -7,6 +7,8 @@ eureka.client.register-with-eureka=false
 #表示是否从Eureka Server上获取注册信息，默认为true
 eureka.client.fetch-registry=false
 eureka.client.service-url.defaultZone=http://localhost:9010/eureka/
+#控制台彩色输出
+spring.output.ansi.enabled=ALWAYS
 ```
 
 # eureka client
