@@ -1,14 +1,19 @@
 # eureka server
 ```
-eureka.instance.hostname=localhost
-eureka.client.registerWithEureka=false
-eureka.client.fetchRegistry=false
-eureka.client.serviceUrl.defaultZone=http://${eureka.instance.hostname}:8080/eureka/
+server.port=9010
+spring.application.name=eureka-server
+#表示是否将自己注册到Eureka Server上，默认为true
+eureka.client.register-with-eureka=false
+#表示是否从Eureka Server上获取注册信息，默认为true
+eureka.client.fetch-registry=false
+eureka.client.service-url.defaultZone=http://localhost:9010/eureka/
 ```
 
 # eureka client
 ```
-eureka.client.serviceUrl.defaultZone=http://192.168.x.x:8080/eureka/
+server.port=9011
+spring.application.name=eureka-client
+eureka.client.service-url.defaultZone=http://localhost:9010/eureka/
 ```
 
 # druid
