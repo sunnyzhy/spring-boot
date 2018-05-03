@@ -1,4 +1,15 @@
 # eureka server
+- pom.xml
+
+```
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+		</dependency>
+```
+
+- application.properties
+
 ```
 server.port=9010
 spring.application.name=eureka-server
@@ -11,11 +22,70 @@ eureka.client.service-url.defaultZone=http://localhost:9010/eureka/
 spring.output.ansi.enabled=ALWAYS
 ```
 
+- 注解
+
+```
+@EnableEurekaServer
+```
+
 # eureka client
+- pom.xml
+
+```
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+		</dependency>
+```
+
+- application.properties
+
 ```
 server.port=9011
 spring.application.name=eureka-client
 eureka.client.service-url.defaultZone=http://localhost:9010/eureka/
+```
+
+- 注解
+
+```
+@EnableDiscoveryClient
+```
+
+# zuul
+- pom.xml
+
+```
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
+		</dependency>
+```
+
+- application.yml
+
+```
+zuul:
+  host:
+    connect-timeout-millis: 60000
+    socket-timeout-millis: 60000
+  prefix: /api
+  routes:
+    #路由名称，随意，唯一即可(表示只要HTTP请求是 /group开始的，就会forward到服务id为group_server的服务上面)
+    group:
+        #路由的路径
+        path: /grp/**
+        #服务名称
+        serviceId: group_server
+    user:
+      path: /usr/**
+      serviceId: user_server
+```
+
+- 注解
+
+```
+@EnableZuulProxy
 ```
 
 # druid
