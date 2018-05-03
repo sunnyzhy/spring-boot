@@ -71,7 +71,7 @@ zuul:
     socket-timeout-millis: 60000
   prefix: /api
   routes:
-    #路由名称，随意，唯一即可(表示只要HTTP请求是 /group开始的，就会forward到服务id为group_server的服务上面)
+    #路由名称，随意，唯一即可(表示只要HTTP请求是 /grp开始的，就会forward到服务id为group_server的服务上面)
     group:
         #路由的路径
         path: /grp/**
