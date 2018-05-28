@@ -1,0 +1,67 @@
+# 添加Swagger2依赖
+```
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.8.0</version>
+		</dependency>
+```
+
+# 开启swagger2
+```
+给启动类加上注解@EnableSwagger2
+```
+
+# 浏览在线文档
+```
+http://localhost:9011/swagger-ui.html
+```
+
+# 生成html文档
+## 添加swagger2markup和asciidoctor插件
+```
+			<plugin>
+				<groupId>io.github.swagger2markup</groupId>
+				<artifactId>swagger2markup-maven-plugin</artifactId>
+				<version>1.3.7</version>
+				<configuration>
+					<swaggerInput>http://localhost:9011/v2/api-docs</swaggerInput>
+					<outputDir>src/docs/asciidoc/generated</outputDir>
+					<config>
+						<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+					</config>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<version>1.5.6</version>
+				<configuration>
+					<sourceDirectory>src/docs/asciidoc/generated</sourceDirectory>
+					<outputDirectory>src/docs/asciidoc/html</outputDirectory>
+					<backend>html</backend>
+					<sourceHighlighter>coderay</sourceHighlighter>
+					<attributes>
+						<toc>left</toc>
+					</attributes>
+				</configuration>
+			</plugin>
+```
+
+## 生成adoc
+```
+swagger2markup:convertSwagger2markup
+```
+运行Plugins下面的swagger2markup插件,就会在**src\docs\asciidoc\generated**目录下生成adoc文件
+
+## 生成html
+```
+asciidoctor:process-asciidoc
+```
+运行Plugins下面的asciidoctor插件,就会在**src\docs\asciidoc\html**目录下生成html文件
