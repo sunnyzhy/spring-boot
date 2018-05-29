@@ -39,9 +39,9 @@ public class HystrixBean {
 ```
 
 # 访问hystrix
-```
+
 http://localhost:9011/hystrix
-```
+
 
 1. 在浏览器中会看到以下提示:
 ```
