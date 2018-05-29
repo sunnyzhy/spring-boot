@@ -32,13 +32,13 @@ public class HystrixBean {
 }
 ```
 
-# 启用Zuul 和 Hystrix Dashboard
+# 启动 zuul 和 hystrix dashboard
 ```
 @EnableZuulProxy
 @EnableHystrixDashboard
 ```
 
-# 访问hystrix
+# 访问 hystrix
 
 http://localhost:9011/hystrix
 
