@@ -14,14 +14,15 @@
 ```
 
 # 开启swagger2
+在启动类加上添加注解
 ```
-在启动类加上添加注解@EnableSwagger2
+@EnableSwagger2
 ```
 
 # 浏览在线文档
-```
+
 http://localhost:9011/swagger-ui.html
-```
+
 
 # 生成html文档
 ## 添加swagger2markup和asciidoctor插件
