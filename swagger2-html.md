@@ -15,7 +15,7 @@
 
 # 开启swagger2
 ```
-给启动类加上注解@EnableSwagger2
+在启动类加上添加注解@EnableSwagger2
 ```
 
 # 浏览在线文档
