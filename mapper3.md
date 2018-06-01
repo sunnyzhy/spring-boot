@@ -34,7 +34,7 @@
 ```
 
 # 代码生成器文档
-- 配置文件的目录
+- 文档目录
 ```
 src
 |_main
@@ -43,7 +43,7 @@ src
 |_ _ _ _generatorConfig.xml
 ```
 
-- 配置文件的内容
+- 文档内容
 ```
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE generatorConfiguration
