@@ -33,9 +33,12 @@ http://localhost:9011/swagger-ui.html
 	<version>1.3.7</version>
 	<configuration>
 		<swaggerInput>http://localhost:9011/v2/api-docs</swaggerInput>
-		<outputDir>src/docs/asciidoc/generated</outputDir>
+		<outputDir>src/docs/swagger/generated</outputDir>
 		<config>
+			<!--设置输出文件的语言：ASCIIDOC, MARKDOWN, CONFLUENCE_MARKUP-->
 			<swagger2markup.markupLanguage>ASCIIDOC</swagger2markup.markupLanguage>
+			<!--设置目录的展现方式-->
+			<swagger2markup.pathsGroupedBy>TAGS</swagger2markup.pathsGroupedBy>
 		</config>
 	</configuration>
 </plugin>
@@ -44,8 +47,8 @@ http://localhost:9011/swagger-ui.html
 	<artifactId>asciidoctor-maven-plugin</artifactId>
 	<version>1.5.6</version>
 	<configuration>
-		<sourceDirectory>src/docs/asciidoc/generated</sourceDirectory>
-		<outputDirectory>src/docs/asciidoc/html</outputDirectory>
+		<sourceDirectory>src/docs/swagger/generated</sourceDirectory>
+		<outputDirectory>src/docs/swagger/html</outputDirectory>
 		<backend>html</backend>
 		<sourceHighlighter>coderay</sourceHighlighter>
 		<attributes>
@@ -59,10 +62,10 @@ http://localhost:9011/swagger-ui.html
 ```
 swagger2markup:convertSwagger2markup
 ```
-运行Plugins下面的swagger2markup插件,就会在 src\docs\asciidoc\generated 目录下生成adoc文件
+运行Plugins下面的swagger2markup插件,就会在 src\docs\swagger\generated 目录下生成adoc文件
 
 ## 生成html
 ```
 asciidoctor:process-asciidoc
 ```
-运行Plugins下面的asciidoctor插件,就会在 src\docs\asciidoc\html 目录下生成html文件
+运行Plugins下面的asciidoctor插件,就会在 src\docs\swagger\html 目录下生成html文件
