@@ -10,7 +10,7 @@
 
 - application.properties
 
-```java
+```
 server.port=9010
 
 spring.application.name=eureka-server
