@@ -29,7 +29,7 @@ spring.output.ansi.enabled=ALWAYS
 
 - 注解
 
-```
+```java
 @EnableEurekaServer
 ```
 
