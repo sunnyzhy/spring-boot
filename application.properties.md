@@ -1,7 +1,7 @@
 # eureka server
 - pom.xml
 
-```
+```xml
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
