@@ -36,7 +36,7 @@ spring.output.ansi.enabled=ALWAYS
 # eureka client
 - pom.xml
 
-```
+```xml
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
@@ -55,14 +55,14 @@ eureka.client.service-url.defaultZone=http://localhost:9010/eureka/
 
 - 注解
 
-```
+```java
 @EnableDiscoveryClient
 ```
 
 # zuul
 - pom.xml
 
-```
+```xml
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-netflix-zuul</artifactId>
@@ -91,7 +91,7 @@ zuul:
 
 - 注解
 
-```
+```java
 @EnableZuulProxy
 ```
 
