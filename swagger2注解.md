@@ -10,7 +10,7 @@
         · header --> 请求参数的获取：@RequestHeader
         · query -->请求参数的获取：@RequestParam
         · path（用于restful接口）--> 请求参数的获取：@PathVariable
-        · body（不常用）
+        · body -->请求参数的获取：@RequestBody
         · form（不常用）
     name：参数名
     dataType：参数类型
