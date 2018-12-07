@@ -167,7 +167,7 @@ public class AopApplicationTests {
 
 # 切点表达式
 ## 通配符
-- * ：匹配任意数量的字符
+- \* ：匹配任意数量的字符
 
 ```java
 //匹配com.zhy.aop.service包及其子包中所有类的所有方法
@@ -176,7 +176,7 @@ within(com.zhy.aop.service..*)
 execution(* set*(int))
 ```
 
-- .. ：匹配方法定义中的任意数量的参数，此外还匹配类定义中的任意数量包
+- \.. ：匹配方法定义中的任意数量的参数，此外还匹配类定义中的任意数量包
 
 ```java
 //任意返回值，任意名称，任意参数的公共方法
@@ -185,7 +185,7 @@ execution(public * *(..))
 within(com.zhy.aop.service..*)
 ```
 
-- + ：只能放在类后面，表明本类及所有子类
+- \+ ：只能放在类后面，表明本类及所有子类
 
 ```java
 //匹配实现了DaoUser接口的所有子类的方法
