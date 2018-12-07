@@ -132,7 +132,7 @@ public class AopApplicationTests {
 
     @Test
     public void contextLoads() {
-        userDao.deleteUser();
+        userDao.addUser();
     }
 
 }
