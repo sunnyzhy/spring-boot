@@ -167,11 +167,30 @@ public class AopApplicationTests {
 
 # 切点表达式
 ## 通配符
-- *只能匹配一级路径  
+- * ：匹配任意数量的字符
 
-- ..可以匹配多级，可以是包路径，也可以匹配多个参数
+```java
+//匹配com.zhy.aop.service包及其子包中所有类的所有方法
+within(com.zhy.aop.service..*)
+//匹配以set开头，参数为int类型，任意返回值的方法
+execution(* set*(int))
+```
 
-- + 只能放在类后面，表明本类及所有子类
+- .. ：匹配方法定义中的任意数量的参数，此外还匹配类定义中的任意数量包
+
+```java
+//任意返回值，任意名称，任意参数的公共方法
+execution(public * *(..))
+//匹配com.zhy.aop.service包及其子包中所有类中的所有方法
+within(com.zhy.aop.service..*)
+```
+
+- + ：只能放在类后面，表明本类及所有子类
+
+```java
+//匹配实现了DaoUser接口的所有子类的方法
+within(com.zhy.aop.service.DaoUser+)
+```
 
 ## 类型签名表达式within
 - **语法**
