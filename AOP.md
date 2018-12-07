@@ -1,0 +1,219 @@
+# AOP简单示例
+## 定义接口
+```java
+/**
+ * @author zhy
+ * @date 2018/12/7 15:45
+ **/
+public interface UserDao {
+    int addUser();
+
+    void updateUser();
+
+    void deleteUser();
+
+    void findUser();
+}
+```
+
+## 定义实现类
+```java
+/**
+ * @author zhy
+ * @date 2018/12/7 15:46
+ **/
+@Repository
+public class UserDaoImp implements UserDao {
+    @Override
+    public int addUser() {
+        System.out.println("add user ......");
+        return 1;
+    }
+
+    @Override
+    public void updateUser() {
+        System.out.println("update user ......");
+    }
+
+    @Override
+    public void deleteUser() {
+        System.out.println("delete user ......");
+    }
+
+    @Override
+    public void findUser() {
+        System.out.println("find user ......");
+    }
+}
+```
+
+## 定义AOP的aspect类
+```java
+/**
+ * @author zhy
+ * @date 2018/12/7 15:47
+ * 定义切面类，需要加上@Component、@Aspect这两个注解
+ **/
+@Component
+@Aspect
+public class UserAspect {
+    /**
+     * 定义切点
+     */
+    @Pointcut("execution(* com.zhy.aop.service.UserDao.*(..))")
+    private void userPointcut(){}
+
+    /**
+     * 在切点方法之前执行
+     */
+    @Before(value = "userPointcut()")
+    public void before(){
+        System.out.println("前置通知....");
+    }
+
+    /**
+     * 后置返回
+     *      如果第一个参数为JoinPoint，则第二个参数为返回值的信息
+     *      如果第一个参数不为JoinPoint，则第一个参数为returning中对应的参数
+     * returning：限定了只有目标方法返回值与通知方法参数类型匹配时才能执行后置返回通知，否则不执行，
+     *            参数为Object类型将匹配任何目标返回值
+     */
+    @AfterReturning(value = "userPointcut()",returning = "returnVal")
+    public void afterReturning(Object returnVal){
+        System.out.println("后置通知...."+returnVal);
+    }
+
+
+    /**
+     * 环绕通知：
+     *   注意:Spring AOP的环绕通知会影响到AfterThrowing通知的运行,不要同时使用
+     *
+     *   环绕通知非常强大，可以决定目标方法是否执行，什么时候执行，执行时是否需要替换方法参数，执行完毕是否需要替换返回值。
+     *   环绕通知第一个参数必须是org.aspectj.lang.ProceedingJoinPoint类型
+     */
+    @Around(value = "userPointcut()")
+    public Object around(ProceedingJoinPoint joinPoint) throws Throwable {
+        System.out.println("环绕通知前....");
+        Object obj= (Object) joinPoint.proceed();
+        System.out.println("环绕通知后....");
+        return obj;
+    }
+
+    /**
+     * 后置异常通知
+     *  定义一个名字，该名字用于匹配通知实现方法的一个参数名，当目标方法抛出异常返回后，将把目标方法抛出的异常传给通知方法；
+     *  throwing:限定了只有目标方法抛出的异常与通知方法相应参数异常类型时才能执行后置异常通知，否则不执行，
+     *            对于throwing对应的通知方法参数为Throwable类型将匹配任何异常。
+     * @param joinPoint
+     * @param exception
+     */
+    @AfterThrowing(value = "userPointcut()",throwing = "exception")
+    public void afterThrowable(JoinPoint joinPoint, Throwable exception){
+        System.out.println("exception:"+exception.getMessage());
+    }
+
+    /**
+     * 在切点方法之后执行,无论什么情况下都会执行的方法
+     */
+    @After(value = "userPointcut()")
+    public void after(){
+        System.out.println("最终通知....");
+    }
+}
+```
+
+## 测试类
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class AopApplicationTests {
+    @Autowired
+    private UserDao userDao;
+
+    @Test
+    public void contextLoads() {
+        userDao.deleteUser();
+    }
+
+}
+```
+
+# 定义切点
+- **直接用execution定义匹配表达式**
+```java
+    @Before(value = "execution(* com.zhy.aop.service.UserDao.*(..))")
+    public void before(){
+        System.out.println("前置通知....");
+    }
+```
+
+- **使用@Pointcut注解**
+
+```java
+    /**
+     * 定义切点
+     */
+    @Pointcut("execution(* com.zhy.aop.service.UserDao.*(..))")
+    private void userPointcut(){}
+
+    /**
+     * 在切点方法之前执行
+     */
+    @Before(value = "userPointcut()")
+    public void before(){
+        System.out.println("前置通知....");
+    }
+```
+
+# 切点表达式
+## 类型签名表达式within
+- **语法**
+
+**within(类路径)，主要用来限定类。**
+```java
+within(<type name>)
+```
+
+- **示例**
+
+```java
+//匹配com.zhy.aop.service包及其子包中所有类中的所有方法
+@Pointcut("within(com.zhy.aop.service..*)")
+
+//匹配UserDaoImpl类中所有方法
+@Pointcut("within(com.zhy.aop.service.UserDaoImpl)")
+
+//匹配UserDaoImpl类及其子类中所有方法
+@Pointcut("within(com.zhy.aop.service.UserDaoImpl+)")
+
+//匹配所有实现UserDao接口的类的所有方法
+@Pointcut("within(com.zhy.aop.service.UserDao+)")
+```
+
+## 方法签名表达式execution
+- **语法**
+
+**execution(方法修饰符 返回类型 方法全限定名(参数))，主要用来匹配整个方法签名和返回值。**
+```java
+//scope ：方法作用域，如public,private,protect
+//returnt-type：方法返回值类型
+//fully-qualified-class-name：方法所在类的完全限定名称
+//parameters 方法参数
+execution(<scope> <return-type> <fully-qualified-class-name>.*(parameters))
+```
+
+- **示例**
+
+```java
+//匹配UserDaoImpl类中的所有方法
+@Pointcut("execution(* com.zhy.aop.service.UserDaoImpl.*(..))")
+
+//匹配UserDaoImpl类中的所有公共的方法
+@Pointcut("execution(public * com.zhy.aop.service.UserDaoImpl.*(..))")
+
+//匹配UserDaoImpl类中的所有公共方法并且返回值为int类型
+@Pointcut("execution(public int com.zhy.aop.service.UserDaoImpl.*(..))")
+
+//匹配UserDaoImpl类中第一个参数为int类型的所有公共的方法
+@Pointcut("execution(public * com.zhy.aop.service.UserDaoImpl.*(int , ..))")
+```
