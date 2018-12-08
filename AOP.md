@@ -243,3 +243,19 @@ execution(<scope> <return-type> <fully-qualified-class-name>.*(parameters))
 //匹配UserDaoImpl类中第一个参数为int类型的所有公共的方法
 @Pointcut("execution(public * com.zhy.aop.service.UserDaoImpl.*(int , ..))")
 ```
+
+# 通知函数
+## 前置通知 @Before
+前置通知通过@Before注解进行标注，并可直接传入切点表达式的值，该通知在目标函数执行前执行，注意JoinPoint，是Spring提供的静态变量，通过joinPoint 参数，可以获取目标对象的信息,如类名称、方法参数、方法名称等，该参数是可选的。
+
+## 后置通知 @AfterReturning 
+通过@AfterReturning注解进行标注，该函数在目标函数执行完成后执行，并可以获取到目标函数最终的返回值returnVal，当目标函数没有返回值时，returnVal将返回null，必须通过returning = “returnVal”注明参数的名称而且必须与通知函数的参数名称相同。请注意，在任何通知中这些参数都是可选的，需要使用时直接填写即可，不需要使用时，可以不用声明出来。
+
+## 异常通知 @AfterThrowing
+该通知只有在异常时才会被触发，并由throwing来声明一个接收异常信息的变量，同样异常通知也用于Joinpoint参数，需要时加上即可。
+
+## 最终通知 @After
+该通知有点类似于finally代码块，只要应用了无论什么情况下都会执行。
+
+## 环绕通知 @Around 
+环绕通知既可以在目标方法前执行也可在目标方法之后执行，更重要的是环绕通知可以控制目标方法是否指向执行，但即使如此，我们应该尽量以最简单的方式满足需求，在仅需在目标方法前执行时，应该采用前置通知而非环绕通知。第一个参数必须是ProceedingJoinPoint，通过该对象的proceed()方法来执行目标函数，proceed()的返回值就是环绕通知的返回值。同样的，ProceedingJoinPoint对象也是可以获取目标对象的信息,如类名称,方法参数,方法名称等等。
