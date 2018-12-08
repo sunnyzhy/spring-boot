@@ -134,8 +134,16 @@ public class AopApplicationTests {
     public void contextLoads() {
         userDao.addUser();
     }
-
 }
+```
+
+```
+环绕通知前....
+前置通知....
+add user ......
+环绕通知后....
+最终通知....
+后置通知....1
 ```
 
 # 定义切点
@@ -259,3 +267,105 @@ execution(<scope> <return-type> <fully-qualified-class-name>.*(parameters))
 
 ## 环绕通知 @Around 
 环绕通知既可以在目标方法前执行也可在目标方法之后执行，更重要的是环绕通知可以控制目标方法是否指向执行，但即使如此，我们应该尽量以最简单的方式满足需求，在仅需在目标方法前执行时，应该采用前置通知而非环绕通知。第一个参数必须是ProceedingJoinPoint，通过该对象的proceed()方法来执行目标函数，proceed()的返回值就是环绕通知的返回值。同样的，ProceedingJoinPoint对象也是可以获取目标对象的信息,如类名称、方法参数、方法名称等等。
+
+## 通知传递参数
+在Spring AOP中，除了execution和bean指示符不能传递参数给通知方法，其他指示符都可以将匹配的方法相应参数或对象自动传递给通知方法。获取到匹配的方法参数后通过”argNames”属性指定参数名。如下，需要注意的是args(指示符)、argNames的参数名与before()方法中参数名 必须保持一致即param。
+```java
+@Before(value="args(param)", argNames="param") //明确指定了    
+public void before(int param) {    
+    System.out.println("param:" + param);    
+}  
+```
+
+当然也可以直接使用args指示符不带argNames声明参数，如下：
+```java
+@Before("execution(public * com.zhy..*.addUser(..)) && args(userId,..)")  
+public void before(int userId) {  
+    //调用addUser的方法时如果与addUser的参数匹配则会传递进来会传递进来
+    System.out.println("userId:" + userId);  
+}  
+```
+args(userId,..)该表达式会保证只匹配那些至少接收一个参数而且传入的类型必须与userId一致的方法，记住传递的参数可以简单类型或者对象，而且只有参数和目标方法也匹配时才有会有值传递进来。
+
+# Aspect优先级
+**在同一个切面中，通知函数将根据在类中的声明顺序执行；在不同的切面中，通知函数将根据优先级顺序执行，@Before注解的通知函数，最高优先级的先执行，@AfterReturning注解的通知函数，最高优先级的最后执行。**
+
+```java
+@Component
+@Aspect
+public class UserAspectOne implements Ordered {
+    @Pointcut("execution(* com.zhy.aop.service.UserDao.addUser(..))")
+    private void userPointcut(){}
+
+    @Before(value = "userPointcut()")
+    public void beforeOne(){
+        System.out.println("AspectOne..前置通知..执行顺序1");
+    }
+
+    @Before(value = "userPointcut()")
+    public void beforeTwo(){
+        System.out.println("AspectOne..前置通知..执行顺序2");
+    }
+
+    @AfterReturning(value = "userPointcut()",returning = "returnVal")
+    public void afterReturningOne(Object returnVal){
+        System.out.println("AspectOne..后置通知..执行顺序1.."+returnVal);
+    }
+
+    @AfterReturning(value = "userPointcut()",returning = "returnVal")
+    public void afterReturningTwo(Object returnVal){
+        System.out.println("AspectOne..后置通知..执行顺序2.."+returnVal);
+    }
+
+    @Override
+    public int getOrder() {
+        return 0;
+    }
+}
+```
+
+```java
+@Component
+@Aspect
+public class UserAspectTwo implements Ordered {
+    @Pointcut("execution(* com.zhy.aop.service.UserDao.addUser(..))")
+    private void userPointcut(){}
+
+    @Before(value = "userPointcut()")
+    public void beforeOne(){
+        System.out.println("AspectTwo..前置通知..执行顺序1");
+    }
+
+    @Before(value = "userPointcut()")
+    public void beforeTwo(){
+        System.out.println("AspectTwo..前置通知..执行顺序2");
+    }
+
+    @AfterReturning(value = "userPointcut()",returning = "returnVal")
+    public void afterReturningOne(Object returnVal){
+        System.out.println("AspectTwo..后置通知..执行顺序1.."+returnVal);
+    }
+
+    @AfterReturning(value = "userPointcut()",returning = "returnVal")
+    public void afterReturningTwo(Object returnVal){
+        System.out.println("AspectTwo..后置通知..执行顺序2.."+returnVal);
+    }
+
+    @Override
+    public int getOrder() {
+        return 2;
+    }
+}
+```
+
+```
+AspectOne..前置通知..执行顺序1
+AspectOne..前置通知..执行顺序2
+AspectTwo..前置通知..执行顺序1
+AspectTwo..前置通知..执行顺序2
+add user ......
+AspectTwo..后置通知..执行顺序1..1
+AspectTwo..后置通知..执行顺序2..1
+AspectOne..后置通知..执行顺序1..1
+AspectOne..后置通知..执行顺序2..1
+```
