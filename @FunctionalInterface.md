@@ -35,6 +35,13 @@ public interface MyFunctionalInterface<P, T> {
     default void show() {
         System.out.println("default method execute.");
     }
+    
+    /**
+     * 在接口中编写static修饰的方法时，必须有方法体
+     */
+    static void showStatic() {
+        System.out.println("static method execute.");
+    }
 }
 
 /**
@@ -47,6 +54,10 @@ public interface MyFunctionalInterface<P, T> {
     default void show() {
         System.out.println("default method execute.");
     }
+    
+    static void showStatic() {
+        System.out.println("static method execute.");
+    }
 }
 
 /**
@@ -57,6 +68,10 @@ public interface MyFunctionalInterface<P, T> {
     
     default void show() {
         System.out.println("default method execute.");
+    }
+    
+    static void showStatic() {
+        System.out.println("static method execute.");
     }
 }
 ```
@@ -123,6 +138,11 @@ public class Student {
          * 调用接口的默认方法
          */
         student5.show();
+        
+        /**
+         * 调用接口的静态方法
+         */
+        MyFunctionalInterface.showStatic();
     }
 
 // 输出
@@ -132,4 +152,5 @@ student:Tom3
 student:Tom4
 static student:Tom5
 default method execute.
+static method execute.
 ```
