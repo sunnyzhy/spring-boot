@@ -28,6 +28,10 @@ public interface MyFunctionalInterface<P, T> {
     
     @Override
     boolean equals(Object obj);
+    
+    default void show() {
+        System.out.println("default method execute.");
+    }
 }
 
 /**
@@ -36,6 +40,10 @@ public interface MyFunctionalInterface<P, T> {
 @FunctionalInterface
 public interface MyFunctionalInterface<P, T> {
     T getInstance(P p);
+    
+    default void show() {
+        System.out.println("default method execute.");
+    }
 }
 
 /**
@@ -43,6 +51,10 @@ public interface MyFunctionalInterface<P, T> {
  */
 public interface MyFunctionalInterface<P, T> {
     T getInstance(P p);
+    
+    default void show() {
+        System.out.println("default method execute.");
+    }
 }
 ```
 
@@ -91,23 +103,30 @@ public class Student {
         System.out.println(message);
 
         /**
-         * 访问对象的方法
+         * 调用对象的方法
          */
         MyFunctionalInterface<String, String> student4 = stu1::method;
         String message2 = student4.getInstance("Tom4");
         System.out.println(message2);
 
         /**
-         * 访问类的静态方法
+         * 调用类的静态方法
          */
         MyFunctionalInterface<String, String> student5 = Student::staticMethod;
         String message3 = student5.getInstance("Tom5");
         System.out.println(message3);
+        
+        /**
+         * 调用接口的默认方法
+         */
+        student5.show();
     }
-    
+
+// 输出
 Student(name=Tom)
 Student(name=Tom2)
 student:Tom3
 student:Tom4
 static student:Tom5
+default method execute.
 ```
