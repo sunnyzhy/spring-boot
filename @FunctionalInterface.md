@@ -29,6 +29,9 @@ public interface MyFunctionalInterface<P, T> {
     @Override
     boolean equals(Object obj);
     
+    /**
+     * 在接口中编写default修饰的方法时，必须有方法体
+     */
     default void show() {
         System.out.println("default method execute.");
     }
