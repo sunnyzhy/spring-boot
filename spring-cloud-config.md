@@ -200,7 +200,7 @@ dev-1.0
 
 2. 在git仓库中修改version的值为dev-1.1
 
-用REST Client发送**post**请求http://localhost:8091**/actuator/refresh** ,显示如下内容
+用REST Client发送**post**请求http://localhost:8091/actuator/refresh ,显示如下内容
 ```
 ["config.client.version","version"]
 ```
@@ -216,6 +216,6 @@ dev-1.1
 
 2. 用**POST**请求
 
-3. 调用**/actuator/refresh**
+3. 调用/actuator/refresh
 
 4. 虽然服务没有重启，但是我们要一个服务一个服务地发送post请求才能获取到更新之后的配置，这显然是不可取的。此时就需要采用消息队列的发布订阅模式，让所的为服务来订阅这个事件，当这个事件发生改变时，就可以通知所有微服务去更新它们的内存中的配置信息，**Bus消息总线**就能解决这个问题。
