@@ -137,7 +137,7 @@ eureka:
 spring:
   cloud:
     config:
-      #github仓库里的profile名
+      #profile跟仓库文件的后缀有关，github仓库里配置文件的命名格式是cloud-config-dev.properties，那么profile就是dev
       profile: dev
       discovery:
         enabled: true
