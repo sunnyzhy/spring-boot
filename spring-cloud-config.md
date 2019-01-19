@@ -19,29 +19,29 @@ Spring Cloud Config分为Config Server和Config Client两部分，为分布式�
 
 2. 新建default配置文件
 
-cloud-config-default.properties
 ```
+cloud-config-default.properties
 version=default-1.0
 ```
 
 3. 新建dev配置文件
 
-cloud-config-dev.properties
 ```
+cloud-config-dev.properties
 version=dev-1.0
 ```
 
 4. 新建pro配置文件
 
-cloud-config-pro.properties
 ```
+cloud-config-pro.properties
 version=pro-1.0
 ```
 
 5. 新建test配置文件
 
-cloud-config-test.properties
 ```
+cloud-config-test.properties
 version=test-1.0
 ```
 
@@ -212,6 +212,7 @@ dev-1.1
 ```
 
 **注意**
+
 刷新的时候，要注意以下几点：
 1. 在Request的Headers中添加**Content-Type: application/json**
 
