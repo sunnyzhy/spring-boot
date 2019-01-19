@@ -158,7 +158,7 @@ server:
   port: 8091
 spring:
   application:
-    #github仓库里的application名
+    #name跟仓库文件的前缀有关，github仓库里配置文件的命名格式是cloud-config-dev.properties，那么name就是cloud-config
     name: cloud-config
 ```
 
