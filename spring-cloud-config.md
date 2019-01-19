@@ -211,9 +211,7 @@ dev-1.0
 dev-1.1
 ```
 
-**注意**
-
-刷新的时候，要注意以下几点：
+**刷新的时候，要注意以下几点：**
 1. 在Request的Headers中添加**Content-Type: application/json**
 
 2. 用**POST**请求
