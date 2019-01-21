@@ -216,7 +216,7 @@ dev-1.1
 **刷新的时候，要注意以下几点：**
 1. 在Request的Headers中添加**Content-Type: application/json**
 
-2. 用**POST**请求
+2. 用<font color=#0099ff size=16 face="黑体">POST</font>请求
 
 3. 调用/actuator/refresh
 
