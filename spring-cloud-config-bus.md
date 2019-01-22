@@ -155,3 +155,104 @@ Webhooks allow external services to be notified when certain events happen. When
 2. 配置webhook
 
 ![](images/spring-cloud-config-4.png)
+
+3. 改进Config Server
+
+- 新增自定义的Wrapper类
+
+```java
+public class CustometRequestWrapper extends HttpServletRequestWrapper {
+    public CustometRequestWrapper(HttpServletRequest request) {
+        super(request);
+    }
+
+    @Override
+    public ServletInputStream getInputStream() {
+        byte[] bytes = new byte[0];
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(bytes);
+
+        return new ServletInputStream() {
+            @Override
+            public boolean isFinished() {
+                return byteArrayInputStream.read() == -1 ? true : false;
+            }
+
+            @Override
+            public boolean isReady() {
+                return false;
+            }
+
+            @Override
+            public void setReadListener(ReadListener readListener) {
+
+            }
+
+            @Override
+            public int read() {
+                return byteArrayInputStream.read();
+            }
+        };
+    }
+}
+```
+
+- 重写Filter
+
+```java
+@Component
+public class ConfigFilter implements Filter {
+    @Override
+    public void init(FilterConfig filterConfig) {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest)servletRequest;
+
+        String url = new String(httpServletRequest.getRequestURI());
+
+        //只过滤/actuator/bus-refresh请求
+        if (!url.endsWith("/bus-refresh")) {
+            filterChain.doFilter(servletRequest, servletResponse);
+            return;
+        }
+
+        //使用HttpServletRequest包装原始请求达到修改post请求中body内容的目的
+        CustometRequestWrapper requestWrapper = new CustometRequestWrapper(httpServletRequest);
+
+        filterChain.doFilter(requestWrapper, servletResponse);
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+}
+```
+
+4. 访问http://localhost:8091/get ,显示如下内容
+
+```
+dev-1.2
+```
+
+5. 访问http://localhost:8092/get ,显示如下内容
+
+```
+dev-1.2
+```
+
+6. 在git仓库中修改version的值为dev-1.3
+
+7. 访问http://localhost:8091/get ,显示如下内容
+
+```
+dev-1.3
+```
+
+8. 访问http://localhost:8092/get ,显示如下内容
+
+```
+dev-1.3
+```
