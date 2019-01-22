@@ -144,6 +144,9 @@ Github上对Webhook的描述
 Webhooks allow external services to be notified when certain events happen. When the specified events happen, we’ll send a POST request to each of the URLs you provide. 
 ```
 
+## 内网穿透
+推荐使用natapp，[natapp教程](https://natapp.cn/article/natapp_newbie "https://natapp.cn/article/natapp_newbie")
+
 ## 配置
 
 ![](images/spring-cloud-config-4.png)
