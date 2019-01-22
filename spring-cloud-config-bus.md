@@ -104,17 +104,29 @@ spring:
 ![](images/spring-cloud-config-3.png)
 
 1. 访问http://localhost:8091/get ,显示如下内容
+
+```
 dev-1.1
+```
 
 2. 访问http://localhost:8092/get ,显示如下内容
+
+```
 dev-1.1
+```
 
 3. 在git仓库中修改version的值为dev-1.2
 
 4. 在**Config Server**端，用REST Client发送post请求http://localhost:8090/actuator/bus-refresh
 
 5. 访问http://localhost:8091/get ,显示如下内容
+
+```
 dev-1.2
+```
 
 6. 访问http://localhost:8092/get ,显示如下内容
+
+```
 dev-1.2
+```
