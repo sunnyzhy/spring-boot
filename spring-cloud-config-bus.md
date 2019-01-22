@@ -148,5 +148,10 @@ Webhooks allow external services to be notified when certain events happen. When
 推荐使用natapp，[natapp教程](https://natapp.cn/article/natapp_newbie "https://natapp.cn/article/natapp_newbie")
 
 ## 配置
+1. 配置natapp
+
+隧道端口配置为8090
+
+2. 配置webhook
 
 ![](images/spring-cloud-config-4.png)
