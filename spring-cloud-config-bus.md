@@ -57,7 +57,7 @@ management:
 
 ![](images/spring-cloud-config-1.png)
 
-而队列中多出一列
+队列中也多出一列
 
 ![](images/spring-cloud-config-2.png)
 
