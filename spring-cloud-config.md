@@ -45,7 +45,7 @@ cloud-config-test.properties
 version=test-1.0
 ```
 
-# 基于Springboot2.1.2
+# 基于GA版本的Springboot2.0.8
 
 # Config Server
 ## pom.xml
