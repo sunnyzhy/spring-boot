@@ -130,3 +130,20 @@ dev-1.2
 ```
 dev-1.2
 ```
+
+7. 此时并没有重启服务，获取的配置内容却已经自动刷新了。但是如果每次都要手动去向配置服务发送 post 请求的话，那么也不太可取。这个时候就可以利用 **GitHub 的 Webhooks**。
+
+# Webhook
+## 概述
+Webhook是一种web回调或者http的push API，是向APP或者其他应用提供实时信息的一种方式。Webhook在数据产生时立即发送数据，也就是能实时收到数据。这一种不同于典型的API，需要用了实时性需要足够快的轮询。这无论是对生产还是对消费者都是高效的，唯一的缺点是初始建立困难。
+
+Webhook有时也被称为反向API，因为他提供了API规则，你需要设计要使用的API。Webhook将向你的应用发起http请求，典型的是post请求，应用程序由请求驱动。
+
+Github上对Webhook的描述
+```
+Webhooks allow external services to be notified when certain events happen. When the specified events happen, we’ll send a POST request to each of the URLs you provide. 
+```
+
+## 配置
+
+![](images/spring-cloud-config-4.png)
