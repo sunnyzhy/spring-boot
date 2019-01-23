@@ -243,7 +243,7 @@ dev-1.2
 dev-1.2
 ```
 
-6. 在git仓库中修改version的值为dev-1.3
+6. 在git仓库中修改version的值为dev-1.3，**注意查看webhook的Recent Deliveries，post响应是否成功。**
 
 7. 访问http://localhost:8091/get ,显示如下内容
 
