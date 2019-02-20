@@ -85,7 +85,7 @@ public class PersonAutoConfiguration {
 ## 新建 spring.factories 文件
 新建文件src/main/resources/META-INF/spring.factories
 ```
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhy.PersonServiceAutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhy.PersonAutoConfiguration
 ```
 
 ## 打包mvn clean install
