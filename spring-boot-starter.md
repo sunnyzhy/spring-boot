@@ -1,12 +1,12 @@
 # 自定义starter
 
-# 创建一个maven工程（maven-archetype-quickstart）
+## 创建一个maven工程（maven-archetype-quickstart）
 
 - Spring官方Starter通常命名为spring-boot-starter-{name}如 spring-boot-starter-web
 
 - Spring官方建议非官方Starter命名应遵循{name}-spring-boot-starter的格式, 如mybatis-spring-boot-starter
 
-# 引入依赖
+## 引入依赖
 ```xml
   <groupId>com.zhy</groupId>
   <artifactId>helloworld-spring-boot-starter</artifactId>
@@ -33,7 +33,7 @@
   </dependencies>
 ```
 
-# 创建proterties类来保存application.properties配置文件信息
+## 创建proterties类来保存application.properties配置文件信息
 ```java
 @ConfigurationProperties(prefix = "spring.person")
 @Data
@@ -44,7 +44,7 @@ public class PersonProperties {
 }
 ```
 
-# 创建业务类
+## 创建业务类
 ```java
 public class PersonService {
     private PersonProperties properties;
@@ -60,7 +60,7 @@ public class PersonService {
 }
 ```
 
-# 创建AutoConfiguration
+## 创建AutoConfiguration
 ```java
 @Configuration
 @EnableConfigurationProperties(PersonProperties.class)
@@ -80,15 +80,15 @@ public class PersonAutoConfiguration {
 }
 ```
 
-# 新建 spring.factories 文件
+## 新建 spring.factories 文件
 新建文件src/main/resources/META-INF/spring.factories
 ```
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhy.PersonServiceAutoConfiguration
 ```
 
-# 打包mvn clean install
+## 打包mvn clean install
 
-# 创建一个Spring Boot工程并引入依赖
+## 创建一个Spring Boot工程并引入依赖
 ```xml
 <dependency>
   <groupId>com.zhy</groupId>
@@ -97,7 +97,7 @@ org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhy.PersonSer
 </dependency>
 ```
 
-# 配置application.yml
+## 配置application.yml
 ```
 spring:
   person:
@@ -105,6 +105,7 @@ spring:
     age: 20
 ```
 
+## 单元测试
 ```java
 @RunWith(SpringRunner.class)
 @SpringBootTest
