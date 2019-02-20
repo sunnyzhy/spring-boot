@@ -1,5 +1,34 @@
 # 自定义starter
 
+## starter的理念
+starter会把所有用到的依赖都给包含进来，避免了开发者自己去引入依赖所带来的麻烦。需要注意的是不同的starter是为了解决不同的依赖，所以它们内部的实现可能会有很大的差异，例如jpa的starter和Redis的starter可能实现就不一样，这是因为starter的本质在于synthesize，这是一层在逻辑层面的抽象，也许这种理念有点类似于Docker，因为它们都是在做一个“包装”的操作，如果你知道Docker是为了解决什么问题的，也许你可以用Docker和starter做一个类比。
+
+## starter的实现
+虽然不同的starter实现起来各有差异，但是他们基本上都会使用到两个相同的内容：ConfigurationProperties和AutoConfiguration。因为Spring Boot坚信“约定大于配置”这一理念，所以我们使用ConfigurationProperties来保存我们的配置，并且这些配置都可以有一个默认值，即在我们没有主动覆写原始配置的情况下，默认值就会生效，这在很多情况下是非常有用的。除此之外，starter的ConfigurationProperties还使得所有的配置属性被聚集到一个文件中（一般在resources目录下的application.properties），这样我们就告别了Spring项目中XML地狱。
+
+## starter的整体逻辑
+![](images/spring-boot-starter.png)
+
+## Starter原理
+1. SpringBoot 在启动时会去依赖的starter包中寻找 resources/META-INF/spring.factories文件（通过autoconfigure 管理,通过服务中的springboot main 启动中@EnableAutoConfiguration（@SpringBootApplication）引入），然后根据文件中配置的Jar包去扫描项目所依赖的Jar包，这类似于 Java 的 SPI 机制。
+
+2. 根据 spring.factories配置加载AutoConfigure类。
+
+3. 根据 @Conditional注解的条件，进行自动配置并将Bean注入Spring Context 上下文当中。也可以使用@ImportAutoConfiguration({MyServiceAutoConfiguration.class}) 指定自动配置哪些类。
+
+## 创建自己的Spring Boot Starter
+1. 创建starter项目，注意项目的命名规范
+
+2. 创建ConfigurationProperties用于保存配置信息（application.properties）
+
+3. 创建业务类
+
+4. 创建AutoConfiguration，引用定义好的配置信息，并将满足条件(@ConditionalOnXxx)的业务类注入到Spring容器中(Spring Context)
+
+5. 把AutoConfiguration类加入spring.factories配置文件中进行声明
+
+6. 打包项目，之后在另一个SpringBoot项目中引入该项目依赖，然后就可以使用该starter了
+
 ## 创建一个maven工程（maven-archetype-quickstart）
 
 - Spring官方Starter通常命名为spring-boot-starter-{name}如 spring-boot-starter-web
