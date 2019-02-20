@@ -6,10 +6,8 @@
 
 - Spring官方建议非官方Starter命名应遵循{name}-spring-boot-starter的格式, 如mybatis-spring-boot-starter
 
-这里创建的项目的artifactId为helloworld-spring-boot-starter
-
 # 引入依赖
-```
+```xml
   <groupId>com.zhy</groupId>
   <artifactId>helloworld-spring-boot-starter</artifactId>
   <version>1.0-SNAPSHOT</version>
@@ -86,4 +84,38 @@ public class PersonAutoConfiguration {
 新建文件src/main/resources/META-INF/spring.factories
 ```
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhy.PersonServiceAutoConfiguration
+```
+
+# 打包mvn clean install
+
+# 创建一个Spring Boot工程并引入依赖
+```xml
+<dependency>
+  <groupId>com.zhy</groupId>
+  <artifactId>helloworld-spring-boot-starter</artifactId>
+  <version>1.0-SNAPSHOT</version>
+</dependency>
+```
+
+# 配置application.yml
+```
+spring:
+  person:
+    name: abc
+    age: 20
+```
+
+```java
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class ComponentApplicationTests {
+
+    @Autowired
+    private PersonService personService;
+    
+    @Test
+    public void contextLoads() {
+        personService.sayHello();
+    }
+}
 ```
