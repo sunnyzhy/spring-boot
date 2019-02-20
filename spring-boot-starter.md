@@ -141,7 +141,7 @@ public class PersonAutoConfiguration {
 - @EnableConfigurationProperties(XxxProperties.class): 使@ConfigurationProperties注解生效。如果只配置@ConfigurationProperties注解，在IOC容器中是获取不到properties配置文件转化的bean的
 
 ### 新建 spring.factories 文件
-新建文件src/main/resources/META-INF/spring.factories
+新建文件**src/main/resources/META-INF/spring.factories**
 ```
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.zhy.PersonAutoConfiguration
 ```
