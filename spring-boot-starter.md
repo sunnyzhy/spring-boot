@@ -29,7 +29,7 @@ starter会把所有用到的依赖都给包含进来，避免了开发者自己�
 
 6. 打包项目，之后在另一个SpringBoot项目中引入该项目依赖，然后就可以使用该starter了
 
-### 创建一个maven工程（maven-archetype-quickstart）
+### 创建maven工程（maven-archetype-quickstart）
 
 - Spring官方Starter通常命名为spring-boot-starter-{name}如 spring-boot-starter-web
 
