@@ -6,6 +6,8 @@
 
 - Spring官方建议非官方Starter命名应遵循{name}-spring-boot-starter的格式, 如mybatis-spring-boot-starter
 
+## 删除启动类（包含main方法的类）
+
 ## 引入依赖
 ```xml
   <groupId>com.zhy</groupId>
