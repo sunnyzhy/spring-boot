@@ -107,6 +107,10 @@ public class PersonAutoConfiguration {
 
 - @ConditionalOnSingleCandidate: 当指定的Bean在容器中只有一个，或者在有多个Bean的情况下，用来指定首选的Bean
 
+- @ConfigurationProperties: 主要用来把properties配置文件转化为对应的XxxProperties来使用的,并不会把该类放入到IOC容器中，如果想放入到容器中可以在XxxProperties上使用@Component来标注，也可以使用@EnableConfigurationProperties(XxxProperties.class)统一配置到Application上来，这种方式可以在Application上来统一开启指定的属性，这样也没必要在每个XxxProperties上使用@Component
+
+- @EnableConfigurationProperties(XxxProperties.class): 使@ConfigurationProperties注解生效。如果只配置@ConfigurationProperties注解，在IOC容器中是获取不到properties配置文件转化的bean的
+
 ## 新建 spring.factories 文件
 新建文件src/main/resources/META-INF/spring.factories
 ```
