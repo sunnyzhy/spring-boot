@@ -20,6 +20,8 @@ The Name Server boot success. serializeType=JSON
 The broker[zhy, 192.168.0.6:10911] boot success. serializeType=JSON and name server is 127.0.0.1:9876
 ```
 
+**注意：broker启动失败，删除"C:\Users\当前系统用户名\store"目录，就可以了。**
+
 # NameServer功能
 
 - 接收broker的请求注册broker路由信息（包括master和slave）
