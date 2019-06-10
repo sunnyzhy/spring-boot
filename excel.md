@@ -144,6 +144,9 @@ public class User {
         workbook.write(fileOutputStream);
         fileOutputStream.flush();
         fileOutputStream.close();
+	// 删除临时文件
+	// windows C:\Users\当前用户\AppData\Local\Temp\poifiles
+	// linux /tmp/poifiles
         workbook.dispose();
         workbook.close();
     }
