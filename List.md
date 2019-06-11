@@ -1,4 +1,38 @@
-# User类
+# 排序
+## User类
+```java
+@Data
+public class User {
+    private int id;
+    private String name;
+}
+```
+
+# 单元测试
+```java
+    private String name = "user";
+    private Random random = new Random();
+
+    @Test
+    public void listSort() {
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            User user = new User();
+            user.setId(random.nextInt(100));
+            user.setName(name + user.getId());
+            userList.add(user);
+        }
+        // 升序
+        userList.sort((o1, o2) -> o1.getId() - o2.getId());
+        // 降序
+        userList.sort((o1, o2) -> o2.getId() - o1.getId());
+        // 升序
+        userList.sort(Comparator.comparing(User::getId));
+    }
+```
+
+# 去重&交集
+## User类
 ```java
 @Data
 public class User {
@@ -24,7 +58,7 @@ public class User {
 }
 ```
 
-# 去重
+## 去重
 ```
 distinct()是基于hashCode()和equals()工作的，所以，如果使用distinct去重，就需要重写hashcode和equals方法。
 ```
@@ -41,7 +75,7 @@ List<User> users = userList
         .collect(Collectors.toList());
 ```
 
-# 交集
+## 交集
 ```java
 List<User> userList1 = Lists.newArrayList(
         new User(1, "a"),
