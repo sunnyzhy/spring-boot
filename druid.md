@@ -14,8 +14,12 @@
 
 # 配置application.properties
 ```
+server.port=9013
+
 #db
-spring.datasource.url=jdbc:mysql://20.0.0.252:3306/zhy?characterEncodeing=utf-8&useSSL=false&serverTimezone=GMT
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+spring.datasource.type=com.alibaba.druid.pool.DruidDataSource
+spring.datasource.url=jdbc:mysql://localhost:3306/my_db?characterEncodeing=utf-8&useSSL=false&serverTimezone=GMT
 spring.datasource.username=root
 spring.datasource.password=root
 
