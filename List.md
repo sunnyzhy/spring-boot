@@ -92,3 +92,38 @@ List<User> intersectionList = userList1
                .anyMatch(x -> x.getId().equals(item.getId())))
        .collect(Collectors.toList());
 ```
+
+# 分页
+## User类
+```java
+@Data
+public class User {
+    private int id;
+    private String name;
+}
+```
+
+## 单元测试
+```java
+    @Test
+    public void listPage() {
+        List<User> userList = new ArrayList<>();
+        for (int i = 0; i < 107; i++) {
+            User user = new User();
+            user.setId(i);
+            user.setName(name + user.getId());
+            userList.add(user);
+        }
+        int total = userList.size();
+        Page page = initPage(6, 10, total);
+        List<User> list = userList.subList(page.getFromIndex(), page.getToIndex());
+        System.out.println(list);
+    }
+
+    private Page initPage(int pageIndex, int pageSize, int total) {
+        Page page = new Page();
+        page.setFromIndex((pageIndex - 1) * pageSize);
+        page.setToIndex(total < pageIndex * pageSize ? total : pageIndex * pageSize);
+        return page;
+    }
+```
