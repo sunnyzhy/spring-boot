@@ -32,6 +32,15 @@ public class FileUtil {
 ```
 
 # 压缩 zip 文件
+## 添加 maven 依赖
+```xml
+		<dependency>
+			<groupId>net.lingala.zip4j</groupId>
+			<artifactId>zip4j</artifactId>
+			<version>1.3.3</version>
+		</dependency>
+```
+
 ## ZipCompressUtil 类
 ```java
 import net.lingala.zip4j.core.ZipFile;
