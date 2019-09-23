@@ -1,4 +1,4 @@
-![eureka注册中心集群](./images/eureka.png "eureka注册中心集群")
+![eureka注册中心集群](../images/eureka.png "eureka注册中心集群")
 
 1. 注册中心集群
 
