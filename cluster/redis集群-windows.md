@@ -1,8 +1,13 @@
 # 前言（重点、重点、重点）
 ### 1. Redis 官网只提供 linux 版本的下载，windows 版本需要到 github 下载
-### 2. Redis5.0 以上版本创建集群使用 redis-cli；Redis5.0 以下版本创建集群使用 ruby
-### 3. github 上的 Redis 版本只更新到 3.2.100，也就意味着在 windows 环境实现集群必须使用 ruby
-### 4. 本示例实现的是单机环境下的伪集群，redis.windows.conf 配置：
+### 2. Redis5.0 以上版本创建集群使用 redis-cli；Redis5.0 以下版本创建集群使用 Ruby
+### 3. github 上的 Redis 版本只更新到 3.2.100，也就意味着在 windows 环境实现集群必须使用 Ruby
+### 4. windows 环境下的 Redis 服务默认加载的配置文件是 redis.windows-service.conf，可以在安装 Redis 服务的时候通过以下方式指定配置文件是   redis.windows.conf：
+```
+redis-server --service-install redis.windows.conf --service-name "Redis Service Name" --loglevel verbose
+```
+
+### 5. 本示例实现的是单机环境下的伪集群，redis.windows.conf 配置：
 ```
 bind 127.0.0.1
 
@@ -17,9 +22,9 @@ cluster-node-timeout 15000
 appendonly yes
 ```
 
-### 5. 生产环境下的集群，redis.windows.conf 配置：
+### 6. 生产环境下的集群，redis.windows.conf 配置：
 ```
-bind 192.168.0.10
+bind 0.0.0.0
 
 port 6379
 
@@ -38,7 +43,7 @@ appendonly yes
 
 **注意：官网只提供 linux 版本的下载。**
 
-windows 版本的 redis 下载地址：https://github.com/MSOpenTech/redis/tags
+windows 版本的 redis 下载地址：https://github.com/microsoftarchive/redis/tags
 
 此示例的 redis 目录为：D:\redis\redis
 ```
