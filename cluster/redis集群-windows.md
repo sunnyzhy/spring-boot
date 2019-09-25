@@ -355,6 +355,7 @@ D:\redis\redis>redis-cli -h 127.0.0.1 -c -p 6305
 
 ```
 D:\redis\redis>redis-cli -h 127.0.0.1 -c -p 6300
+
 127.0.0.1:6300> get name
 -> Redirected to slot [5798] located at 127.0.0.1:6304
 "zhy"
