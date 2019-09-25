@@ -43,7 +43,7 @@ appendonly yes
 
 **注意：官网只提供 linux 版本的下载。**
 
-windows 版本的 redis 下载地址：https://github.com/microsoftarchive/redis/tags
+windows 版本的 redis 下载地址：https://github.com/microsoftarchive/redis/releases
 
 此示例的 redis 目录为：D:\redis\redis
 ```
