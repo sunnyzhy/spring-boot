@@ -2,23 +2,34 @@
 ### 1. Redis 官网只提供 linux 版本的下载，windows 版本需要到 github 下载
 ### 2. Redis5.0 以上版本创建集群使用 redis-cli；Redis5.0 以下版本创建集群使用 ruby
 ### 3. github 上的 Redis 版本只更新到 3.2.100，也就意味着在 windows 环境实现集群必须使用 ruby
-### 4. 本示例实现的是单机环境下的伪集群，端口分配如下：
+### 4. 本示例实现的是单机环境下的伪集群，redis.windows.conf 配置：
 ```
-127.0.0.1:6300
-127.0.0.1:6301
-127.0.0.1:6302
-127.0.0.1:6303
-127.0.0.1:6304
-127.0.0.1:6305
+bind 127.0.0.1
+
+port 6300
+
+cluster-enabled yes
+
+cluster-config-file nodes-6300.conf
+
+cluster-node-timeout 15000
+
+appendonly yes
 ```
-### 5. 生产环境下的集群，端口分配可以作如下参考：
+
+### 5. 生产环境下的集群，redis.windows.conf 配置：
 ```
-192.168.0.10:6379
-192.168.0.11:6379
-192.168.0.12:6379
-192.168.0.13:6379
-192.168.0.14:6379
-192.168.0.15:6379
+bind 192.168.0.10
+
+port 6379
+
+cluster-enabled yes
+
+cluster-config-file nodes-6379.conf
+
+cluster-node-timeout 15000
+
+appendonly yes
 ```
 
 # 下载 windows 版本的 Redis
