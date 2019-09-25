@@ -1,5 +1,5 @@
 # 前言（重点、重点、重点）
-### 1. 官网只提供 linux 版本的下载，windows 版本需要到 github 下载
+### 1. Redis 官网只提供 linux 版本的下载，windows 版本需要到 github 下载
 ### 2. Redis5.0 以上版本创建集群使用 redis-cli；Redis5.0 以下版本创建集群使用 ruby
 ### 3. github 上的 Redis 版本只更新到 3.2.100，也就意味着在 windows 环境实现集群必须使用 ruby
 ### 4. 本示例实现的是单机环境下的伪集群，端口分配如下：
