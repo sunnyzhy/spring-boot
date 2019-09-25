@@ -315,7 +315,29 @@ OK
 
 127.0.0.1:6301> get name
 "zhy"
+```
 
+执行 set 命令，可以看到集群生效，name 值被分配到 6301 节点上了。
+
+Redis集群数据分配策略：
+
+采用一种叫做哈希槽 (hash slot) 的方式来分配数据，redis cluster 默认分配了 16384 个 slot，当我们 set 一个 key 时，会用 CRC16 算法来取模得到所属的slot，然后将这个 key 分到哈希槽区间的节点上，具体算法就是：CRC16(key) % 16384
+
+注意的是：必须要 3 个以上的主节点，否则在创建集群时会失败，三个节点分别承担的 slot 区间是：
+
+```
+节点 A 覆盖0－5460
+    
+节点 B 覆盖5461－10922
+    
+节点 C 覆盖10923－16383
+```
+
+所以，按照 redis cluster 的哈希槽算法：CRC16('name') % 16384，name 被分配到了 6301 端口的 redis 节点上。
+
+切换到 6300 和 6305 节点，再查询：
+
+```
 D:\redis\redis>redis-cli -h 127.0.0.1 -c -p 6300
 
 127.0.0.1:6300> get name
@@ -326,5 +348,14 @@ D:\redis\redis>redis-cli -h 127.0.0.1 -c -p 6305
 
 127.0.0.1:6305> get name
 -> Redirected to slot [5798] located at 127.0.0.1:6301
+"zhy"
+```
+
+停止 6301 的节点服务，再查询：
+
+```
+D:\redis\redis>redis-cli -h 127.0.0.1 -c -p 6300
+127.0.0.1:6300> get name
+-> Redirected to slot [5798] located at 127.0.0.1:6304
 "zhy"
 ```
