@@ -120,7 +120,7 @@ D:\redis>dir
 2019/07/19  16:44    <DIR>          redis
 ```
 
-2. 将安装的 redis 文件夹中的 redis.windows.conf 以及 redis-server ，分别拷贝到新建的这 6 个文件夹中
+2. 将 redis 安装目录中的 redis.windows.conf 以及 redis-server ，分别拷贝到新建的这 6 个文件夹中
 
 3. 更改配置
 
