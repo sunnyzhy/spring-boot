@@ -46,7 +46,7 @@ appendonly yes
 
 # 下载 windows 版本的 Redis
 
-官网下载地址：http://redis.io/download
+官网下载地址：http://redis.io
 
 **注意：官网只提供 linux 版本的下载。**
 
