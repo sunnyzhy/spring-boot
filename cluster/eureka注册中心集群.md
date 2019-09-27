@@ -2,8 +2,8 @@
 
 - **注册中心集群**
 
-注册中心集群里的各个注册中心相互注册，比如 "注册中心2(192.168.0.12)" 的配置文件：
-```
+注册中心集群里的各个注册中心相互注册，比如 "注册中心 2(192.168.0.12)" 的 application.properties 配置文件：
+``` 
 server.port=8081
 
 spring.application.name=regcenter-server
@@ -29,7 +29,7 @@ eureka.client.serviceUrl.defaultZone=http://192.168.0.11:8081/eureka/,http://192
 
 - **服务集群**
 
-服务集群里的各个服务向各个注册中心注册：
+服务集群里的各个服务向各个注册中心注册，application.properties 配置文件：
 ```
 server.port=8085
 
