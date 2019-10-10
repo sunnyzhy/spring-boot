@@ -122,12 +122,14 @@ http.cors.allow-origin: "*"
 1. 查看集群状态
 
 ```
-# curl 192.168.0.12:9200/_cat/nodes
-192.168.0.11 24 81  7    mdi - node-2
-192.168.0.10 22 57 -1    mdi * node-1
-192.168.0.12 22 92 19    mdi - node-3
+# curl 192.168.0.12:9200/_cat/nodes?v
+ip         heap.percent ram.percent cpu load_1m load_5m load_15m node.role master name
+192.168.0.11         24          81  7                           mdi       -      node-2
+192.168.0.10         22          57  -1                          mdi       *      node-1
+192.168.0.12         22          92  7                           mdi       -      node-3
 
-# curl 192.168.0.12:9200/_cat/master
+# curl 192.168.0.12:9200/_cat/master?v
+id                     host         ip           node
 SD41P8qnSkmPsQ5cgiiQiQ 192.168.0.10 192.168.0.10 node-1
 ```
 node-1 是主节点
@@ -135,11 +137,13 @@ node-1 是主节点
 2. 停止节点 1 的 elasticsearch 服务，再查看集群状态
 
 ```
-# curl 192.168.0.12:9200/_cat/nodes
-192.168.0.12 26 92 9    mdi - node-3
-192.168.0.11 19 81 6    mdi * node-2
+# curl 192.168.0.12:9200/_cat/nodes?v
+ip         heap.percent ram.percent cpu load_1m load_5m load_15m node.role master name
+192.168.0.12         26          92  9                           mdi       -      node-3
+192.168.0.11         19          81  6                           mdi       *      node-2
 
-# curl 192.168.0.12:9200/_cat/master
+# curl 192.168.0.12:9200/_cat/master?v
+id                     host         ip           node
 rJHnTJC3ROO5ywoFSvwhEA 192.168.0.12 192.168.0.12 node-2
 ```
 node-2 被选举为主节点
