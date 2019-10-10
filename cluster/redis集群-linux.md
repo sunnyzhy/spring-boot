@@ -16,7 +16,7 @@ cluster-node-timeout 15000
 appendonly yes
 ```
 
-- **生产环境下的集群，redis.conf 配置：**
+- **生产环境下的集群，每个节点下的 redis.conf 配置都一样：**
 
 ```
 bind 0.0.0.0
@@ -74,7 +74,7 @@ appendonly yes
 
 3. 更改配置
 
-将 6 个文件夹下的 redis.conf 文件中以下属性进行修改：
+将 6 个文件夹下的 redis.conf 文件中的属性分别作如下修改：
 
 ```
 port 6300
@@ -82,6 +82,66 @@ port 6300
 cluster-enabled yes
 
 cluster-config-file nodes-6300.conf
+
+cluster-node-timeout 15000
+
+appendonly yes
+```
+
+```
+port 6301
+
+cluster-enabled yes
+
+cluster-config-file nodes-6301.conf
+
+cluster-node-timeout 15000
+
+appendonly yes
+```
+
+```
+port 6302
+
+cluster-enabled yes
+
+cluster-config-file nodes-6302.conf
+
+cluster-node-timeout 15000
+
+appendonly yes
+```
+
+```
+port 6303
+
+cluster-enabled yes
+
+cluster-config-file nodes-6303.conf
+
+cluster-node-timeout 15000
+
+appendonly yes
+```
+
+```
+port 6304
+
+cluster-enabled yes
+
+cluster-config-file nodes-6304.conf
+
+cluster-node-timeout 15000
+
+appendonly yes
+```
+
+```
+port 6305
+
+cluster-enabled yes
+
+cluster-config-file nodes-6305.conf
 
 cluster-node-timeout 15000
 
