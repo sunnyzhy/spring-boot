@@ -124,7 +124,7 @@ D:\redis>dir
 
 3. 更改配置
 
-将 6 个文件夹下的 redis.windows.conf 文件中以下属性进行修改：
+将 6 个文件夹下的 redis.windows.conf 文件中的属性分别作如下修改：
 
 ```
 port 6300
