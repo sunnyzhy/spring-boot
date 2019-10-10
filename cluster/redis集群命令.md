@@ -1,4 +1,4 @@
-# Redis 集群命令（redis-cli -c -p port）
+# Redis 集群命令
 ## 集群
 - cluster info ：打印集群的信息
 
