@@ -1,4 +1,4 @@
-# 前言（重点、重点、重点）
+# 前言
 ## 本示例用的是 elasticsearch7.1.1
 
 # 下载 elasticsearch
