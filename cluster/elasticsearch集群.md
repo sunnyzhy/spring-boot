@@ -1,5 +1,5 @@
 # 前言
-## 本示例用的是 elasticsearch7.1.1
+- 本示例用的是 elasticsearch7.1.1
 
 # 下载 elasticsearch
 
@@ -39,7 +39,7 @@
 |http.cors.enabled|是否支持跨域，是：true，在使用head插件时需要此配置|
 |http.cors.allow-origin|"*" 表示支持所有域名|
 
-## 修改节点 1 的 config/elasticsearch.yml
+## 修改节点 1 的配置
 
 ```
 cluster.name: my-elasticsearch
@@ -63,7 +63,7 @@ http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
 
-## 修改节点 2 的 config/elasticsearch.yml
+## 修改节点 2 的配置
 
 ```
 cluster.name: my-elasticsearch
@@ -87,7 +87,7 @@ http.cors.enabled: true
 http.cors.allow-origin: "*"
 ```
 
-## 修改节点 3 的 config/elasticsearch.yml
+## 修改节点 3 的配置
 
 ```
 cluster.name: my-elasticsearch
