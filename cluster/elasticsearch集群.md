@@ -1,3 +1,6 @@
+# 前言（重点、重点、重点）
+## 本示例用的是 elasticsearch7.1.1
+
 # 下载 elasticsearch
 
 官网最新版本下载地址：https://www.elastic.co/cn/downloads/elasticsearch
@@ -5,8 +8,6 @@
 官网历史版本下载地址：https://www.elastic.co/cn/downloads/past-releases#elasticsearch
 
 下载后直接解压。
-
-**本示例用的是 elasticsearch7.1.1**
 
 # 搭建 Redis 集群
 
