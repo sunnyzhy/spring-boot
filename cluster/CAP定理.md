@@ -38,12 +38,9 @@ Consistency，一致性。写操作之后的读操作，必须返回该值。
 
 ![CAP定理](../images/CAP-5.png "CAP定理")
 
-为了让 G2 也能变为 v1，就要在 G1 写操作的时候，让 G1 向 G2 发送一条消息，要求 G2 也改成 v1。
+为了让 G2 也能变为 v1，就要在 G1 写操作的时候，让 G1 向 G2 发送一条消息，要求 G2 也改成 v1。这样的话，用户向 G2 发起读操作，也能得到 v1。
 
 ![CAP定理](../images/CAP-6.png "CAP定理")
-
-这样的话，用户向 G2 发起读操作，也能得到 v1。
-
 ![CAP定理](../images/CAP-7.png "CAP定理")
 
 # Availability
