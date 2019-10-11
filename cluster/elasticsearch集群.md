@@ -134,7 +134,7 @@ ip         heap.percent ram.percent cpu load_1m load_5m load_15m node.role maste
 id                     host         ip           node
 SD41P8qnSkmPsQ5cgiiQiQ 192.168.0.10 192.168.0.10 node-1
 ```
-node-1 是主节点
+**node-1 是主节点**
 
 2. 停止节点 1 的 elasticsearch 服务，再查看集群状态
 
@@ -148,8 +148,8 @@ ip         heap.percent ram.percent cpu load_1m load_5m load_15m node.role maste
 id                     host         ip           node
 rJHnTJC3ROO5ywoFSvwhEA 192.168.0.12 192.168.0.12 node-2
 ```
-node-2 被选举为主节点
+**node-2 被选举为主节点**
 
 3. 停止节点 2 的 elasticsearch 服务
 
-集群中只剩一个节点（node-3）了，此时，整个集群不可用。
+**集群中只剩一个节点（node-3）了，此时，整个集群不可用。**
