@@ -1,6 +1,6 @@
 # 前言
 - **本示例用的是 elasticsearch7.1.1**
-- **不推荐使用 Spring Data Elasticsearch，即 maven 仓库里的 spring-boot-starter-data-elasticsearch。因为 Spring Data Elasticsearch 所支持的 elasticsearch 版本比 elasticsearch 官网的最新版本要低得多。在写这篇笔记的时候，Spring Data Elasticsearch 稳定版(3.2.0)只支持到 Elasticsearch 6.8.1。**
+- **不推荐使用 Spring Data Elasticsearch(https://spring.io/projects/spring-data-elasticsearch)，即 maven 仓库里的 spring-boot-starter-data-elasticsearch。因为 Spring Data Elasticsearch 所支持的 elasticsearch 版本比 elasticsearch 官网的最新版本要低得多。在写这篇笔记的时候，Spring Data Elasticsearch 稳定版(3.2.0)只支持到 Elasticsearch 6.8.1。**
 
 # pom.xml
 ```xml
