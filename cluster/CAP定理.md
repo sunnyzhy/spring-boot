@@ -20,7 +20,7 @@ Partition tolerance，分区容错。
 
 大多数分布式系统都分布在多个子网络。每个子网络就叫做一个区（partition）。分区容错的意思是，区间通信可能失败。比如，一台服务器放在中国，另一台服务器放在美国，这就是两个区，它们之间可能无法通信。
 
-![CAP定理](../images/CAP-2.jpg "CAP定理")
+![CAP定理](../images/CAP-2.png "CAP定理")
 
 上图中，G1 和 G2 是两台跨区的服务器。G1 向 G2 发送一条消息，G2 可能无法收到。系统设计的时候，必须考虑到这种情况。
 
@@ -29,8 +29,8 @@ Partition tolerance，分区容错。
 # Consistency
 Consistency，一致性。写操作之后的读操作，必须返回该值。
 
-![CAP定理](../images/CAP-3.jpg "CAP定理")
-![CAP定理](../images/CAP-4.jpg "CAP定理")
+![CAP定理](../images/CAP-3.png "CAP定理")
+![CAP定理](../images/CAP-4.png "CAP定理")
 
 上图中，某条记录是 v0，用户向 G1 发起一个写操作，将其改为 v1；用户的读操作就会得到 v1，这就叫一致性。
 
@@ -40,11 +40,11 @@ Consistency，一致性。写操作之后的读操作，必须返回该值。
 
 为了让 G2 也能变为 v1，就要在 G1 写操作的时候，让 G1 向 G2 发送一条消息，要求 G2 也改成 v1。
 
-![CAP定理](../images/CAP-6.jpg "CAP定理")
+![CAP定理](../images/CAP-6.png "CAP定理")
 
 这样的话，用户向 G2 发起读操作，也能得到 v1。
 
-![CAP定理](../images/CAP-7.jpg "CAP定理")
+![CAP定理](../images/CAP-7.png "CAP定理")
 
 # Availability
 Availability，可用性。只要收到用户的请求，服务器就必须给出回应。
