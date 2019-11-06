@@ -14,7 +14,7 @@
 
 # 主要代码
 ## 添加maven依赖
-```
+```xml
 <dependency>
     <groupId>com.github.shyiko</groupId>
     <artifactId>mysql-binlog-connector-java</artifactId>
