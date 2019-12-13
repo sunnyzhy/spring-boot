@@ -216,8 +216,33 @@ public interface UserMapper extends Mapper<User> {
 
     Integer selectUserCount(UserSqlCondition sqlCondition);
 
-    void batchInsert(List<User> list);
+    void batchInsert(@Param("list") List<User> list);
 }
+```
+
+# 批量添加并返回主键id
+1. 升级Mybatis到3.3.1及以上版本，官方在这个版本中加入了批量新增返回主键id的功能
+
+2. <insert>标签中添加 useGeneratedKeys="true" keyProperty="id"
+	
+3. 在Dao中不能使用@Param注解
+
+4. Mapper.xml中使用list变量（parameterType="java.util.List"）接受Dao中的参数集合
+
+```java
+void batchInsertReturnId(List<User> list);
+```
+
+```xml
+  <insert id="batchInsertReturnId" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+	INSERT INTO user(`username`,`password`,`name`,`gender`,`type`,`status`,`birthday`,`address`)
+	VALUES
+	<foreach collection="list" item="item" separator=",">
+	  (#{item.username},#{item.password},#{item.name},
+	  #{item.gender},#{item.type},#{item.status},
+	  #{item.birthday},#{address.name})
+	</foreach>
+  </insert>
 ```
 
 # Mybatis对整型参数值等于0的判断
