@@ -127,3 +127,23 @@ public class User {
         return page;
     }
 ```
+
+## 删除list中所有null值
+```java
+@Test
+public void filterList1() {
+    List<Integer> list = Lists.newArrayList(null, 1, 2, null, 3, null);
+    List<Integer> filterList = list.parallelStream()
+            .filter(Objects::nonNull)
+            .collect(Collectors.toList());
+    System.out.println(filterList);
+}
+
+@Test
+public void filterList2() {
+    List<Integer> list = Lists.newArrayList(null, 1, 2, null, 3, null);
+    list.removeIf(Objects::isNull);
+    System.out.println(list);
+}
+```
+
