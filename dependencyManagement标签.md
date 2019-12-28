@@ -8,7 +8,7 @@
 
 - 子项目声明了依赖且未声明版本号和 scope，则会继承父项目的版本号和 scope，否则覆盖
 
-```
+``` xml
 <!-- 只是声明依赖，并不引入 -->
 <dependencyManagement>
   <dependencies>
