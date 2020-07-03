@@ -35,7 +35,7 @@ Exception又分为RunTimeException和其他Exception。
 3. java.lang.ArrayIndexoutofBoundsException
 
 ### Runtime Exception
-在定义方法时不需要声明会抛出runtime exception， 在调用这个方法时不需要捕获这个runtime exception。
+**在定义方法时不需要声明会抛出runtime exception， 在调用这个方法时不需要捕获这个runtime exception。**
 
 runtime exception是从java.lang.RuntimeException或java.lang.Error类衍生出来的，例如：nullpointexception，IndexOutOfBoundsException就属于runtime exception。
 
