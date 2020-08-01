@@ -147,3 +147,14 @@ public void filterList2() {
 }
 ```
 
+## 对象转List
+```java
+public void list11() {
+    Integer i = 10;
+    List<Integer> listI = Arrays.asList(i);
+    System.out.println(listI);
+    Integer j = 11;
+    List<Integer> listJ = Collections.singletonList(j);
+    System.out.println(listJ);
+}
+```
