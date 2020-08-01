@@ -91,3 +91,28 @@ public class ZipCompressUtil {
         zipCompressUtil.zipFile("D:\\xx\\yy.log", "D:\\xx\\yy.zip");
     }
 ```
+
+# 在多线程中使用 MultipartFile 进行异步操作报错 --- 系统找不到指定的文件
+
+前端传递过来的文件会存储到临时文件夹中：
+
+```
+C:\Users\xxx\AppData\Local\Temp\tomcat.6131519677783180826.8056\work\Tomcat\localhost\ROOT
+```
+
+但是子线程异步执行的时候，由于主线程结束，导致临时文件被清空，所以会报错： 
+
+```
+java.io.FileNotFoundException: C:\Users\xxx\AppData\Local\Temp\tomcat.6131519677783180826.8056\work\Tomcat\localhost\ROOT\upload_85d787c3_6037_4ea2_a7f9_54ac3a19b461_00000011.tmp (系统找不到指定的文件。)
+```
+
+需要转换为流来进行操作：
+
+```java
+@PostMapping("/import")
+public String import(@RequestParam("file") MultipartFile file) throws IOException {
+    fileService.doImportThread(file.getInputStream());
+}
+```
+
+
