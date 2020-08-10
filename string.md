@@ -21,7 +21,7 @@ public void split() {
 # padLeft
 ```java
 private String padLeft(String text, Integer num) {
-    Pattern pattern = Pattern.compile("%0\\d+?d");
+    Pattern pattern = Pattern.compile("%0?\\d*?d");
     Matcher matcher = pattern.matcher(text);
     if (matcher.find()) {
         String group = matcher.group(0);
@@ -38,6 +38,10 @@ private String padLeft(String text, Integer num) {
 public void padLeft() {
     String text = padLeft("x%05dy%03d", 5);
     System.out.println(text);
+    text = padLeft("x%5dy%3d", 5);
+    System.out.println(text);
+    text = padLeft("x%dy%d", 5);
+    System.out.println(text);
 }
 ```
 
@@ -45,4 +49,6 @@ public void padLeft() {
 
 ```
 x00005y005
+x    5y  5
+x5y5
 ```
