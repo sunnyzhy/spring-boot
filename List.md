@@ -189,3 +189,73 @@ List<Integer> list = Arrays.asList(1, 2, 3);
 ```java
 List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
 ```
+
+# 删除List元素
+```java
+private List<Integer> list = new ArrayList<>();
+
+@Test
+public void list() {
+	for (int i = 0; i < 10; i++) {
+		list.add(i);
+	}
+	System.out.println(list);
+	for (int i = 0; i < 10; i++) {
+		if (i % 3 == 0) {
+			remove(i);
+		}
+	}
+	System.out.println(list);
+}
+
+private void remove(Integer key) {
+	Iterator<Integer> iterator = list.iterator();
+	while (iterator.hasNext()) {
+		Integer k = iterator.next();
+		if (k.equals(key)) {
+			iterator.remove();
+		}
+	}
+}
+```
+
+输出:
+```
+[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+[1, 2, 4, 5, 7, 8]
+```
+
+# 删除Map元素
+```java
+private Map<Integer, String> map = new ConcurrentHashMap<>();
+
+@Test
+public void map() {
+	for (int i = 0; i < 10; i++) {
+		map.put(i, "map" + i);
+	}
+	System.out.println(map);
+	for (int i = 0; i < 10; i++) {
+		if (i % 3 == 0) {
+			remove(i);
+		}
+	}
+	System.out.println(map);
+}
+
+private void remove(Integer key) {
+	Iterator<Integer> iterator = map.keySet().iterator();
+	while (iterator.hasNext()) {
+		Integer k = iterator.next();
+		if (k.equals(key)) {
+			iterator.remove();
+		}
+	}
+}
+```
+
+输出:
+```
+{0=map0, 1=map1, 2=map2, 3=map3, 4=map4, 5=map5, 6=map6, 7=map7, 8=map8, 9=map9}
+{1=map1, 2=map2, 4=map4, 5=map5, 7=map7, 8=map8}
+```
