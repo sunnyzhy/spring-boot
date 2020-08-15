@@ -158,3 +158,34 @@ public void list11() {
     System.out.println(listJ);
 }
 ```
+
+# 初始化List
+## 使用 List.add
+```java
+List<Integer> list = new ArrayList<>();
+list.add(1);
+list.add(2);
+list.add(3);
+```
+
+## 使用 {{}} 双括号
+```java
+List<Integer> list = new ArrayList<Integer>() {{
+    add(1);
+    add(2);
+    add(3);
+}};
+```
+
+## 使用 Arrays.asList
+```java
+List<Integer> list = Arrays.asList(1, 2, 3);
+// 不支持增、删元素
+// list.add(4);
+// list.remove(1);
+```
+
+## 使用 Stream
+```java
+List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
+```
