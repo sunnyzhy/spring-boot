@@ -197,13 +197,14 @@ management:
 **actuator 默认读取 META-INF/build-info.properties**
 
 所以需要先生成 build-info.properties:
+
 1. 运行 Plugins -> spring-boot -> spring-boot:build-info
 
-![build-info](./images/build-info.png ''build-info'')
+![build-info](./images/build-info.png "build-info")
 
-2. 生成的 build-info.properties
+2. 生成的 target/classes/META-INF/build-info.properties
 
-![build-info](./images/build-info-2.png ''build-info'')
+![build-info](./images/build-info-2.png "build-info")
 
 3. 访问 http://localhost:8080/actuator/info
 
