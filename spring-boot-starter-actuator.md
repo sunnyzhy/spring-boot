@@ -192,3 +192,32 @@ management:
 	}
 }
 ```
+
+## /actuator/info 显示版本信息
+**actuator 默认读取 META-INF/build-info.properties**
+
+所以需要先生成 build-info.properties:
+1. 运行 Plugins -> spring-boot -> spring-boot:build-info
+
+![build-info](./images/build-info.png ''build-info'')
+
+2. 生成的 build-info.properties
+
+![build-info](./images/build-info-2.png ''build-info'')
+
+3. 访问 http://localhost:8080/actuator/info
+
+```json
+{
+	"build": {
+		"version": "1.0.0",
+		"artifact": "framework",
+		"name": "framework",
+		"group": "com.zhy",
+		"time": {
+			"nano": 111000000,
+			"epochSecond": 1604629406
+		}
+	}
+}
+```
