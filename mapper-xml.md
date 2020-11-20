@@ -258,7 +258,83 @@ mapper的配置文件
 - **解决方法**
 
 ``` xml
-		<if test="statusType != null and statusType != ''  or statusType == 0">
-			AND status_flag = #{statusType}
-		</if>
+<if test="statusType != null and statusType != ''  or statusType == 0">
+    AND status_flag = #{statusType}
+</if>
+```
+
+# 判断 list 是否为空
+```xml
+<if test="list != null and list.size() > 0">
+    AND id IN
+    <foreach close=")" collection="list" item="item" open="(" separator=",">
+	#{item}
+    </foreach>
+</if>
+```
+
+# 批量修改
+## 批量修改对象列表
+```xml
+  <update id="batchUpdate" parameterType="java.util.List">
+    UPDATE user
+    <trim prefix="SET" suffixOverrides=",">
+      <trim prefix="`name` =CASE" suffix="END,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.name != null">
+            WHEN id=#{item.id} THEN #{item.name}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`type` =CASE" suffix="END,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.type != null">
+            WHEN id=#{item.id} THEN #{item.type}
+          </if>
+        </foreach>
+      </trim>
+      <trim prefix="`status` =CASE" suffix="END,">
+        <foreach collection="list" index="index" item="item">
+          <if test="item.status != null">
+            WHEN id=#{item.id} THEN #{item.status}
+          </if>
+        </foreach>
+      </trim>
+    </trim>
+    WHERE id IN
+    <foreach close=")" collection="list" index="index" item="item" open="(" separator=",">
+      #{item.id}
+    </foreach>
+  </update>
+```
+
+```java
+void batchUpdate(List<User> list);
+```
+
+## update 时 set 和 if 的用法
+```xml
+  <update id="update" parameterType="com.zhy.model.sql.UserSqlCondition">
+    UPDATE user
+    <set>
+      status=#{status},
+      <if test="name != null">
+        name = #{name},
+      </if>
+      <if test="type != null">
+        type = #{type},
+      </if>
+      address=#{address},
+    </set>
+    WHERE id IN
+    <foreach close=")" collection="idList" item="item" open="(" separator=",">
+      #{item}
+    </foreach>
+  </update>
+```
+
+**每个修改都加逗号，set 能够智能的去掉最后一个逗号。**
+
+```java
+void update(UserSqlCondition sqlCondition);
 ```
