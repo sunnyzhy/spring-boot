@@ -1,5 +1,5 @@
 # redis 多数据源
-**使用Lettuce Client，而非 Jedis Client。**
+**使用 Lettuce Client，而非 Jedis Client。**
 
 ## 添加依赖
 ```xml
@@ -15,7 +15,7 @@
 ```
 
 ## 配置 redis 数据源
-```
+```yml
 spring:
   # 默认数据源
   redis:
