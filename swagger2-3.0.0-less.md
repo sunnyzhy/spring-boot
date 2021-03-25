@@ -60,6 +60,8 @@ webmvc 和 webflux 的区别：
 ## 2. 添加 swagger2 bean
 添加 swagger2 配置类，即 swagger2 bean。
 
+![swagger-01](./images/swagger-01.png 'swagger-01')
+
 ```java
 @EnableSwagger2WebFlux
 @Configuration
@@ -85,7 +87,7 @@ public class Swagger2Config {
 ```
 
 ## 3. 浏览在线文档
-![swagger-01](./images/swagger-01.png 'swagger-01')
+![swagger-02](./images/swagger-02.png 'swagger-02')
 
 http://localhost:9011/swagger-ui.html
 
