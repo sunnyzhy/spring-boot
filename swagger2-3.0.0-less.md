@@ -7,7 +7,7 @@ webmvc 和 webflux 的区别：
 
 - webflux是基于reactor的非阻塞模型(一般称为nio)。
 
-## 添加 swagger2 依赖
+## 1. 添加 swagger2 依赖
 ```xml
 <properties>
     <swagger2.version>2.10.5</swagger2.version>
@@ -57,7 +57,7 @@ webmvc 和 webflux 的区别：
 </dependencies>
 ```
 
-## 添加 swagger2 bean
+## 2. 添加 swagger2 bean
 添加 swagger2 配置类，即 swagger2 bean。
 
 ```java
@@ -84,7 +84,7 @@ public class Swagger2Config {
 }
 ```
 
-## 浏览在线文档
+## 3. 浏览在线文档
 ![swagger-01](./images/swagger-01.png 'swagger-01')
 
 http://localhost:9011/swagger-ui.html
