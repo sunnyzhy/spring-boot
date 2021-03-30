@@ -4,7 +4,7 @@
 2. 我们在业务工程中自定义的 PluginAdapter 插件不属于 mybatis-generator-maven-plugin 的 classpath
 3. 可以通过添加依赖的形式，把自定义的 PluginAdapter 插件添加到 mybatis-generator-maven-plugin 的 classpath
 4. 官方说明如下:
-   ![mybatis-generator-swagger2-plugin-01.png](./images/mybatis-generator-swagger2-plugin-01.png 'mybatis-generator-swagger2-plugin-01')
+   ![mybatis-generator-plugin-01.png](./images/mybatis-generator-plugin-01.png 'mybatis-generator-plugin-01')
 5. 数据库表和字段的 comment 要填写完整
 
 ## 1. 新建 mybatis-generator-swagger2-plugin 插件工程
@@ -48,14 +48,16 @@ public class Swagger2Plugin extends PluginAdapter {
             topLevelClass.addAnnotation(classAnnotation);
         }
 
-        // 取 generatorConfig.xml#context#plugin#property 的 name 值
+        // 读取配置文件 generatorConfig.xml 里 property 的 name 为 apiModel 的值
         String apiModelAnnotationPackage = properties.getProperty("apiModel");
+	// 读取配置文件 generatorConfig.xml 里 property 的 name 为 apiModelProperty 的值
         String apiModelPropertyAnnotationPackage = properties.getProperty("apiModelProperty");
 
-        // 取 generatorConfig.xml#context#plugin#property 的 value 值
+        // 如果配置项为空，就重新设置配置文件 generatorConfig.xml 里 property 的 name 为 apiModel 的值
         if (null == apiModelAnnotationPackage) {
             apiModelAnnotationPackage = "io.swagger.annotations.ApiModel";
         }
+	// 如果配置项为空，就重新设置配置文件 generatorConfig.xml 里 property 的 name 为 apiModelProperty 的值
         if (null == apiModelPropertyAnnotationPackage) {
             apiModelPropertyAnnotationPackage = "io.swagger.annotations.ApiModelProperty";
         }
