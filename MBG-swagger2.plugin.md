@@ -42,31 +42,33 @@ public class Swagger2Plugin extends PluginAdapter {
 
     @Override
     public boolean modelFieldGenerated(Field field, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
-        // @ApiModel 注解使用表的 comment
-        String classAnnotation = "@ApiModel(value=\"" + introspectedTable.getRemarks() + "\")";
-        if (!topLevelClass.getAnnotations().contains(classAnnotation)) {
-            topLevelClass.addAnnotation(classAnnotation);
-        }
-
         // 读取配置文件 generatorConfig.xml 里 property 的 name 为 apiModel 的值
         String apiModelAnnotationPackage = properties.getProperty("apiModel");
-	// 读取配置文件 generatorConfig.xml 里 property 的 name 为 apiModelProperty 的值
+        if (apiModelAnnotationPackage != null) {
+            apiModelAnnotationPackage = apiModelAnnotationPackage.trim();
+            if (apiModelAnnotationPackage.length() > 0 && apiModelAnnotationPackage.equals("io.swagger.annotations.ApiModel")) {
+                // import io.swagger.annotations.ApiModel;
+                topLevelClass.addImportedType(apiModelAnnotationPackage);
+                // 添加 @ApiModel 注解，description 是数据表的 comment
+                String apiModelAnnotation = "@ApiModel(value=\"" + topLevelClass.getType().getShortName() + "\", description=\"" + introspectedTable.getRemarks() + "\")";
+                if (!topLevelClass.getAnnotations().contains(apiModelAnnotation)) {
+                    topLevelClass.addAnnotation(apiModelAnnotation);
+                }
+            }
+        }
+
+        // 读取配置文件 generatorConfig.xml 里 property 的 name 为 apiModelProperty 的值
         String apiModelPropertyAnnotationPackage = properties.getProperty("apiModelProperty");
-
-        // 如果配置项为空，就重新设置配置文件 generatorConfig.xml 里 property 的 name 为 apiModel 的值
-        if (null == apiModelAnnotationPackage) {
-            apiModelAnnotationPackage = "io.swagger.annotations.ApiModel";
+        if (apiModelPropertyAnnotationPackage != null) {
+            apiModelPropertyAnnotationPackage = apiModelPropertyAnnotationPackage.trim();
+            if (apiModelPropertyAnnotationPackage.length() > 0 && apiModelPropertyAnnotationPackage.equals("io.swagger.annotations.ApiModelProperty")) {
+                // import io.swagger.annotations.ApiModelProperty;
+                topLevelClass.addImportedType(apiModelPropertyAnnotationPackage);
+                // 添加 @ApiModelProperty 注解, value 是数据表字段的 comment
+                field.addAnnotation("@ApiModelProperty(value=\"" + introspectedColumn.getRemarks() + "\")");
+            }
         }
-	// 如果配置项为空，就重新设置配置文件 generatorConfig.xml 里 property 的 name 为 apiModelProperty 的值
-        if (null == apiModelPropertyAnnotationPackage) {
-            apiModelPropertyAnnotationPackage = "io.swagger.annotations.ApiModelProperty";
-        }
 
-        topLevelClass.addImportedType(apiModelAnnotationPackage);
-        topLevelClass.addImportedType(apiModelPropertyAnnotationPackage);
-
-        // @ApiModelProperty 注解使用字段的 comment
-        field.addAnnotation("@ApiModelProperty(value=\"" + introspectedColumn.getRemarks() + "\")");
         return super.modelFieldGenerated(field, topLevelClass, introspectedColumn, introspectedTable, modelClassType);
     }
 }
@@ -79,6 +81,7 @@ public class Swagger2Plugin extends PluginAdapter {
 ```xml
 <properties>
 	<swagger2.version>3.0.0</swagger2.version>
+	<swagger.version>1.6.2</swagger.version>
 	<mybatis-plugin.version>1.3.6</mybatis-plugin.version>
 </properties>
 
@@ -87,6 +90,26 @@ public class Swagger2Plugin extends PluginAdapter {
         <groupId>io.springfox</groupId>
         <artifactId>springfox-boot-starter</artifactId>
         <version>${swagger2.version}</version>
+        <exclusions>
+            <exclusion>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-annotations</artifactId>
+            </exclusion>
+            <exclusion>
+                <groupId>io.swagger</groupId>
+                <artifactId>swagger-models</artifactId>
+            </exclusion>
+        </exclusions>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-annotations</artifactId>
+        <version>${swagger.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>io.swagger</groupId>
+        <artifactId>swagger-models</artifactId>
+        <version>${swagger.version}</version>
     </dependency>
 </dependencies>
 
