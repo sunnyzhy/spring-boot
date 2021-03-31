@@ -41,16 +41,16 @@ public class LombokPlugin extends PluginAdapter {
         return true;
     }
 
-    @Override
     public boolean modelBaseRecordClassGenerated(TopLevelClass topLevelClass, IntrospectedTable introspectedTable) {
         if (lombokEnabled()) {
+            // import lombok.Data;
             topLevelClass.addImportedType("lombok.Data");
+            // 添加 @Data 注解
             topLevelClass.addAnnotation("@Data");
         }
         // 必须返回 true，否则不会生成表的实体类
         return true;
     }
-
 
     @Override
     public boolean modelSetterMethodGenerated(Method method, TopLevelClass topLevelClass, IntrospectedColumn introspectedColumn, IntrospectedTable introspectedTable, ModelClassType modelClassType) {
