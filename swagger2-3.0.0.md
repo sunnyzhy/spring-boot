@@ -1,17 +1,35 @@
 # spring boot 集成 swagger2-3.0.0
 ## 1. 添加 swagger2 依赖
-```xml
-<properties>
-    <swagger2.version>3.0.0</swagger2.version>
-</properties>
+- 1.1. 排除 springfox-boot-starter 自带的 swagger-annotations 和 swagger-models 依赖
 
-<dependencies>
-    <dependency>
-        <groupId>io.springfox</groupId>
-        <artifactId>springfox-boot-starter</artifactId>
-        <version>${swagger2.version}</version>
-    </dependency>
-</dependencies>
+- 1.2. 添加 1.6.2 版本的 swagger-annotations 和 swagger-models 依赖
+
+```xml
+<dependency>
+	<groupId>io.springfox</groupId>
+	<artifactId>springfox-boot-starter</artifactId>
+	<version>3.0.0</version>
+	<exclusions>
+		<exclusion>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-annotations</artifactId>
+		</exclusion>
+		<exclusion>
+			<groupId>io.swagger</groupId>
+			<artifactId>swagger-models</artifactId>
+		</exclusion>
+	</exclusions>
+</dependency>
+<dependency>
+	<groupId>io.swagger</groupId>
+	<artifactId>swagger-annotations</artifactId>
+	<version>1.6.2</version>
+</dependency>
+<dependency>
+	<groupId>io.swagger</groupId>
+	<artifactId>swagger-models</artifactId>
+	<version>1.6.2</version>
+</dependency>
 ```
 
 ## 2. 添加 swagger2 bean
