@@ -59,7 +59,7 @@ private String doSupplier(Supplier<String> supply) {
  * @return
  */
 private String add(int x, int y) {
-    return "x + y = " + (x + y);
+    return x + " + " + y + " = " + (x + y);
 }
 
 /**
@@ -92,9 +92,9 @@ private String max(int[] arr) {
 ```
 Supplier<String> called
 the arg is not one
-x + y = 3
-the array is: 51, 59, 36, 22, 94, 29, 97, 69, 40, 61
-the max number is 97
+1 + 2 = 3
+the array is: 2, 62, 90, 2, 79, 71, 63, 78, 58, 7
+the max number is 90
 ```
 
 ### 创建对象
