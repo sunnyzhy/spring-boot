@@ -20,6 +20,41 @@ public interface Consumer<T> {
 
 ## 示例
 
+### 系统应用
+
+```java
+@Test
+void system() {
+    List<Cat> list = new ArrayList<>();
+    list.add(new Cat("Tom"));
+    list.add(new Cat("Jim"));
+
+    list.forEach(x -> System.out.println(x.getName()));
+
+    list.forEach(x -> x.setName("my name is: " + x.getName()));
+
+    list.forEach(x -> System.out.println(x.getName()));
+}
+
+@Data
+class Cat {
+    private String name;
+
+    public Cat(String name) {
+        this.name = name;
+    }
+}
+```
+
+输出:
+
+```
+Tom
+Jim
+my name is: Tom
+my name is: Jim
+```
+
 ### 普通应用
 
 ```java
