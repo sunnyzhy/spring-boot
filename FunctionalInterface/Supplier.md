@@ -16,6 +16,18 @@ public interface Supplier<T> {
 
 ## 示例
 
+### 系统应用
+
+```java
+@Test
+void system() {
+    Cat cat = null;
+    // 判断 cat 是否为 null, 如果为不为 null，就返回当前对象；否则就返回新创建的对象
+    Cat cat1 = Optional.ofNullable(cat).orElseGet(() -> new Cat());
+    System.out.println(cat1);
+}
+```
+
 ### 普通应用
 
 ```java
