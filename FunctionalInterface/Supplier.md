@@ -19,10 +19,18 @@ public interface Supplier<T> {
 ```java
 @Test
 void contextLoads() {
-    String value = doSupplier(() -> nullArg());
+    String value = doSupplier(() -> "Supplier<String> called");
     System.out.println(value);
 
-    value = doSupplier(() -> numToString(5));
+    int num = 5;
+    value = doSupplier(() -> {
+        switch (num) {
+            case 1:
+                return "the arg is one";
+            default:
+                return "the arg is not one";
+        }
+    });
     System.out.println(value);
 
     value = doSupplier(() -> add(1, 2));
@@ -42,29 +50,8 @@ private String doSupplier(Supplier<String> supply) {
 }
 
 /**
- * 直接返回一个字符串
- * @return
- */
-private String nullArg() {
-    return "the arg is null";
-}
-
-/**
- * 数字转字符串
- * @param num
- * @return
- */
-private String numToString(int num) {
-    switch (num) {
-        case 1:
-            return "the arg is one";
-        default:
-            return "the arg is not one";
-    }
-}
-
-/**
  * 两个参数相加
+ *
  * @param x
  * @param y
  * @return
@@ -75,6 +62,7 @@ private String add(int x, int y) {
 
 /**
  * 求数组元素的最大值
+ *
  * @param arr
  * @return
  */
@@ -95,4 +83,14 @@ private String max(int[] arr) {
     stringBuilder.append("the max number is " + max);
     return stringBuilder.toString();
 }
+```
+
+输出:
+
+```
+Supplier<String> called
+the arg is not one
+x + y = 3
+the array is: 51, 59, 36, 22, 94, 29, 97, 69, 40, 61
+the max number is 97
 ```
