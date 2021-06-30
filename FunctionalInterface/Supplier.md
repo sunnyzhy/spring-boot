@@ -16,6 +16,8 @@ public interface Supplier<T> {
 
 ## 示例
 
+### 普通用法
+
 ```java
 @Test
 void contextLoads() {
@@ -94,3 +96,44 @@ x + y = 3
 the array is: 51, 59, 36, 22, 94, 29, 97, 69, 40, 61
 the max number is 97
 ```
+
+### 创建对象
+```java
+@Test
+void instance() {
+    // Cat::new 等价于 () -> new Cat()
+    // Supplier<Cat> supplier = () -> new Cat();
+    Supplier<Cat> supplier = Cat::new;
+    
+    Cat cat1 = supplier.get();
+    System.out.println("cat1's name is: " + cat1.getName());
+    
+    Cat cat2 = supplier.get();
+    System.out.println("cat2's name is: " + cat2.getName());
+    
+    cat2.setName("Jim");
+    System.out.println("cat1's name is: " + cat1.getName());
+    System.out.println("cat2's name is: " + cat2.getName());
+
+    System.out.println("cat1's hash code is: " + cat1.hashCode());
+    System.out.println("cat2's hash code is: " + cat2.hashCode());
+}
+
+@Data
+class Cat {
+    private String name = "Tom";
+}
+```
+
+输出:
+
+```
+cat1's name is: Tom
+cat2's name is: Tom
+cat1's name is: Tom
+cat2's name is: Jim
+cat1's hash code is: 84333
+cat2's hash code is: 74537
+```
+
+**注：每次调用 get 方法都会创建一个新的对象，所以两个对象打印的 hashcode 是不一样的！**
