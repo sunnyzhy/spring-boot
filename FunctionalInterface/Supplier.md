@@ -16,7 +16,7 @@ public interface Supplier<T> {
 
 ## 示例
 
-### 普通用法
+### 普通应用
 
 ```java
 @Test
