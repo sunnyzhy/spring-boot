@@ -36,15 +36,15 @@ public interface Predicate<T> {
 }
 ```
 
-符合签名 boolean test(T t) 的方法，即参数为泛型，返回值为 boolean 的方法，都可以使用 Predicate<T> 描述。
+符合签名 boolean test(T t) 的方法，即参数为泛型，返回值为 boolean 的方法，都可以使用 Predicate\<T\> 描述。
 
 方法:
 - boolean test(T t), 判断参数是否满足条件
-- default Predicate<T> and(Predicate<? super T> other), 默认方法，逻辑与
-- default Predicate<T> negate(), 默认方法，逻辑非
-- default Predicate<T> or(Predicate<? super T> other), 默认方法，逻辑或
-- static <T> Predicate<T> isEqual(Object targetRef), 静态方法，判断数据是否与参数相等
-- static <T> Predicate<T> not(Predicate<? super T> target)，静态方法，逻辑非，内部调用的是 negate()
+- default Predicate\<T\> and(Predicate<? super T> other), 默认方法，逻辑与
+- default Predicate\<T\> negate(), 默认方法，逻辑非
+- default Predicate\<T\> or(Predicate<? super T> other), 默认方法，逻辑或
+- static \<T\> Predicate\<T\> isEqual(Object targetRef), 静态方法，判断数据是否与参数相等
+- static \<T\> Predicate\<T\> not(Predicate<? super T> target)，静态方法，逻辑非，内部调用的是 negate()
 
 ## 示例
 
