@@ -18,8 +18,8 @@ public interface Consumer<T> {
 符合签名 void accept(T t) 的方法，即参数为泛型，没有返回值的方法，都可以使用 Consumer\<T\> 描述。
 
 方法:
-1. void accept(T t), 执行消费
-2. default Consumer\<T\> andThen(Consumer<? super T> after), 默认方法，先执行当前的消费动作，再执行后续的消费动作
+- void accept(T t), 执行消费
+- default Consumer\<T\> andThen(Consumer<? super T> after), 默认方法，先执行当前的消费动作，再执行后续的消费动作
 
 ## 示例
 
