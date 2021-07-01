@@ -10,9 +10,10 @@ public interface Supplier<T> {
 }
 ```
 
-1. Supplier\<T\> 接口只包含一个无参的方法 T get()，返回一个泛型数据。
-2. 业务方法的参数与 Supplier\<T\> 接口无关。
-3. 业务方法的返回值类型必须跟 Supplier\<T\> 接口里指定的泛型一致。
+符合签名 T get() 的方法，即没有参数，返回值为泛型的方法，都可以使用 Supplier<T> 描述。
+
+方法:
+- T get()，返回一个泛型对象。
 
 ## 示例
 
