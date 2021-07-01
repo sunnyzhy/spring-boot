@@ -33,7 +33,7 @@ void system() {
 
 ```java
 @Test
-void contextLoads() {
+void getTest() {
     String value = doSupplier(() -> "Supplier<String> called");
     System.out.println(value);
 
