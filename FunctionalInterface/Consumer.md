@@ -60,24 +60,16 @@ my name is: Jim
 
 ### 普通应用
 
+#### accept
+
 ```java
 @Test
-void normal() {
+void acceptTest() {
     Consumer<Integer> square = x -> System.out.println(x + "^2 = " + x * x);
     square.accept(3);
 
     Consumer<Integer> multi = x -> multi(x);
     multi.accept(3);
-
-    Consumer<Integer> consumer1 = x -> System.out.println("x = " + x);
-    Consumer<Integer> consumer2 = x -> {
-        System.out.println("x + x = " + (x + x));
-    };
-    Consumer<Integer> consumer3 = x -> System.out.println("x * x = " + x * x);
-    consumer1
-            .andThen(consumer2)
-            .andThen(consumer3)
-            .accept(3);
 }
 
 private void multi(int x) {
@@ -90,6 +82,28 @@ private void multi(int x) {
 ```
 3^2 = 9
 3 * 2 = 6
+```
+
+#### andThen
+
+```java
+@Test
+void andThenTest() {
+    Consumer<Integer> consumer1 = x -> System.out.println("x = " + x);
+    Consumer<Integer> consumer2 = x -> {
+        System.out.println("x + x = " + (x + x));
+    };
+    Consumer<Integer> consumer3 = x -> System.out.println("x * x = " + x * x);
+    consumer1
+            .andThen(consumer2)
+            .andThen(consumer3)
+            .accept(3);
+}
+```
+
+输出:
+
+```
 x = 3
 x + x = 6
 x * x = 9
