@@ -15,8 +15,11 @@ public interface Consumer<T> {
 }
 ```
 
-1. Consumer\<T\> 接口只有两个方法: 一个抽象方法，一个默认方法。其中，抽象方法接收一个泛型参数，无返回值；默认方法的参数和返回值均为 Consumer\<T\>。
-2. 只要符合签名 void accept(T t) 的业务方法，都可以使用 Consumer\<T\> 描述。
+符合签名 void accept(T t) 的方法，即参数为泛型，没有返回值的方法，都可以使用 Consumer\<T\> 描述。
+
+方法:
+1. void accept(T t), 执行消费
+2. default Consumer\<T\> andThen(Consumer<? super T> after), 默认方法，先执行当前的消费动作，再执行后续的消费动作
 
 ## 示例
 
