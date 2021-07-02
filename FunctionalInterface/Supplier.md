@@ -10,7 +10,7 @@ public interface Supplier<T> {
 }
 ```
 
-符合签名 T get() 的方法，即没有参数，返回值为泛型的方法，都可以使用 Supplier\<T\> 描述。
+符合签名 T get() 的方法，即没有参数，返回值为泛型的方法，都可以调用 Supplier\<T\> 接口。
 
 方法:
 - T get()，返回一个泛型对象。
