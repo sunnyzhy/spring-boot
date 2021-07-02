@@ -15,7 +15,7 @@ public interface Consumer<T> {
 }
 ```
 
-符合签名 void accept(T t) 的方法，即参数为泛型，没有返回值的方法，都可以使用 Consumer\<T\> 描述。
+符合签名 void accept(T t) 的方法，即参数为泛型，没有返回值的方法，都可以调用 Consumer\<T\> 接口。
 
 方法:
 - void accept(T t), 执行消费
