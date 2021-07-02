@@ -24,7 +24,7 @@ public interface Function<T, R> {
 }
 ```
 
-符合签名 R apply(T t) 的方法，即参数为泛型，返回值也为泛型的方法，都可以使用 Function\<T, R\> 描述。
+符合签名 R apply(T t) 的方法，即参数为泛型，返回值也为泛型的方法，都可以调用 Function\<T, R\> 接口。
 
 方法:
 - R apply(T t), 参数为泛型，返回值也为泛型
