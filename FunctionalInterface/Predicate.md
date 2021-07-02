@@ -36,7 +36,7 @@ public interface Predicate<T> {
 }
 ```
 
-符合签名 boolean test(T t) 的方法，即参数为泛型，返回值为 boolean 的方法，都可以使用 Predicate\<T\> 描述。
+符合签名 boolean test(T t) 的方法，即参数为泛型，返回值为 boolean 的方法，都可以调用 Predicate\<T\> 接口。
 
 方法:
 - boolean test(T t), 判断参数是否满足条件
