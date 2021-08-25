@@ -1,4 +1,7 @@
-# PathVariable annotation was empty on param 0
+# FAQ
+
+## 1 PathVariable annotation was empty on param 0
+
 - 原因
 
 远程调用Feign的时候报错，PathVariable注解为空。
@@ -10,7 +13,8 @@
 @PathVariable(value = "id") Integer id
 ```
 
-# @Value注解报Could not resolve placeholder错误
+## 2 @Value注解报Could not resolve placeholder错误
+
 - 原因
 
 存在多个properties配置文件，即除了application.properties之外，还有自定义的xxx.properties。
@@ -31,7 +35,8 @@ Spring容器采用反射扫描的发现机制，在探测到Spring容器中有�
     </bean>
 ```
 
-# Cannot determine embedded database driver class for database type NONE
+## 3 Cannot determine embedded database driver class for database type NONE
+
 - 原因
 
 配置文件中缺少DataSource配置
@@ -43,7 +48,7 @@ Spring容器采用反射扫描的发现机制，在探测到Spring容器中有�
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
 ```
 
-# spring boot 单元测试的时候报 BeanCreationNotAllowedException: Error creating bean with name 'eurekaAutoServiceRegistration'
+## 4 spring boot 单元测试的时候报 BeanCreationNotAllowedException: Error creating bean with name 'eurekaAutoServiceRegistration'
 
 [github解决方案](https://github.com/spring-cloud/spring-cloud-netflix/issues/1952 "github解决方案")
 
@@ -51,7 +56,8 @@ Spring容器采用反射扫描的发现机制，在探测到Spring容器中有�
 The workaround works when running the application, but not when running tests disappointed.
 ```
 
-# The field file exceeds its maximum permitted size of 1048576 bytes.
+## 5 The field file exceeds its maximum permitted size of 1048576 bytes.
+
 - 原因
 
 Spring Boot 内置的 tomcat 限制了请求的文件大小。
@@ -72,7 +78,8 @@ spring.servlet.multipart.max-request-size = 100MB
 
 **如果不限制文件上传的大小，就把两个值都设置为-1。**
 
-# post 请求，后台已执行，但是返回 404
+## 6 post 请求，后台已执行，但是返回 404
+
 解决方法:
 
 - 用 @Controller 注解修饰的 controller ，需加上 @ResponseBody 注解
