@@ -9,7 +9,7 @@ Maven 中使用 scope 来指定当前包的依赖范围和依赖的传递性。�
 |runtime|runtime, test|是|
 |test|test|否|
 |system|compile, test|是|
-|import|<dependencyManagement>|否|
+|import|\<dependencyManagement\>|否|
 
 ## compile
 
@@ -202,9 +202,9 @@ maven 跟 java 一样，都是单继承，也就是说在子模块中只能出�
 
 1. 将 dependency 分类，每一类依赖建立单独的 pom 文件
 2. 在需要使用到这些依赖的子模块中，使用 dependencyManagement 管理依赖
-3. <scope>import</scope> 只能定义在 dependencyManagement 里, 且仅用于 <type>pom</type> 的 dependency
+3. \<scope\>import\</scope\> 只能定义在 dependencyManagement 里, 且仅用于 \<type\>pom\</type\> 的 dependency
 
-一般，我们会将 springboot 添加到父模块的 <parent> 标签里:
+一般，我们会将 springboot 添加到父模块的 \<parent\> 标签里:
 
 ```xml
 <parent>
@@ -225,7 +225,7 @@ maven 跟 java 一样，都是单继承，也就是说在子模块中只能出�
 </dependencyManagement>
 ```
 
-我们也可以不使用 <parent> 标签，而使用 import 来将 springboot 添加到父模块里:
+我们也可以不使用 \<parent\> 标签，而使用 import 来将 springboot 添加到父模块里:
 
 ```xml
 <dependencyManagement>
