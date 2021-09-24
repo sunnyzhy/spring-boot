@@ -9,7 +9,7 @@
 
 下载后直接解压。
 
-# 搭建 Redis 集群
+# 搭建 elasticsearch 集群
 
 有如下 3 个节点：
 
