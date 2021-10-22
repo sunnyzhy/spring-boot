@@ -1,9 +1,13 @@
- # Mybatis中#与$的区别
+# Mybatis 之 mapper 用法
+ 
+## Mybatis中#与$的区别
+ 
 - **#{}** 是预编译处理，MyBatis在处理 **#{}** 时，它会将sql中的 **#{}** 替换为 **?** ，然后调用 PreparedStatement 的 set 方法来赋值
 
 - **${}** 是字符串替换， MyBatis在处理 **${}** 时，它会将sql中的 **${}** 替换为变量的值
 
 注意：
+
 1. 使用 **${}** 会导致sql注入
 
 2. 使用 **#{}** 可以很大程度上防止sql注入
@@ -15,30 +19,41 @@ select * from ${t_name};
 
 select * from user order by ${f_age};
 ```
+
+## Mybatis 的实体字段是关键字/保留字
+
+```java
+@Column(name = "`database`")
+private Integer database;
+```
  
- # 参数的用法
-  ## mapper.xml
-  ``` xml
-  <select id="select" parameterType="java.util.Map" resultMap="BaseResultMap">
-    select * from user where id in
-    <foreach item="item" index="index" collection="ids" open="("
-             separator="," close=")">
-      #{item}
-    </foreach>
-    <if test="type != null and type != ''">
-      AND `type` = #{type}
-    </if>
-  </select>
-  ```
+## 参数的用法
+
+### mapper.xml
+
+``` xml
+<select id="select" parameterType="java.util.Map" resultMap="BaseResultMap">
+  select * from user where id in
+  <foreach item="item" index="index" collection="ids" open="("
+           separator="," close=")">
+    #{item}
+  </foreach>
+  <if test="type != null and type != ''">
+    AND `type` = #{type}
+  </if>
+</select>
+```
   
-  ## mapper
-  ``` java
-  public interface UserMapper extends Mapper<User> {
-    List<User> select(@Param("type") Integer type, @Param("ids") List<Integer> ids);
-  }
-  ```
+### mapper
+
+``` java
+public interface UserMapper extends Mapper<User> {
+  List<User> select(@Param("type") Integer type, @Param("ids") List<Integer> ids);
+}
+```
   
-# sql标签用法
+## sql标签用法
+
 ```xml
 <mapper namespace="com.zhy.mapper.UserMapper">
   <resultMap id="BaseResultMap" type="com.zhy.model.User">
@@ -70,8 +85,10 @@ select * from user order by ${f_age};
 </mapper>
 ```
 
-# 分页查询、count、批量添加
-## model
+## 分页查询、count、批量添加
+
+### model
+
 ```java
 @Data
 public class UserSqlCondition {
@@ -112,7 +129,8 @@ public class UserSqlCondition {
 }
 ```
 
-## mapper.xml
+### mapper.xml
+
 一个标签中执行多条sql语句，需要做以下操作：
 
 1. 在数据库的连接参数中加上 **allowMultiQueries=true**
@@ -209,7 +227,8 @@ spring.datasource.password=root
 </mapper>
 ```
 
-## mapper
+### mapper
+
 ```java
 public interface UserMapper extends Mapper<User> {
     List<User> selectUser(UserSqlCondition sqlCondition);
@@ -220,7 +239,8 @@ public interface UserMapper extends Mapper<User> {
 }
 ```
 
-# 批量添加并返回主键id
+## 批量添加并返回主键id
+
 1. 升级Mybatis到3.3.1及以上版本，官方在这个版本中加入了批量新增返回主键id的功能
 
 2. <insert>标签中添加 useGeneratedKeys="true" keyProperty="id"
@@ -245,8 +265,10 @@ void batchInsertReturnId(List<User> list);
   </insert>
 ```
 
-# Mybatis对整型参数值等于0的判断
+## Mybatis对整型参数值等于0的判断
+	
 mapper的配置文件
+	
 ``` xml
 		<if test="statusType != null and statusType != '' ">
 			AND status_flag = #{statusType}
@@ -263,7 +285,8 @@ mapper的配置文件
 </if>
 ```
 
-# 判断 list 是否为空
+## 判断 list 是否为空
+
 ```xml
 <if test="list != null and list.size() > 0">
     AND id IN
@@ -273,8 +296,10 @@ mapper的配置文件
 </if>
 ```
 
-# 批量修改
-## 批量修改对象列表
+## 批量修改
+
+### 批量修改对象列表
+
 ```xml
   <update id="batchUpdate" parameterType="java.util.List">
     UPDATE user
@@ -312,7 +337,8 @@ mapper的配置文件
 void batchUpdate(List<User> list);
 ```
 
-## update 时 set 和 if 的用法
+### update 时 set 和 if 的用法
+
 ```xml
   <update id="update" parameterType="com.zhy.model.sql.UserSqlCondition">
     UPDATE user
