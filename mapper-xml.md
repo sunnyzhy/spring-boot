@@ -2,17 +2,17 @@
  
 ## Mybatis中#与$的区别
  
-- **#{}** 是预编译处理，MyBatis在处理 **#{}** 时，它会将sql中的 **#{}** 替换为 **?** ，然后调用 PreparedStatement 的 set 方法来赋值
+- ```#{}``` 是预编译处理，MyBatis在处理 ```#{}``` 时，它会将sql中的 ```#{}``` 替换为 ```?``` ，然后调用 PreparedStatement 的 set 方法来赋值
 
-- **${}** 是字符串替换， MyBatis在处理 **${}** 时，它会将sql中的 **${}** 替换为变量的值
+- ```${}``` 是字符串替换， MyBatis在处理 ```${}``` 时，它会将sql中的 ```${}``` 替换为变量的值
 
 注意：
 
-1. 使用 **${}** 会导致sql注入
+1. 使用 ```${}``` 会导致 sql 注入
 
-2. 使用 **#{}** 可以很大程度上防止sql注入
+2. 使用 ```#{}``` 可以很大程度上防止 sql 注入
 
-3. 如果参数是字段名、表名等，就需要使用 **${}** ，例如
+3. 如果参数是字段名、表名等，就需要使用 ```${}``` ，例如
 
 ```sql
 select * from ${t_name};
@@ -136,9 +136,9 @@ public class UserSqlCondition {
 
 一个标签中执行多条sql语句，需要做以下操作：
 
-1. 在数据库的连接参数中加上 **allowMultiQueries=true**
+1. 在数据库的连接参数中加上 ```allowMultiQueries=true```
 
-2. 在标签下将多条sql用 **;** 隔开
+2. 在标签下将多条sql用 ```;``` 隔开
 
 ```
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -242,15 +242,15 @@ public interface UserMapper extends Mapper<User> {
 }
 ```
 
-## 批量添加并返回主键id
+## 批量添加并返回主键 id
 
-1. 升级Mybatis到3.3.1及以上版本，官方在这个版本中加入了批量新增返回主键id的功能
+1. 升级 Mybatis 到 3.3.1 及以上版本，官方在这个版本中加入了批量新增返回主键 id 的功能
 
-2. <insert>标签中添加 useGeneratedKeys="true" keyProperty="id"
+2. ```<insert>``` 标签中添加 ```useGeneratedKeys="true" keyProperty="id"```
 	
-3. 在Dao中不能使用@Param注解
+3. 在 Dao 中不能使用 ```@Param``` 注解
 
-4. Mapper.xml中使用list变量（parameterType="java.util.List"）接受Dao中的参数集合
+4. Mapper.xml 中使用 list 变量```（parameterType="java.util.List"）```接受 Dao 中的参数集合
 
 ```java
 void batchInsertReturnId(List<User> list);
@@ -268,9 +268,9 @@ void batchInsertReturnId(List<User> list);
   </insert>
 ```
 
-## Mybatis对整型参数值等于0的判断
+## Mybatis 对整型参数值等于 0 的判断
 	
-mapper的配置文件
+mapper 的配置文件
 	
 ``` xml
 		<if test="statusType != null and statusType != '' ">
@@ -278,7 +278,7 @@ mapper的配置文件
 		</if>
 ```
 
-当 statusType 的值为 **0** 的时候，如果其数据类型为 **Integer**，则判断的结果为 **null** ；如果其数据类型为 **int**，则判断的结果为 **''**。
+当 statusType 的值为 ```0``` 的时候，如果其数据类型为 ```Integer```，则判断的结果为 ```null``` ；如果其数据类型为 ```int```，则判断的结果为 ```''```。
 
 - **解决方法**
 
