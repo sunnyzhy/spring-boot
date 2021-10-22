@@ -26,7 +26,10 @@ select * from user order by ${f_age};
 @Column(name = "`database`")
 private Integer database;
 ```
- 
+
+1. 使用 ```@Column``` 注解注解
+2. 关键字用 ``` ` ``` 号标记
+
 ## 参数的用法
 
 ### mapper.xml
