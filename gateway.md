@@ -205,7 +205,45 @@ filters:
       parts: 2
 ```
 
-#### 2.4.2 SpringCloudCircuitBreakerFilterFactory 示例
+***当请求 ```/a/b/c``` 时，最终转发的请求是 ```/c```***
+
+#### 2.4.2 PrefixPathGatewayFilterFactory 示例
+
+源码:
+
+```java
+// .\org\springframework\cloud\spring-cloud-gateway-server\3.0.3\spring-cloud-gateway-server-3.0.3.jar!\org\springframework\cloud\gateway\filter\factory\PrefixPathGatewayFilterFactory.class
+
+public class PrefixPathGatewayFilterFactory extends AbstractGatewayFilterFactory<PrefixPathGatewayFilterFactory.Config> {
+    // ...
+    
+    public static class Config {
+        private String prefix;
+
+        // ...
+    }
+}
+```
+
+简化配置:
+
+```yml
+filters:
+  - PrefixPath=/api
+```
+
+完整配置:
+
+```yml
+filters:
+  - name: PrefixPath
+    args:
+      prefix: /api
+```
+
+***当请求 ```/a/b/c``` 时，最终转发的请求是 ```/api/a/b/c```***
+
+#### 2.4.3 SpringCloudCircuitBreakerFilterFactory 示例
 
 ```
 SpringCloudCircuitBreakerFilterFactory 一般用作全局熔断。
