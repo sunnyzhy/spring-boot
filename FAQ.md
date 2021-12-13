@@ -82,5 +82,15 @@ spring.servlet.multipart.max-request-size = 100MB
 
 解决方法:
 
-- 用 @Controller 注解修饰的 controller ，需加上 @ResponseBody 注解
-- 用 @RestController 注解修饰 controller
+- 用 @Controller 注解修饰的 controller ，需加上 ```@ResponseBody``` 注解
+- 用 ```@RestController``` 注解修饰 controller
+
+## 7 RestController 报错 404
+
+SpringBoot 启动时候，启动类从当前包开始扫描子级包，所以如果 Controller 不是启动类所在包的子级包，是不会被扫描进 IOC 容器并进行自动配置的。此时，需要将 Controller 所在的包修改为启动类的子级包。
+
+例如，Controller 所在的包是 ```package com.example.controller;```，而主启动类所在的包是 ```package com.example.demo;```，由于 Controller 所在的包不是启动类所在包的子级包，所以前端访问 Controller 接口的时候就会抛出 404 的异常。
+
+解决方法:
+
+把 Controller 所在的包修改为 ```package com.example.demo.controller;``` 使其成为  ```package com.example.demo;``` 的子级包。
