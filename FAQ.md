@@ -94,3 +94,107 @@ SpringBoot 启动时候，启动类从当前包开始扫描子级包，所以如
 解决方法:
 
 把 Controller 所在的包修改为 ```package com.example.demo.controller;``` 使其成为  ```package com.example.demo;``` 的子级包。
+
+## 8 Eureka 在有虚拟网卡的情况下获取正确的IP
+
+### 解决方法
+
+```yml
+spring:
+  cloud:
+    inetutils:
+      ignored-interfaces: ## 忽略网卡
+      - VMware.*
+```
+
+### 源码分析
+
+#### 8.1 EurekaClientAutoConfiguration
+
+```java
+// 源码: spring-cloud-netflix-eureka-client-3.0.3.jar\org\springframework\cloud\netflix\eureka\EurekaClientAutoConfiguration.class
+
+@Bean
+@ConditionalOnMissingBean(
+    value = {EurekaInstanceConfig.class},
+    search = SearchStrategy.CURRENT
+)
+public EurekaInstanceConfigBean eurekaInstanceConfigBean(InetUtils inetUtils, ManagementMetadataProvider managementMetadataProvider) {
+    // ...
+    EurekaInstanceConfigBean instance = new EurekaInstanceConfigBean(inetUtils);
+    // ...
+    return instance;
+}
+```
+
+#### 8.2 EurekaInstanceConfigBean
+
+```java
+// 源码: spring-cloud-netflix-eureka-client-3.0.3.jar\org\springframework\cloud\netflix\eureka\EurekaInstanceConfigBean.class
+
+public EurekaInstanceConfigBean(InetUtils inetUtils) {
+    // ...
+    this.hostInfo = this.inetUtils.findFirstNonLoopbackHostInfo();
+    // ...
+}
+```
+
+#### 8.3 findFirstNonLoopbackHostInfo()
+
+```java
+// 源码: spring-cloud-netflix-eureka-client-3.0.3.jar\org\springframework\cloud\commons\util\InetUtils.class
+
+public InetUtils.HostInfo findFirstNonLoopbackHostInfo() {
+    InetAddress address = this.findFirstNonLoopbackAddress();
+    // ...
+}
+```
+
+#### 8.4 findFirstNonLoopbackAddress()
+
+```java
+// 源码: spring-cloud-netflix-eureka-client-3.0.3.jar\org\springframework\cloud\commons\util\InetUtils.class
+
+public InetAddress findFirstNonLoopbackAddress() {
+    // ...
+
+    try {
+        // ...
+        while(true) {
+            NetworkInterface ifc;
+            do {
+                // ...
+            } while(this.ignoreInterface(ifc.getDisplayName()));
+
+            // ...
+        }
+    } catch (IOException var8) {
+        this.log.error("Cannot get first non-loopback address", var8);
+    }
+
+    // ...
+}
+```
+
+#### 8.5 ignoreInterface()
+
+```java
+// 源码: spring-cloud-netflix-eureka-client-3.0.3.jar\org\springframework\cloud\commons\util\InetUtils.class
+
+boolean ignoreInterface(String interfaceName) {
+    // 从配置文件里读取需要忽略的网卡
+    Iterator var2 = this.properties.getIgnoredInterfaces().iterator();
+
+    String regex;
+    do {
+        if (!var2.hasNext()) {
+            return false;
+        }
+
+        regex = (String)var2.next();
+    } while(!interfaceName.matches(regex));
+
+    this.log.trace("Ignoring interface: " + interfaceName);
+    return true;
+}
+```
