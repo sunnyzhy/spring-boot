@@ -228,3 +228,34 @@ public class DemoTests {
 ### 9.2 Failed to load ApplicationContext
 
 检查 application.yml 或 application.properties 的配置项是否有错误或不完整的地方。
+
+## 10 为什么在业务模块的 pom#properties 加上 ＜log4j2.version＞ 配置就可以更新 log4j2 的版本
+
+1. ctrl + 左键，点击业务模块的 pom 文件中 ```<parent>```里的任意内容
+   ```xml
+       <parent>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-starter-parent</artifactId>
+           <version>2.5.7</version>
+           <relativePath/> <!-- lookup parent from repository -->
+       </parent>
+   ```
+   跳转到 ```spring-boot-starter-parent-2.5.7.pom```
+2. ctrl + 左键，点击 ```spring-boot-starter-parent-2.5.7.pom#<parent>```里的任意内容
+   ```xml
+       <parent>
+           <groupId>org.springframework.boot</groupId>
+           <artifactId>spring-boot-dependencies</artifactId>
+           <version>2.5.7</version>
+       </parent>
+   ```
+   跳转到 ```spring-boot-dependencies-2.5.7.pom```
+3. 在 ```spring-boot-dependencies-2.5.7.pom``` 里搜索 ```log4j2.version```
+   ```xml
+       <properties>
+           // ...
+           <log4j2.version>2.14.1</log4j2.version>
+           // ...
+       </properties>
+   ```
+4. 发现 spring-boot 2.5.7 默认使用的 log4j2 的版本号是 2.14.1, 所以，我们只需要在业务模块的 pom#properties 里显式地配置 ```<properties><log4j2.version>2.17.0</log4j2.version></properties>```，就可以覆盖 spring-boot 默认的 log4j2 的版本号，从而实现版本的更新。
