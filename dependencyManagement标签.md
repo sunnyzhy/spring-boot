@@ -32,9 +32,9 @@
 <dependencyManagement>
   <dependencies>
     <dependency>
-        <groupId>org.elasticsearch</groupId>
-        <artifactId>elasticsearch</artifactId>
-        <version>${elasticsearch.version}</version>
+        <groupId>io.jsonwebtoken</groupId>
+        <artifactId>jjwt</artifactId>
+        <version>${jjwt.version}</version>
     </dependency>
   </dependencies>
 </dependencyManagement>
@@ -96,7 +96,7 @@
            <artifactId>spring-boot-starter-web</artifactId>
        </dependency>
    ```
-5. 其它依赖，诸如: ```spring-boot-starter-security```, ```mysql-connector-java```, ```lombok```, ```commons-lang3```，都无须额外声明。
+5. 其它依赖，诸如: ```spring-boot-starter-security```, ```mysql-connector-java```, ```lombok```, ```commons-lang3```，```elasticsearch```, 都无须额外声明。
 
 ### ```spring-cloud-starter-gateway``` 依赖声明
 
