@@ -111,6 +111,7 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+        </dependencies>
     <dependencyManagement>
    ```
    跳转到 ```spring-cloud-dependencies-2020.0.5.pom```
