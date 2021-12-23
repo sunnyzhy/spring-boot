@@ -89,7 +89,7 @@
            <version>2.5.7</version>
        </dependency>
    ```
-4. 所以，不需要在业务模块的 pom 文件里声明 ```spring-boot-starter-web``` 依赖，直接在```子业务模块```里显示地引用即可。
+4. 所以，不需要在业务模块的 pom 文件里声明 ```spring-boot-starter-web``` 依赖，直接在```子业务模块```里显式地引用即可。
    ```xml
        <dependency>
            <groupId>org.springframework.boot</groupId>
