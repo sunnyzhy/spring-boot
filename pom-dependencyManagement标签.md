@@ -60,6 +60,8 @@
 
 ## 添加依赖声明时避免重复添加
 
+***如果是已经包含在 spring-boot-dependencies 和 spring-cloud-dependencies 里的依赖，就不需要在父模块的 pom 里重复声明; 否则，就需要在父模块的 pom 里显式声明。***
+
 ### ```spring-boot-starter-web``` 依赖声明
 
 1. ctrl + 左键，点击业务模块的 pom 文件中 ```<parent>```里的任意内容
@@ -152,3 +154,71 @@
       </dependency>
    ```
 5. 其它依赖，诸如: ```spring-cloud-starter-netflix-eureka-client```, ```spring-cloud-starter-openfeign```，都无须额外声明。
+
+## 更新依赖的版本号
+
+### 更新 spring-boot 内部默认加载的依赖项的版本号
+
+- 更新 spring-boot-starter-web 的版本号，***在父模块里添加依赖声明。***
+   ```xml
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>2.6.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+   ```
+- 更新 spring-boot-starter-security 的版本号，***在父模块里添加依赖声明。***
+   ```xml
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>2.6.2</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+   ```
+- 更新 log4j2 的版本号，***在父模块里添加属性声明。***
+   ```xml
+    <properties>
+        <log4j2.version>2.17.0</log4j2.version>
+    </properties>
+   ```
+- 更新 lombok 的版本号，***在父模块里添加属性声明。***
+   ```xml
+    <properties>
+        <lombok.version>1.18.22</lombok.version>
+    </properties>
+   ```
+
+### 更新 spring-cloud 内部默认加载的依赖项的版本号
+
+- 更新 spring-cloud-starter-gateway 的版本号，***在父模块里添加依赖声明。***
+   ```xml
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-gateway</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+   ```
+- 更新 spring-cloud-starter-netflix-eureka-client 的版本号，***在父模块里添加依赖声明。***
+   ```xml
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+                <version>3.1.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+   ```
