@@ -162,7 +162,7 @@
 
 1. 如果没有在 properties 和 dependencyManagement 里指定版本号，就使用 spring-boot 默认的版本号
 2. 如果在 properties 里指定了版本号，但没有在 dependencyManagement 里指定版本号，就使用 properties 里指定的版本号
-3. 如果在 properties、 dependencyManagement、dependencies 里同时指定了版本号，就使用 dependencyManagement 里同时指定的版本号
+3. 如果在 properties、 dependencyManagement、dependencies 里同时指定了版本号，就使用 dependencyManagement 里指定的版本号
 4. 如果在 dependencyManagement 里同时指定了多个版本号，就按声明的顺序，```使用最后声明的版本号```
 5. dependencyManagement 的优先级最高
 
@@ -305,6 +305,6 @@
 总结，dependencyManagement 继承的方式，版本号传递的规则:
 
 1. 如果在 dependencyManagement 里只导入了 spring-boot-dependencies，就使用 spring-boot 默认的版本号
-2. 如果在 properties、 dependencyManagement、dependencies 里同时指定了版本号，就使用 dependencyManagement 里同时指定的版本号
+2. 如果在 properties、 dependencyManagement、dependencies 里同时指定了版本号，就使用 dependencyManagement 里指定的版本号
 3. 如果在 dependencyManagement 里同时指定了多个版本号，就按声明的顺序，```使用最先声明的版本号```
 4. dependencyManagement 的优先级最高
