@@ -15,7 +15,7 @@
     </parent>
    ```
 
-2. 在 properties 里指定版本 1.18.20，此时 1.18.20 会覆盖 spring-boot 默认的 ```1.18.22```
+2. 在 properties 里指定版本 1.18.20，此时 ```1.18.20``` 会覆盖 spring-boot 默认的 1.18.22
 
    ```xml
     <parent>
