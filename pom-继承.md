@@ -97,7 +97,7 @@
     <packaging>pom</packaging>
 ```
 
-- 方式一
+- parent 继承方式
 
    ```xml
     <parent>
@@ -107,7 +107,7 @@
     </parent>
    ```
 
-- 方式二
+- dependencyManagement 继承方式
 
    ```xml
     <dependencyManagement>
