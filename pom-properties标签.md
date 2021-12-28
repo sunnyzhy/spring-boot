@@ -35,7 +35,7 @@
 
 ## settings.x
 
-settings 代表 maven 的 settings 配置文件 ```/conf/settings.xml```
+settings 代表 maven 的 settings 配置文件 ```$MAVEN_HOME/conf/settings.xml```
 
 例如 ```${settings.localRepository}``` 表示:
 
@@ -70,3 +70,41 @@ settings 代表 maven 的 settings 配置文件 ```/conf/settings.xml```
     <maven.install.skip>true</maven.install.skip>
 </properties>
 ```
+
+## 内置属性
+
+内置属性，即 superPom 中预定义的属性。位置: ```$MAVEN_HOME/lib/maven-model-builder-3.8.1.jar/org/apache/maven/model/pom-4.0.0.xml```
+
+pom-4.0.0.xml 部分内容:
+
+```xml
+  <build>
+    <directory>${project.basedir}/target</directory>
+    <outputDirectory>${project.build.directory}/classes</outputDirectory>
+    <finalName>${project.artifactId}-${project.version}</finalName>
+    <testOutputDirectory>${project.build.directory}/test-classes</testOutputDirectory>
+    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+    <scriptSourceDirectory>${project.basedir}/src/main/scripts</scriptSourceDirectory>
+    <testSourceDirectory>${project.basedir}/src/test/java</testSourceDirectory>
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>${project.basedir}/src/test/resources</directory>
+      </testResource>
+    </testResources>
+  </build>
+```
+
+属性说明:
+
+- ${project.basedir}: 当前项目的根目录，即 pom.xml 文件所在的目录，还可以简写为: ${basedir}
+- ${project.version}: 当前项目的版本，还可以简写为: ${version}
+- ${project.build.directory}: 项目的构建目录，默认值为: ${project.basedir}/target
+- ${project.build.outputDirectory}: 项目主代码编译输出目录，默认值为: ${project.build.directory}/classes, 即 ${project.basedir}/target/classes
+- ${project.build.testOutputDirectory}: 项目测试代码编译输出目录，默认值为: ${project.build.directory}/test-classes, 即 ${project.basedir}/target/test-classes
+- ${project.build.sourceDirectory}: 项目的主源码目录，默认值为: ${project.basedir}/src/main/java
+- ${project.build.testSourceDirectory}: 项目的测试源码目录，默认值为: ${project.basedir}/src/test/java
