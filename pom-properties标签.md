@@ -101,10 +101,10 @@ pom-4.0.0.xml 部分内容:
 
 属性说明:
 
-- ${project.basedir}: 当前项目的根目录，即 pom.xml 文件所在的目录，还可以简写为: ${basedir}
-- ${project.version}: 当前项目的版本，还可以简写为: ${version}
-- ${project.build.directory}: 项目的构建目录，默认值为: ${project.basedir}/target
-- ${project.build.outputDirectory}: 项目主代码编译输出目录，默认值为: ${project.build.directory}/classes, 即 ${project.basedir}/target/classes
-- ${project.build.testOutputDirectory}: 项目测试代码编译输出目录，默认值为: ${project.build.directory}/test-classes, 即 ${project.basedir}/target/test-classes
-- ${project.build.sourceDirectory}: 项目的主源码目录，默认值为: ${project.basedir}/src/main/java
-- ${project.build.testSourceDirectory}: 项目的测试源码目录，默认值为: ${project.basedir}/src/test/java
+- ```${project.basedir}```: 当前项目的根目录，即 ```pom.xml``` 文件所在的目录，还可以简写为: ```${basedir}```
+- ```${project.version}```: 当前项目的版本，还可以简写为: ```${version}```
+- ```${project.build.directory}```: 项目的构建目录，默认值为: ```${project.basedir}/target```
+- ```${project.build.outputDirectory}```: 项目主代码编译输出目录，默认值为: ```${project.build.directory}/classes```, 即 ```${project.basedir}/target/classes```
+- ```${project.build.testOutputDirectory}```: 项目测试代码编译输出目录，默认值为: ```${project.build.directory}/test-classes```, 即 ```${project.basedir}/target/test-classes```
+- ```${project.build.sourceDirectory}```: 项目的主源码目录，默认值为: ```${project.basedir}/src/main/java```
+- ```${project.build.testSourceDirectory}```: 项目的测试源码目录，默认值为: ```${project.basedir}/src/test/java```
