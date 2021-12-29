@@ -303,7 +303,7 @@ public abstract class DruidAbstractDataSource extends WrapperAdapter implements 
 }
 ```
 
-MySqlUtils.getLastPacketReceivedTimeMs(conn) 是获取上一次使用的时间，mysqlIdleMillis 是计算出来的空闲时间，timeBetweenEvictionRunsMillis 是常量 60 秒。如果连接空闲了 60 秒以上，就调用  ```this.discardConnection(holder);``` 丢弃这个旧连接，并打印日志 ```LOG.warn(errorMsg);```。
+```MySqlUtils.getLastPacketReceivedTimeMs(conn)``` 是获取上一次使用的时间，mysqlIdleMillis 是计算出来的空闲时间，timeBetweenEvictionRunsMillis 是常量 60 秒。如果连接空闲了 60 秒以上，就调用 ```this.discardConnection(holder);``` 丢弃这个旧连接，并打印日志 ```LOG.warn(errorMsg);```。
 
 ### 11.2 分析 isValidConnection 源码, 即上述方法中 valid 的赋值过程
 
