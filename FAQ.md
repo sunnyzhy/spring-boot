@@ -259,3 +259,145 @@ public class DemoTests {
        </properties>
    ```
 4. 发现 spring-boot 2.5.7 默认使用的 log4j2 的版本号是 2.14.1, 所以，我们只需要在业务模块的 pom#properties 里显式地配置 ```<properties><log4j2.version>2.17.0</log4j2.version></properties>```，就可以覆盖 spring-boot 默认的 log4j2 的版本号，从而实现版本的更新。
+
+## 11 Druid 异常 discard long time none received connection.
+
+### 11.1 分析 testConnectionInternal 源码
+
+```java
+// 源码: \com\alibaba\druid\1.2.8\druid-1.2.8.jar!\com\alibaba\druid\pool\DruidAbstractDataSource.class
+
+public abstract class DruidAbstractDataSource extends WrapperAdapter implements DruidAbstractDataSourceMBean, DataSource, DataSourceProxy, Serializable {
+    // ...
+    
+    public DruidAbstractDataSource(boolean lockFair) {
+        // ...
+        this.timeBetweenEvictionRunsMillis = 60000L;
+        // ...
+    }
+
+    protected boolean testConnectionInternal(DruidConnectionHolder holder, Connection conn) {
+        // ...
+
+                valid = this.validConnectionChecker.isValidConnection(conn, this.validationQuery, this.validationQueryTimeout);
+                
+                // ...
+                
+                if (valid && this.isMySql) {
+                    long lastPacketReceivedTimeMs = MySqlUtils.getLastPacketReceivedTimeMs(conn);
+                    if (lastPacketReceivedTimeMs > 0L) {
+                        long mysqlIdleMillis = currentTimeMillis - lastPacketReceivedTimeMs;
+                        if (lastPacketReceivedTimeMs > 0L && mysqlIdleMillis >= this.timeBetweenEvictionRunsMillis) {
+                            this.discardConnection(holder);
+                            String errorMsg = "discard long time none received connection. , jdbcUrl : " + this.jdbcUrl + ", version : " + VERSION.getVersionNumber() + ", lastPacketReceivedIdleMillis : " + mysqlIdleMillis;
+                            LOG.warn(errorMsg);
+                            boolean var13 = false;
+                            return var13;
+                        }
+                    }
+                }
+        // ...
+    }
+    
+    // ...
+}
+```
+
+MySqlUtils.getLastPacketReceivedTimeMs(conn) 是获取上一次使用的时间，mysqlIdleMillis 是计算出来的空闲时间，timeBetweenEvictionRunsMillis 是常量 60 秒。如果连接空闲了 60 秒以上，就调用  ```this.discardConnection(holder);``` 丢弃这个旧连接，并打印日志 ```LOG.warn(errorMsg);```。
+
+### 11.2 分析 isValidConnection 源码, 即上述方法中 valid 的赋值过程
+
+```java
+// 源码: .\com\alibaba\druid\1.2.8\druid-1.2.8.jar!\com\alibaba\druid\pool\vendor\MySqlValidConnectionChecker.class
+
+public class MySqlValidConnectionChecker extends ValidConnectionCheckerAdapter implements ValidConnectionChecker, Serializable {
+    // ...
+    public static final String DEFAULT_VALIDATION_QUERY = "SELECT 1";
+    private boolean usePingMethod = false;
+    
+    public MySqlValidConnectionChecker() {
+        // ...
+
+        this.configFromProperties(System.getProperties());
+    }
+    
+    // 把属性 "druid.mysql.usePingMethod" 的值赋值给 usePingMethod
+    public void configFromProperties(Properties properties) {
+        if (properties != null) {
+            String property = properties.getProperty("druid.mysql.usePingMethod");
+            if ("true".equals(property)) {
+                this.setUsePingMethod(true);
+            } else if ("false".equals(property)) {
+                this.setUsePingMethod(false);
+            }
+
+        }
+    }
+    
+    public void setUsePingMethod(boolean usePingMethod) {
+        this.usePingMethod = usePingMethod;
+    }
+    
+    // ...
+    
+    public boolean isValidConnection(Connection conn, String validateQuery, int validationQueryTimeout) throws Exception {
+        if (conn.isClosed()) { // 如果数据库连接关闭，就返回 false
+            return false;
+        } else {
+            if (this.usePingMethod) { // 使用 ping 的方式检查数据库连接，如果有异常，就抛出异常；否则，总是返回 true
+                // ...
+
+                    try {
+                        this.ping.invoke(conn, true, validationQueryTimeout * 1000);
+                        return true;
+                    } catch (InvocationTargetException var11) {
+                        Throwable cause = var11.getCause();
+                        if (cause instanceof SQLException) {
+                            throw (SQLException)cause;
+                        }
+
+                        throw var11;
+                    }
+                }
+            }
+
+            // 使用数据库查询 "SELECT 1" 的方式检查数据库连接，如果查询能返回结果，就返回 true；否则，返回 false
+            String query = validateQuery;
+            if (validateQuery == null || validateQuery.isEmpty()) {
+                query = "SELECT 1";
+            }
+
+            Statement stmt = null;
+            ResultSet rs = null;
+
+            boolean var7;
+            try {
+                stmt = conn.createStatement();
+                if (validationQueryTimeout > 0) {
+                    stmt.setQueryTimeout(validationQueryTimeout);
+                }
+
+                rs = stmt.executeQuery(query);
+                var7 = true;
+            } finally {
+                JdbcUtils.close(rs);
+                JdbcUtils.close(stmt);
+            }
+
+            return var7;
+        }
+    }
+}
+```
+
+### 11.3 解决方法, 禁用 PingMethod
+
+- 在```启动参数```中添加如下参数:
+
+   ```-Ddruid.mysql.usePingMethod=false```
+
+- 在 Spring Boot 项目的```启动类```中添加如下代码:
+
+   ```java
+    System.setProperty("druid.mysql.usePingMethod","false");
+   ```
