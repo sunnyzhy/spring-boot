@@ -42,7 +42,7 @@ AOF：将所有的 command 操作保存到 aof 中，AOP 的同步频率很高�
    
    5. master 节点挂了以后，不影响 slave 节点的读，Redis 将不再提供写服务，master 节点启动后 Redis 将重新对外提供写服务
    
-   6. master 节点挂了以后，不会 slave 节点重新选一个 master (主从模式的缺点）
+   6. master 节点挂了以后，不会从 slave 节点里重新选一个 master (主从模式的缺点）
 
 - **主从节点的缺点**
 
@@ -55,7 +55,7 @@ sentinel 的中文含义是哨兵、守卫。在主从模式中，当 master 节
 
 sentinel 模式的特点：
 
-- ntinel 模式是建立在主从模式的基础上，如果只有一个主节点，sentinel 就没有任何意义
+- sentinel 模式是建立在主从模式的基础上，如果只有一个主节点，sentinel 就没有任何意义
 
 - 当 master 节点挂了以后，sentinel 会在 slave 中选择一个节点做为 master，并修改它们的配置文件，其他 slave 的配置文件也会被修改，比如 slaveof 属性会指向新的 master
 
