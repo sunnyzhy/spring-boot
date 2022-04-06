@@ -3,50 +3,46 @@
 ## 1 PathVariable annotation was empty on param 0
 
 - 原因
-
-远程调用Feign的时候报错，PathVariable注解为空。
+   远程调用Feign的时候报错，PathVariable注解为空。
 
 - 解决方法
-
-@PathVariable注释要写明value
-```java
-@PathVariable(value = "id") Integer id
-```
+    @PathVariable注释要写明value
+    ```java
+    @PathVariable(value = "id") Integer id
+    ```
 
 ## 2 @Value注解报Could not resolve placeholder错误
 
 - 原因
+    存在多个properties配置文件，即除了application.properties之外，还有自定义的xxx.properties。
 
-存在多个properties配置文件，即除了application.properties之外，还有自定义的xxx.properties。
-
-Spring容器采用反射扫描的发现机制，在探测到Spring容器中有一个org.springframework.beans.factory.config.PropertyPlaceholderConfigurer的Bean就会停止对剩余PropertyPlaceholderConfigurer的扫描，所以根据加载的顺序，配置的第二个property-placeholder就被没有被spring加载，所以在使用@Value注入的时候占位符就解析不了。
+    Spring容器采用反射扫描的发现机制，在探测到Spring容器中有一个org.springframework.beans.factory.config.PropertyPlaceholderConfigurer的Bean就会停止对剩余PropertyPlaceholderConfigurer的扫描，所以根据加载的顺序，配置的第二个property-placeholder就被没有被spring加载，所以在使用@Value注入的时候占位符就解析不了。
 
 - 解决方法
+    合并properties配置文件:
 
-合并properties配置文件
-```xml
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:application.properties</value>
-                <value>classpath:nnn/xxx.properties</value>
-            </list>
-        </property>
-    </bean>
-```
+    ```xml
+        <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+            <property name="locations">
+                <list>
+                    <value>classpath:application.properties</value>
+                    <value>classpath:nnn/xxx.properties</value>
+                </list>
+            </property>
+        </bean>
+    ```
 
 ## 3 Cannot determine embedded database driver class for database type NONE
 
 - 原因
-
-配置文件中缺少DataSource配置
+    配置文件中缺少DataSource配置
 
 - 解决方法
+    在springboot的启动类上禁止自动初始化DataSource:
 
-在springboot的启动类上禁止自动初始化DataSource
-```java
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-```
+    ```java
+    @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+    ```
 
 ## 4 spring boot 单元测试的时候报 BeanCreationNotAllowedException: Error creating bean with name 'eurekaAutoServiceRegistration'
 
@@ -59,22 +55,22 @@ The workaround works when running the application, but not when running tests di
 ## 5 The field file exceeds its maximum permitted size of 1048576 bytes.
 
 - 原因
-
-Spring Boot 内置的 tomcat 限制了请求的文件大小。
+    Spring Boot 内置的 tomcat 限制了请求的文件大小。
 
 - 解决方法
+    Spring Boot1.4 之后的版本配置:
 
-Spring Boot1.4 之后的版本配置:
-```
-spring.http.multipart.maxFileSize = 10Mb
-spring.http.multipart.maxRequestSize = 100Mb
-```
+    ```
+    spring.http.multipart.maxFileSize = 10Mb
+    spring.http.multipart.maxRequestSize = 100Mb
+    ```
 
-Spring Boot2.0 之后的版本配置:
-```
-spring.servlet.multipart.max-file-size = 10MB  
-spring.servlet.multipart.max-request-size = 100MB
-```
+    Spring Boot2.0 之后的版本配置:
+
+    ```
+    spring.servlet.multipart.max-file-size = 10MB  
+    spring.servlet.multipart.max-request-size = 100MB
+    ```
 
 **如果不限制文件上传的大小，就把两个值都设置为-1。**
 
@@ -401,3 +397,92 @@ public class MySqlValidConnectionChecker extends ValidConnectionCheckerAdapter i
    ```java
     System.setProperty("druid.mysql.usePingMethod","false");
    ```
+
+## 12 spring-cloud-starter-gateway 异常
+
+### 12.1 java.net.SocketException: Too many open files
+
+网关的异常日志:
+
+```
+feign.RetryableException: Too many open files executing POST http://xxx
+	at feign.FeignException.errorExecuting(FeignException.java:249) ~[feign-core-10.12.jar!/:?]
+	at feign.SynchronousMethodHandler.executeAndDecode(SynchronousMethodHandler.java:129) ~[feign-core-10.12.jar!/:?]
+	at feign.SynchronousMethodHandler.invoke(SynchronousMethodHandler.java:89) ~[feign-core-10.12.jar!/:?]
+	at feign.ReflectiveFeign$FeignInvocationHandler.invoke(ReflectiveFeign.java:100) ~[feign-core-10.12.jar!/:?]
+	at com.sun.proxy.$Proxy202.feign方法(Unknown Source) ~[?:?]
+	at feign 调用目标服务接口时异常的详细堆栈信息 ~[classes!/:2.11.2.6214]
+	at sun.reflect.GeneratedMethodAccessor199.invoke(Unknown Source) ~[?:?]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[?:1.8.0_202]
+	at java.lang.reflect.Method.invoke(Method.java:498) ~[?:1.8.0_202]
+... ...
+Caused by: java.net.SocketException: Too many open files
+	at java.net.Socket.createImpl(Socket.java:460) ~[?:1.8.0_202]
+	at java.net.Socket.getImpl(Socket.java:520) ~[?:1.8.0_202]
+	at java.net.Socket.setSoTimeout(Socket.java:1141) ~[?:1.8.0_202]
+	at okhttp3.internal.connection.RealConnection.connectSocket(RealConnection.kt:293) ~[okhttp-4.9.3.jar!/:?]
+... ...
+```
+
+- 原因
+   打开文件数（包含文件和 Socket 连接数）超过 Linux 设置的最大值
+- 解决方法
+    1. 使用 ```ps -ef | grep 目标服务的名称``` 查看 feign 调用的目标服务的进程 id, 即 pid
+    2. 使用 ```lsof -p pid | wc -l```  查看目标进程打开的文件数
+    3. 使用 ```cat /proc/pid/limits```  查看目标进程能打开的最大文件数限制:
+    ```bash
+    Limit                     Soft Limit           Hard Limit           Units     
+    Max cpu time              unlimited            unlimited            seconds   
+    Max file size             unlimited            unlimited            bytes     
+    Max data size             unlimited            unlimited            bytes     
+    Max stack size            8388608              unlimited            bytes     
+    Max core file size        0                    unlimited            bytes     
+    Max resident set          unlimited            unlimited            bytes     
+    Max processes             95695                95695                processes 
+    Max open files            65536                65536                files     
+    Max locked memory         65536                65536                bytes     
+    Max address space         unlimited            unlimited            bytes     
+    Max file locks            unlimited            unlimited            locks     
+    Max pending signals       95695                95695                signals   
+    Max msgqueue size         819200               819200               bytes     
+    Max nice priority         0                    0                    
+    Max realtime priority     0                    0                    
+    Max realtime timeout      unlimited            unlimited            us        
+    ```
+
+    ***Max open files 为 65536***
+
+    4. 使用 ```ulimit -a``` 查看 Linux 最大文件数限制 ，如果出现 ```ulimit -a``` 查看的 ```open files``` 和 ```cat /proc/pid/limits``` 查看的 ```open files``` 不一致的情况，那就有可能是在程序运行中修改过系统 ```open files``` 的大小，而运行中的程序只会以启动时的 ```open files``` 大小为准。
+    ```bash
+    # ulimit -a
+    core file size          (blocks, -c) 0
+    data seg size           (kbytes, -d) unlimited
+    scheduling priority             (-e) 0
+    file size               (blocks, -f) unlimited
+    pending signals                 (-i) 95695
+    max locked memory       (kbytes, -l) 64
+    max memory size         (kbytes, -m) unlimited
+    open files                      (-n) 65536
+    pipe size            (512 bytes, -p) 8
+    POSIX message queues     (bytes, -q) 819200
+    real-time priority              (-r) 0
+    stack size              (kbytes, -s) 8192
+    cpu time               (seconds, -t) unlimited
+    max user processes              (-u) 95695
+    virtual memory          (kbytes, -v) unlimited
+    file locks                      (-x) unlimited
+    ```
+
+    ***open files 为 65536***
+
+    5. 修改 Linux 最大文件数限制
+    ```bash
+    # vim /etc/security/limits.conf
+    * soft nofile 655360
+    * hard nofile 655360
+    ```
+    6. 如果程序运行一段时间之后，又出现 ```Too many open files``` 异常，就用以下方法分析是什么句柄占用最多:
+    ```bash
+    # lsof -p pid> lsof.log
+    # cat lsof.log | awk '{print $8}' | sort | uniq -c | sort -rn | head -n 10
+    ```
