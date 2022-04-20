@@ -367,3 +367,43 @@ void batchUpdate(List<User> list);
 ```java
 void update(UserSqlCondition sqlCondition);
 ```
+
+## 批量删除
+
+### 主键批量删除
+
+```xml
+<delete id="batchDeleteUser" parameterType="java.util.List">
+	delete from user where id in 
+	<foreach collection="idList" item="id" separator="," open="(" close=")">
+	    #{id}
+	</foreach>
+</delete>
+```
+
+### 复杂条件批量删除 OR
+
+通过组合索引删除数据。
+
+```xml
+<delete id="batchDeleteUser" parameterType="java.util.List">
+	delete from user where
+	<foreach collection="list" item="item" separator=" or " index="index">
+	    (name = #{item.name} and age = #{item.age} and type = #{item.type})
+	</foreach>
+</delete>
+```
+
+### 复杂条件批量删除 IN
+
+通过组合索引删除数据。
+
+```xml
+<delete id="batchDeleteUser" parameterType="java.util.List">
+	delete from user
+	where (name, type) in
+	<foreach item="item" index="index" collection="list" separator="," open="(" close=")">
+		(#{item.name},#{item.type})
+	</foreach>
+</delete>
+```
