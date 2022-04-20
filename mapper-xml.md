@@ -389,7 +389,7 @@ void update(UserSqlCondition sqlCondition);
 <delete id="batchDeleteUser" parameterType="java.util.List">
 	delete from user where
 	<foreach collection="list" item="item" separator=" or " index="index">
-	    (name = #{item.name} and age = #{item.age} and type = #{item.type})
+	    (name = #{item.name} and type = #{item.type})
 	</foreach>
 </delete>
 ```
@@ -403,7 +403,7 @@ void update(UserSqlCondition sqlCondition);
 	delete from user
 	where (name, type) in
 	<foreach item="item" index="index" collection="list" separator="," open="(" close=")">
-		(#{item.name},#{item.type})
+		(#{item.name}, #{item.type})
 	</foreach>
 </delete>
 ```
