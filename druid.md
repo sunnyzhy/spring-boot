@@ -1,4 +1,6 @@
-# 添加依赖
+# druid
+
+## 添加依赖
 ```
 <dependency>
 	<groupId>mysql</groupId>
@@ -12,7 +14,7 @@
 </dependency>
 ```
 
-# 配置application.properties
+## 配置application.properties
 ```
 server.port=9013
 
@@ -31,5 +33,27 @@ spring.datasource.druid.test-on-borrow=true
 spring.datasource.druid.stat-view-servlet.allow=true
 ```
 
-# 浏览
+## 浏览
 http://localhost:9013/druid
+
+## druid 连接失败不停尝试重连
+
+```java
+public DataSource build(String url, String username, String password) throws Exception {
+     Properties p =new Properties();
+     p.put(DruidDataSourceFactory.PROP_INIT, "false");
+     p.put(DruidDataSourceFactory.PROP_URL, url);
+     p.put(DruidDataSourceFactory.PROP_USERNAME, username);
+     p.put(DruidDataSourceFactory.PROP_PASSWORD, password);
+     DruidDataSource dataSource = (DruidDataSource) DruidDataSourceFactory.createDataSource(p);
+     dataSource.setBreakAfterAcquireFailure(true);
+     dataSource.init();
+     return dataSource;
+}
+```
+
+注意以下几点:
+
+1. ```init``` 设置为 ```false```
+2. 调用 ```setBreakAfterAcquireFailure(true)``` 方法
+3. 调用 ```init()``` 方法
