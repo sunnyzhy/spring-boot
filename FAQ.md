@@ -486,3 +486,110 @@ Caused by: java.net.SocketException: Too many open files
 	    # lsof -p pid> lsof.log
 	    # cat lsof.log | awk '{print $8}' | sort | uniq -c | sort -rn | head -n 10
 	    ```
+
+## 13 The bean 'xxxService' could not be injected because it is a JDK dynamic proxy
+
+***场景***
+
+```java
+public interface xxxInterface {
+    void send(String message);
+}
+
+@Service
+@Slf4j
+public class xxxService implements xxxInterface {
+    @Override
+    public void send(String message) {
+        // TODO
+    }
+    
+    @Async
+    public void threadStart() {
+        // TODO
+    }
+}
+
+@Component
+@Slf4j
+public class ApplicationRunnerImpl implements ApplicationRunner {
+    @Autowired
+    private xxxService xxx;
+
+    @Override
+    public void run(ApplicationArguments arg0) throws Exception {
+        xxx.threadStart();
+    }
+}
+```
+
+***异常日志***
+
+```
+The bean 'xxxService' could not be injected because it is a JDK dynamic proxy
+
+The bean is of type 'com.sun.proxy.$Proxy172' and implements:
+	xxxInterface
+	org.springframework.aop.SpringProxy
+	org.springframework.aop.framework.Advised
+	org.springframework.core.DecoratingProxy
+
+Expected a bean of type 'xxxService' which implements:
+	xxxInterface
+
+Action:
+
+Consider injecting the bean as one of its interfaces or forcing the use of CGLib-based proxies by setting proxyTargetClass=true on @EnableAsync and/or @EnableCaching.
+```
+
+***原因***
+
+xxxService 是一个 JDK 动态代理，所以不能作为 bean 被注入:
+
+1. xxxService 类实现了 xxxInterface 接口
+2. xxxService 类里有一个配置了 ```@Async``` 注解的线程函数
+
+***解决方法***
+
+- 根据 ```Action``` 里的提示，可以在 ```@EnableAsync``` 注解上配置 ```proxyTargetClass=true```
+   ```java
+   @EnableAsync(proxyTargetClass = true)
+   ```
+- 不要在实现了接口的类里使用 ```@Async``` 注解，可以封装一个普通类，在普通类里定义一个多线程函数来调用 ```xxxService.threadStart()``` 方法
+	```java
+	@Service
+	@Slf4j
+	public class xxxService implements xxxInterface {
+	    @Override
+	    public void send(String message) {
+		// TODO
+	    }
+
+	    public void threadStart() {
+		// TODO
+	    }
+	}
+
+	@Service
+	public class CommonService {
+	    @Autowired
+	    private xxxService xxx;
+
+	    @Async
+	    public void threadStart() {
+		xxx.threadStart();
+	    }
+	}
+
+	@Component
+	@Slf4j
+	public class ApplicationRunnerImpl implements ApplicationRunner {
+	    @Autowired
+	    private CommonService commonService;
+
+	    @Override
+	    public void run(ApplicationArguments arg0) throws Exception {
+		commonService.threadStart();
+	    }
+	}
+	```
