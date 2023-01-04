@@ -119,3 +119,22 @@ spring:
     application:
         name: eureka-client-1
 ```
+
+## 查看集群
+
+### DS Replicas
+- 192.168.5.10
+- 192.168.5.11
+
+### Instances currently registered with Eureka
+
+|Application|AMIs|Availability|Zones|Status|
+|--|--|--|--|--|
+|EUREKA-CLIENT-1|n/a(2)|(2)|UP(2) - node-1:eureka-client-1:8081 , node-2:eureka-client-1:8081|
+
+### General Info
+|Name|Value|
+|--|--|
+|registered-replicas|http://192.168.5.10:8080/eureka/, http://192.168.5.11:8080/eureka/|
+|unavailable-replicas|http://192.168.5.10:8080/eureka/, http://192.168.5.11:8080/eureka/|
+|available-replicas||
