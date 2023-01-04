@@ -135,6 +135,6 @@ spring:
 ### General Info
 |Name|Value|
 |--|--|
-|registered-replicas|http://192.168.5.10:8080/eureka/, http://192.168.5.11:8080/eureka/|
-|unavailable-replicas|http://192.168.5.10:8080/eureka/, http://192.168.5.11:8080/eureka/|
+|registered-replicas|```http://192.168.5.10:8080/eureka/```, ```http://192.168.5.11:8080/eureka/```|
+|unavailable-replicas|```http://192.168.5.10:8080/eureka/```, ```http://192.168.5.11:8080/eureka/```|
 |available-replicas||
