@@ -593,3 +593,15 @@ xxxService 是一个 JDK 动态代理，所以不能作为 bean 被注入:
 	    }
 	}
 	```
+
+## 14 异步文件上传 FileNotFoundException
+
+报错信息:
+
+```
+java.io.FileNotFoundException: C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\Tomcat\localhost\ROOT\upload_937d1ca3_fcf7_4c63_b104_7c8126932469_00000001.tmp (系统找不到指定的文件。)
+```
+
+***原因***
+
+使用线程处理 MultipartFile 文件对象的时候会在线程内部生成临时文件，在线程执行完之后，spring 会主动删除该临时文件；此时再调用上传接口处理同一文件的时候，就会出现 FileNotFound 异常！
