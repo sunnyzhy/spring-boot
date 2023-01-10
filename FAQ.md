@@ -594,7 +594,7 @@ xxxService 是一个 JDK 动态代理，所以不能作为 bean 被注入:
 	}
 	```
 
-## 14 异步文件上传 FileNotFoundException
+## 14 MultipartFile 对象报 FileNotFoundException
 
 报错信息:
 
@@ -604,9 +604,20 @@ java.io.FileNotFoundException: C:\Users\Administrator\AppData\Local\Temp\tomcat.
 
 ***原因***
 
-使用线程处理 MultipartFile 文件对象的时候会在线程内部生成临时文件，在线程执行完之后，spring 会主动删除该临时文件；此时再调用上传接口处理同一文件的时候，就会出现 FileNotFound 异常！
+MultipartFile 文件会存储在临时文件夹中，如:
+
+```
+C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\Tomcat\localhost\ROOT\
+```
+
+- 如果是单线程解析文件，是不会有问题的
+
+- 如果是多线程解析文件，主线程一旦结束，临时文件就会被清空；这时候子线程再读取 MultipartFile 文件，就会报错 FileNotFound
 
 ***解决方法***
 
-1. ```InputStream inputStream = file.getInputStream();```
-2. 多个线程共用 ```inputStream```
+由于主线程结束，临时文件被清空，导致多线程无法读取临时文件而报错 FileNotFound，此时可以提前在主线程中获取文件流信息:
+
+```java
+InputStream inputStream = file.getInputStream();
+```
