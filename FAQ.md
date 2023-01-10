@@ -621,3 +621,5 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
 ```java
 InputStream inputStream = file.getInputStream();
 ```
+
+再把一个或多个文件流对象传递给子线程。
