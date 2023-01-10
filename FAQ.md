@@ -605,3 +605,8 @@ java.io.FileNotFoundException: C:\Users\Administrator\AppData\Local\Temp\tomcat.
 ***原因***
 
 使用线程处理 MultipartFile 文件对象的时候会在线程内部生成临时文件，在线程执行完之后，spring 会主动删除该临时文件；此时再调用上传接口处理同一文件的时候，就会出现 FileNotFound 异常！
+
+***解决方法***
+
+1. ```InputStream inputStream = file.getInputStream();```
+2. 多个线程共用 ```inputStream```
