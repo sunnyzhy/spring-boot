@@ -616,10 +616,31 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
 
 ***解决方法***
 
-由于主线程结束，临时文件被清空，导致多线程无法读取临时文件而报错 FileNotFound，此时可以提前在主线程中获取文件流信息:
+由于主线程结束，临时文件被清空，导致多线程无法读取临时文件而报错 FileNotFound。具体做法如下:
 
-```java
-InputStream inputStream = file.getInputStream();
-```
+1. 在主线程中获取文件流对象:
 
-再把一个或多个文件流对象传递给子线程。
+   ```java
+   InputStream inputStream = file.getInputStream();
+   ```
+
+   或者
+
+   ```java
+   List<InputStream> inputStreamList = new ArrayList<>();
+   for (int i = 0; i < 5; i++) {
+       inputStreamList.add(file.getInputStream());
+   }
+   ```
+
+2. 把文件流对象以参数的形式传递给子线程:
+
+   ```java
+   doMethodThread(inputStream);
+   ```
+
+   或者
+
+   ```java
+   doMethodThread(List<InputStream>);
+   ```
