@@ -613,6 +613,8 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
 - 如果是单线程解析文件，是不会有问题的
 
 - 如果是多线程解析文件，主线程一旦结束，临时文件就会被清空；这时候子线程再读取 MultipartFile 文件，就会报错 FileNotFound
+   
+   ***类似于主线程结束之后，子线程就读取不到 http 上下文了。***
 
 ***解决方法***
 
