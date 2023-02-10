@@ -2,8 +2,8 @@
 
 ## 前言
 
-1. 配置文件的加载类 ```ConfigFileApplicationListener``` 的类已被标记为 ```@Deprecated```
-2. 新版本的配置文件加载类为 ```ConfigDataEnvironment```
+1. 源码里配置文件的加载类 ```ConfigFileApplicationListener``` 已被标记为 ```@Deprecated```
+2. 现行的配置文件加载类为 ```ConfigDataEnvironment```
 
 ## 解析 ConfigDataEnvironment
 
@@ -48,7 +48,7 @@ application 配置文件的加载顺序为:
       - ```classpath:/```
       - ```classpath:/config/```
 
-3. 同级目录的 ```application.properties``` 优先级高于 ```application.yml```
+3. 同级目录里的 ```application.properties``` 优先级高于 ```application.yml```
 
 ### 示例一
 
