@@ -1,6 +1,8 @@
 # java 进程占用 CPU 和内存过高问题排查
 
-## java 进程占用 CPU 过高
+## linux
+
+### java 进程占用 CPU 过高
 
 使用 ```top``` 查看进程列表，找到 cpu 占用率最高的 java 进程，也可以通过 ```shift + p``` 进行排序:
 
@@ -71,7 +73,7 @@ jstack -l 7691 >> /usr/local/7691.stack
 
 根据定位到的问题，具体分析。
 
-## java 进程占用内存过高
+### java 进程占用内存过高
 
 使用 ```top``` 查看进程列表，通过 ```shift + m``` 按内存占用率进行排序:
 
@@ -93,3 +95,44 @@ jmap -dump:format=b,file=/usr/local/7391.hprof 7391
 ```
 
 把 ```7391.hprof``` 文件下载到本地，然后使用 ```visualvm``` 或 ```MemoryAnalyzer``` 具体分析。
+
+## windows
+
+### java 进程占用 CPU 过高
+
+打开 Windows 任务管理器，查看 ```进程``` 列表，找到 cpu 占用率最高的 java 进程。
+
+从查询结果中可知 ```7691``` 的 java 进程占用 cpu 最高。
+
+使用 ```jstack``` 命令生成 Java 进程中所有线程的快照:
+
+```bash
+jstack -l 7691 >> C:\7691.stack
+```
+
+使用 ```PsList``` 或 ```ProcessExplorer``` 查看 java 进程中占用 cup 最高的线程。
+
+- ```PsList```
+   - 下载: [PsList 官方网址](https://learn.microsoft.com/zh-cn/sysinternals/downloads/pslist 'PsList 官方网址')，下载完将其解压到 ```C:\Windows\System32``` 路径下即可使用。
+   - 使用: 在 cmd 命令窗口中执行命令 ```pslist -dmx 7691``` 即可找出占用 cup 最高的线程。
+- ```ProcessExplorer```
+   - 下载: [ProcessExplorer 官方网址](https://learn.microsoft.com/zh-cn/sysinternals/downloads/process-explorer 'ProcessExplorer 官方网址')，下载完直接运行 ```procexp.exe``` 即可使用。
+   - 使用: 找到 PID 为 7691 的进程，右键点击 ```Properties…``` 选项，再打开 ```Threads``` 列表即可找出占用 cup 最高的线程。
+
+从查询结果中可知 ```7833``` 的线程占用 cpu 最高，将十进制的 ```7833``` 转换为十六进制数 ```1e99```
+
+打开之前生成的 ```7691.stack``` 文件并在文件中搜索 ```1e99```，根据定位到的问题，具体分析。
+
+### java 进程占用内存过高
+
+打开 Windows 任务管理器，查看 ```进程``` 列表，找到内存占用率最高的 java 进程。
+
+从查询结果中可知 ```7391``` 的 java 进程占用内存最高。
+
+使用 ```jmap``` 命令生成堆转储快照:
+
+```bash
+jmap -dump:format=b,file=C:\7391.hprof 7391
+```
+
+然后使用 ```visualvm``` 或 ```MemoryAnalyzer``` 具体分析快照文件 ```C:\7391.hprof```。
