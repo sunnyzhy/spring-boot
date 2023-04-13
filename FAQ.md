@@ -646,3 +646,7 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
    ```java
    doMethodThread(List<InputStream>);
    ```
+
+## 15 读取 Excel文件，报错 Cleaning up unclosed ZipFile for archive
+
+使用文件流读取 excel 的时候，一定要在末尾加上关闭流的操作。
