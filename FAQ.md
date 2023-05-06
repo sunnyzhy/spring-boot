@@ -199,27 +199,10 @@ boolean ignoreInterface(String interfaceName) {
 
 ### 9.1 Unable to find a @SpringBootConfiguration, you need to use @ContextConfiguration or @SpringBootTest(classes=...) with your test
 
-一般常出现在 maven 创建的工程，需要在 @SpringBootTest 注解里指定```启动类```，即 @SpringBootTest(classes = 启动类.class)
-
-比如启动类:
-
-```java
-@SpringBootApplication
-public class DemoApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(DemoApplication.class,args);
-    }
-}
-```
-
-那么，需要在 @SpringBootTest 注解里指定 DemoApplication:
-
-```java
-@SpringBootTest(classes = DemoApplication.class)
-public class DemoTests {
-
-}
-```
+1. 没有写启动类
+2. 虽然写了启动类，但是启动类的包名和单元测试的包名不同。比如启动类的包名是 ```org.springframework.cloud.pattern```，单元测试的包名是 ```org.springframework.cloud```。解决方法有两种：
+   1. 把启动类的包名和单元测试的包名修改为同一个
+   2. 在 ```@SpringBootTest``` 注解里指定 ```启动类```，即 ```@SpringBootTest(classes = 启动类.class)```
 
 ### 9.2 Failed to load ApplicationContext
 
