@@ -633,3 +633,30 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
 ## 15 读取 Excel文件，报错 Cleaning up unclosed ZipFile for archive
 
 使用文件流读取 excel 的时候，一定要在末尾加上关闭流的操作。
+
+## 16 NoClassDefFoundError
+
+原因：
+
+- 没有添加相应的依赖
+- 存在相应的依赖，但是子依赖与父依赖的版本不一致（这种情况的概率要大一些）
+   ![NoClassDefFound](./images/NoClassDefFound.png 'NoClassDefFound')
+
+解决：
+
+打开 ***```父模块```*** 的 ```spring-boot-dependencies```，搜索相应的依赖：
+
+- 如果存在，就在 ***```子模块```*** 里指定相应依赖的版本:
+   ```xml
+    <properties>
+        <selenium.version>4.9.1</selenium.version>
+    </properties>
+   ```
+- 如果不存在，就在 ***```子模块```*** 里添加相应依赖:
+   ```xml
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>4.9.1</version>
+        </dependency>
+   ```
