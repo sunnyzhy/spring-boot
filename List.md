@@ -1,5 +1,7 @@
-# 排序
-## User类
+# List
+
+## 排序
+### User类
 ```java
 @Data
 public class User {
@@ -8,7 +10,7 @@ public class User {
 }
 ```
 
-## 单元测试
+### 单元测试
 ```java
     private String name = "user";
     private Random random = new Random();
@@ -31,8 +33,8 @@ public class User {
     }
 ```
 
-# 去重&交集
-## User类
+## 去重&交集
+### User类
 ```java
 @Data
 public class User {
@@ -58,7 +60,7 @@ public class User {
 }
 ```
 
-## 去重
+### 去重
 ```
 distinct()是基于hashCode()和equals()工作的，所以，如果使用distinct去重，就需要重写hashcode和equals方法。
 ```
@@ -75,7 +77,7 @@ List<User> users = userList
         .collect(Collectors.toList());
 ```
 
-## 交集
+### 交集
 ```java
 List<User> userList1 = Lists.newArrayList(
         new User(1, "a"),
@@ -93,8 +95,8 @@ List<User> intersectionList = userList1
        .collect(Collectors.toList());
 ```
 
-# 分页
-## User类
+## 分页
+### User类
 ```java
 @Data
 public class User {
@@ -103,7 +105,7 @@ public class User {
 }
 ```
 
-## 单元测试
+### 单元测试
 ```java
     @Test
     public void listPage() {
@@ -128,7 +130,7 @@ public class User {
     }
 ```
 
-## 删除list中所有null值
+### 删除list中所有null值
 ```java
 @Test
 public void filterList1() {
@@ -147,7 +149,7 @@ public void filterList2() {
 }
 ```
 
-## 对象转List
+### 对象转List
 ```java
 public void list11() {
     Integer i = 10;
@@ -159,8 +161,8 @@ public void list11() {
 }
 ```
 
-# 初始化List
-## 使用 List.add
+## 初始化List
+### 使用 List.add
 ```java
 List<Integer> list = new ArrayList<>();
 list.add(1);
@@ -168,7 +170,7 @@ list.add(2);
 list.add(3);
 ```
 
-## 使用 {{}} 双括号
+### 使用 {{}} 双括号
 ```java
 List<Integer> list = new ArrayList<Integer>() {{
     add(1);
@@ -177,7 +179,7 @@ List<Integer> list = new ArrayList<Integer>() {{
 }};
 ```
 
-## 使用 Arrays.asList
+### 使用 Arrays.asList
 ```java
 List<Integer> list = Arrays.asList(1, 2, 3);
 // 不支持增、删元素
@@ -185,12 +187,14 @@ List<Integer> list = Arrays.asList(1, 2, 3);
 // list.remove(1);
 ```
 
-## 使用 Stream
+### 使用 Stream
 ```java
 List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
 ```
 
-# 删除List元素
+## 删除集合元素
+
+### 删除List元素
 ```java
 private List<Integer> list = new ArrayList<>();
 
@@ -225,7 +229,7 @@ private void remove(Integer key) {
 [1, 2, 4, 5, 7, 8]
 ```
 
-# 删除Map元素
+### 删除Map元素
 ```java
 private Map<Integer, String> map = new ConcurrentHashMap<>();
 
@@ -259,3 +263,9 @@ private void remove(Integer key) {
 {0=map0, 1=map1, 2=map2, 3=map3, 4=map4, 5=map5, 6=map6, 7=map7, 8=map8, 9=map9}
 {1=map1, 2=map2, 4=map4, 5=map5, 7=map7, 8=map8}
 ```
+
+## FAQ
+
+### 迭代删除 ```Iterator.remove()``` 时异常 ```java.lang.IllegalStateException```
+
+使用迭代删除的时候，一定要先使用 ```Iterator.next()``` 方法迭代出集合中的元素，然后才能调用 ```Iterator.remove()``` 方法删除迭代的元素，否则就会抛出导演 ```java.lang.IllegalStateException```
