@@ -266,6 +266,6 @@ private void remove(Integer key) {
 
 ## FAQ
 
-### 迭代删除 ```Iterator.remove()``` 时异常 ```java.lang.IllegalStateException```
+### 使用 ```Iterator.remove()``` 迭代删除时抛出异常 ```java.lang.IllegalStateException```
 
-使用迭代删除的时候，一定要先使用 ```Iterator.next()``` 方法迭代出集合中的元素，然后才能调用 ```Iterator.remove()``` 方法删除迭代的元素，否则就会抛出导演 ```java.lang.IllegalStateException```
+使用迭代删除的时候，一定要先使用 ```Iterator.next()``` 方法迭代出集合中的元素，然后才能调用 ```Iterator.remove()``` 方法删除迭代的元素，否则就会抛出异常 ```java.lang.IllegalStateException```
