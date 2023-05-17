@@ -2,7 +2,7 @@
 
 ## 添加依赖
 
-``xml
+```xml
 <properties>
     <selenium.version>4.9.1</selenium.version>
     <selenium-htmlunit.version>2.52.0</selenium-htmlunit.version>
