@@ -64,7 +64,7 @@ userList.add(new User(3, "a"));
 userList.add(new User(1, "c"));
 ```
 
-### distinct
+### distinct 去重
 
 ```distinct()``` 是基于 ```hashCode()``` 和 ```equals()``` 工作的，所以，如果使用 ```distinct``` 去重，就需要重写 ```hashcode``` 和 ```equals``` 方法。
 
@@ -111,14 +111,14 @@ List<User> users = userList
         .collect(Collectors.toList());
 ```
 
-### filter
+### filter 去重
 
 ```java
 List<User> users = new ArrayList<>();
 userList.stream().filter(x -> !users.stream().anyMatch(xx -> xx.getName().equals(x.getName()))).forEach(users::add);
 ```
 
-### TreeSet
+### TreeSet 去重
 
 方法一:
 
