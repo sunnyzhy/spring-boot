@@ -100,7 +100,7 @@ userList.add(new User(1, "c"));
     }
 ```
 
-***注：如果以 id 为条件去重，就把 ```hashcode``` 和 ```equals``` 方法里的 name 改为 id 即可。***
+***注：如果以 id 为条件去重，就把 ```hashcode``` 和 ```equals``` 方法里的 name 改为 id 即可。缺点：去重的条件固定，要修改去重条件的话就需要修改 User 类。***
 
 去重:
 
