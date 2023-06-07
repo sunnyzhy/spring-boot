@@ -1,7 +1,9 @@
 # List
 
 ## 排序
+
 ### User类
+
 ```java
 @Data
 public class User {
@@ -11,6 +13,7 @@ public class User {
 ```
 
 ### 单元测试
+
 ```java
     private String name = "user";
     private Random random = new Random();
@@ -33,70 +36,135 @@ public class User {
     }
 ```
 
-## 去重&交集
+## 去重
+
 ### User类
-```java
-@Data
-public class User {
-    private Integer id;
-    private String name;
-  
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-        if (obj == null || getClass() != obj.getClass()) {
-            return false;
-        }
-        User user = (User) obj;
-        return Objects.equals(id, user.id);
-    }
-}
-```
-
-### 去重
-```
-distinct()是基于hashCode()和equals()工作的，所以，如果使用distinct去重，就需要重写hashcode和equals方法。
-```
 
 ```java
-List<User> userList = Lists.newArrayList(
-        new User(1, "a"),
-        new User(1, "b"),
-        new User(2, "b"),
-        new User(1, "a"));
+    @Data
+    public class User {
+        private Integer id;
+        private String name;
+
+        public User(Integer id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
+```
+
+初始化数据:
+
+```java
+List<User> userList = new ArrayList<>();
+userList.add(new User(1, "a"));
+userList.add(new User(2, "b"));
+userList.add(new User(2, "c"));
+userList.add(new User(3, "a"));
+userList.add(new User(1, "c"));
+```
+
+### distinct
+
+```distinct()``` 是基于 ```hashCode()``` 和 ```equals()``` 工作的，所以，如果使用 ```distinct``` 去重，就需要重写 ```hashcode``` 和 ```equals``` 方法。
+
+重写 User 类，以 name 为条件去重:
+
+```java
+    @Data
+    public class User {
+        private Integer id;
+        private String name;
+
+        public User(Integer id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name);
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) {
+                return true;
+            }
+            if (obj == null || getClass() != obj.getClass()) {
+                return false;
+            }
+            User user = (User) obj;
+            return Objects.equals(name, user.name);
+        }
+    }
+```
+
+***注：如果以 id 为条件去重，就把 ```hashcode``` 和 ```equals``` 方法里的 name 改为 id 即可。***
+
+去重:
+
+```java
 List<User> users = userList
         .parallelStream()
         .distinct()
         .collect(Collectors.toList());
 ```
 
-### 交集
+### filter
+
 ```java
-List<User> userList1 = Lists.newArrayList(
-        new User(1, "a"),
-        new User(2, "b"),
-        new User(3, "c"));
-List<User> userList2 = Lists.newArrayList(
-        new User(3, "c"),
-        new User(4, "d"),
-        new User(5, "f"));
+List<User> users = new ArrayList<>();
+userList.stream().filter(x -> !users.stream().anyMatch(xx -> xx.getName().equals(x.getName()))).forEach(users::add);
+```
+
+### TreeSet
+
+方法一:
+
+```java
+List<User> users = userList.stream().collect(Collectors.collectingAndThen(Collectors.toCollection(() -> new TreeSet<>(Comparator.comparing(User::getName))), ArrayList::new));
+```
+
+方法二:
+
+```java
+Set<User> set = new TreeSet<>(Comparator.comparing(User::getName));
+set.addAll(userList);
+List<User> users = new ArrayList(set);
+```
+
+方法三:
+
+```java
+Set<User> set = new TreeSet<>((x, y) -> x.getName().compareTo(y.getName()));
+set.addAll(userList);
+List<User> users = new ArrayList(set);
+```
+
+## 交集
+
+```java
+List<User> userList1 = new ArrayList<>();
+userList1.add(new User(1, "a"));
+userList1.add(new User(2, "b"));
+userList1.add(new User(3, "c"));
+List<User> userList2 = new ArrayList<>();
+userList2.add(new User(3, "c"));
+userList2.add(new User(4, "d"));
+userList2.add(new User(5, "f"));
 List<User> intersectionList = userList1
-        .parallelStream()
-        .filter(item -> userList2
-               .parallelStream()
-               .anyMatch(x -> x.getId().equals(item.getId())))
-       .collect(Collectors.toList());
+	.parallelStream()
+	.filter(item -> userList2
+		.parallelStream()
+		.anyMatch(x -> x.getId().equals(item.getId())))
+	.collect(Collectors.toList());
 ```
 
 ## 分页
+
 ### User类
+
 ```java
 @Data
 public class User {
@@ -106,6 +174,7 @@ public class User {
 ```
 
 ### 单元测试
+
 ```java
     @Test
     public void listPage() {
@@ -131,10 +200,11 @@ public class User {
 ```
 
 ### 删除list中所有null值
+
 ```java
 @Test
 public void filterList1() {
-    List<Integer> list = Lists.newArrayList(null, 1, 2, null, 3, null);
+    List<Integer> list = Arrays.asList(null, 1, 2, null, 3, null);
     List<Integer> filterList = list.parallelStream()
             .filter(Objects::nonNull)
             .collect(Collectors.toList());
@@ -143,13 +213,14 @@ public void filterList1() {
 
 @Test
 public void filterList2() {
-    List<Integer> list = Lists.newArrayList(null, 1, 2, null, 3, null);
+    List<Integer> list = Arrays.asList(null, 1, 2, null, 3, null);
     list.removeIf(Objects::isNull);
     System.out.println(list);
 }
 ```
 
 ### 对象转List
+
 ```java
 public void list11() {
     Integer i = 10;
@@ -162,7 +233,9 @@ public void list11() {
 ```
 
 ## 初始化List
+
 ### 使用 List.add
+
 ```java
 List<Integer> list = new ArrayList<>();
 list.add(1);
@@ -171,6 +244,7 @@ list.add(3);
 ```
 
 ### 使用 {{}} 双括号
+
 ```java
 List<Integer> list = new ArrayList<Integer>() {{
     add(1);
@@ -180,6 +254,7 @@ List<Integer> list = new ArrayList<Integer>() {{
 ```
 
 ### 使用 Arrays.asList
+
 ```java
 List<Integer> list = Arrays.asList(1, 2, 3);
 // 不支持增、删元素
@@ -188,6 +263,7 @@ List<Integer> list = Arrays.asList(1, 2, 3);
 ```
 
 ### 使用 Stream
+
 ```java
 List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
 ```
@@ -195,6 +271,7 @@ List<Integer> list = Stream.of(1, 2, 3).collect(Collectors.toList());
 ## 删除集合元素
 
 ### 删除List元素
+
 ```java
 private List<Integer> list = new ArrayList<>();
 
@@ -230,6 +307,7 @@ private void remove(Integer key) {
 ```
 
 ### 删除Map元素
+
 ```java
 private Map<Integer, String> map = new ConcurrentHashMap<>();
 
