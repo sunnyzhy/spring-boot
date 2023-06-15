@@ -69,3 +69,32 @@ void test() throws IOException, InterruptedException {
     driver.quit();
 }
 ```
+
+## 浏览器和驱动
+
+### 浏览器和驱动
+
+|浏览器|驱动的下载地址|
+|--|--|
+|```Microsoft Edge```|```https://msedgewebdriverstorage.z22.web.core.windows.net/```|
+|```Firefox```|```https://github.com/mozilla/geckodriver/releases```|
+|```Google```|```http://chromedriver.storage.googleapis.com/index.html```|
+
+### 存储目录
+
+- ```Microsoft Edge```
+    |操作系统|驱动的存储目录|快照的存储目录|
+    |--|--|--|
+    |linux|```xxx```|```xxx```|
+    |windows|```C:\Program Files (x86)\Microsoft\Edge\Application```|```C:\Users\用记名\AppData\Local\Temp```|
+- ```Firefox```
+    |操作系统|驱动的存储目录|快照的存储目录|
+    |--|--|--|
+    |linux|```xxx```|```xxx```|
+    |windows|```C:\Program Files (x86)\Microsoft\Edge\Application```|```C:\Users\用记名\AppData\Local\Temp```|
+- ```Google```
+    |操作系统|驱动的存储目录|快照的存储目录|
+    |--|--|--|
+    |linux|```xxx```|```xxx```|
+    |windows|```C:\Program Files (x86)\Microsoft\Edge\Application```|```C:\Users\用记名\AppData\Local\Temp```|
+    
