@@ -72,6 +72,8 @@ void test() throws IOException, InterruptedException {
 
 ## 浏览器和驱动
 
+selenium 官网： ```https://www.selenium.dev/documentation/webdriver/troubleshooting/errors/driver_location/```
+
 ### 浏览器和驱动
 
 |浏览器|驱动的下载地址|
@@ -91,10 +93,10 @@ void test() throws IOException, InterruptedException {
     |操作系统|驱动的存储目录|快照的存储目录|
     |--|--|--|
     |linux|```xxx```|```xxx```|
-    |windows|```C:\Program Files (x86)\Microsoft\Edge\Application```|```C:\Users\用记名\AppData\Local\Temp```|
+    |windows|```C:\Program Files\Mozilla Firefox```|```C:\Users\用记名\AppData\Local\Temp```|
 - ```Google```
     |操作系统|驱动的存储目录|快照的存储目录|
     |--|--|--|
     |linux|```xxx```|```xxx```|
-    |windows|```C:\Program Files (x86)\Microsoft\Edge\Application```|```C:\Users\用记名\AppData\Local\Temp```|
+    |windows|```C:\Program Files\Google\Chrome\Application```|```C:\Users\用记名\AppData\Local\Temp```|
     
