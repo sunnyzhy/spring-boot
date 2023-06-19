@@ -116,7 +116,7 @@ public class WebDriverUtil {
 
 @Test
 void browser() throws InterruptedException, IOException {
-    File file = WebDriverUtil.browser("https://www.baidu.com", 30, 1, "wrapper", null, null);
+    File file = WebDriverUtil.browser("https://www.baidu.com", 30, 5, "wrapper", null, null);
     System.out.println(file);
 }
 ```
