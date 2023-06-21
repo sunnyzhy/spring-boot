@@ -127,11 +127,11 @@ selenium 官网： ```https://www.selenium.dev/documentation/webdriver/troublesh
 
 ### 浏览器和驱动
 
-|浏览器|驱动的下载地址|
-|--|--|
-|```Microsoft Edge```|```https://msedgewebdriverstorage.z22.web.core.windows.net/```|
-|```Firefox```|```https://github.com/mozilla/geckodriver/releases```|
-|```Google```|```http://chromedriver.storage.googleapis.com/index.html```|
+|浏览器|浏览器的下载地址|驱动的下载地址|
+|--|--|--|
+|```Microsoft Edge```|```https://www.microsoft.com/en-us/edge```|```https://msedgewebdriverstorage.z22.web.core.windows.net/```|
+|```Firefox```|```http://www.firefox.com.cn/```|```https://github.com/mozilla/geckodriver/releases```|
+|```Google```|```https://www.google.cn/chrome/```|```http://chromedriver.storage.googleapis.com/index.html```|
 
 ### 存储目录
 
