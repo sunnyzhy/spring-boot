@@ -127,6 +127,8 @@ selenium 官网： ```https://www.selenium.dev/documentation/webdriver/troublesh
 
 ### 浏览器和驱动
 
+安装浏览器：```https://github.com/sunnyzhy/CentOS/blob/master/%E5%AE%89%E8%A3%85%E6%B5%8F%E8%A7%88%E5%99%A8.md```
+
 |浏览器|浏览器的下载地址|驱动的下载地址|
 |--|--|--|
 |```Microsoft Edge```|```https://www.microsoft.com/en-us/edge```|```https://msedgewebdriverstorage.z22.web.core.windows.net/```|
@@ -138,16 +140,16 @@ selenium 官网： ```https://www.selenium.dev/documentation/webdriver/troublesh
 - ```Microsoft Edge```
     |操作系统|驱动的存储目录|快照的存储目录|
     |--|--|--|
-    |linux|```xxx```|```xxx```|
-    |windows|```C:\Program Files (x86)\Microsoft\Edge\Application```|```C:\Users\用记名\AppData\Local\Temp```|
+    |linux|```/usr/bin```|```/tmp```|
+    |windows|```C:\Program Files (x86)\Microsoft\Edge\Application```|```C:\Users\用户名\AppData\Local\Temp```|
 - ```Firefox```
     |操作系统|驱动的存储目录|快照的存储目录|
     |--|--|--|
-    |linux|```xxx```|```xxx```|
-    |windows|```C:\Program Files\Mozilla Firefox```|```C:\Users\用记名\AppData\Local\Temp```|
+    |linux|```/opt/firefox```|```/tmp```|
+    |windows|```C:\Program Files\Mozilla Firefox```|```C:\Users\用户名\AppData\Local\Temp```|
 - ```Google```
     |操作系统|驱动的存储目录|快照的存储目录|
     |--|--|--|
-    |linux|```xxx```|```xxx```|
-    |windows|```C:\Program Files\Google\Chrome\Application```|```C:\Users\用记名\AppData\Local\Temp```|
+    |linux|```/usr/bin```|```/tmp```|
+    |windows|```C:\Program Files\Google\Chrome\Application```|```C:\Users\用户名\AppData\Local\Temp```|
     
