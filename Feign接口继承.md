@@ -102,8 +102,8 @@ public class BusinessService {
     }
     ```
 - 解决方法：
-  - 方法一： 将多个 feign 接口合并
-  - 方法二： 在 ```@FeignClient``` 注解上配置 ```contextId``` 属性，确保每个 feign 的 contextId 唯一：
+   - 方法一： 将多个 feign 接口合并
+   - 方法二： 在 ```@FeignClient``` 注解上配置 ```contextId``` 属性，确保每个 feign 的 contextId 唯一：
     ```java
     @FeignClient(name = "service", contextId = "service1")
     public interface ServiceFeign1 {
