@@ -86,7 +86,7 @@ public class BusinessService {
     }
     ```
 
-### The bean 'xxx.FeignClientSpecification' could not be registered.
+### The bean 'xxx.FeignClientSpecification' could not be registered. A bean with that name has already been defined and overriding is disabled.
 
 - 原因：
    多个 feign 接口使用 ```@FeignClient``` 注解配置同一个名称的微服务时，启动时会引发此异常。错误的写法：
