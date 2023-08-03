@@ -48,3 +48,70 @@ public class BusinessService {
     }
 }
 ```
+
+## FAQ
+
+### Only single inheritance supported
+
+```open-feign``` 不支持接口的多层继承与多继承。
+
+- 多层继承，错误的写法：
+    ```java
+    interface ParentFeign1 {
+    
+    }
+    
+    interface ParentFeign2 extends ParentFeign1 {
+    
+    }
+    
+    @FeignClient(name = "service")
+    interface ChildFeign extends ParentFeign2 {
+    
+    }
+    ```
+- 多继承，错误的写法：
+    ```java
+    interface ParentFeign1 {
+
+    }
+
+    interface ParentFeign2 {
+
+    }
+
+    @FeignClient(name = "service")
+    interface ChildFeign extends ParentFeign1, ParentFeign2 {
+
+    }
+    ```
+
+### The bean 'xxx.FeignClientSpecification' could not be registered.
+
+- 原因：
+   多个 feign 接口使用 ```@FeignClient``` 注解配置同一个名称的微服务时，启动时会引发此异常。错误的写法：
+    ```java
+    @FeignClient(name = "service")
+    public interface ServiceFeign1 {
+    
+    }
+    
+    @FeignClient(name = "service")
+    public interface ServiceFeign2 {
+    
+    }
+    ```
+- 解决方法：
+  - 方法一： 将多个 feign 接口合并
+  - 方法二： 在 ```@FeignClient``` 注解上配置 ```contextId``` 属性，确保每个 feign 的 contextId 唯一：
+    ```java
+    @FeignClient(name = "service", contextId = "service1")
+    public interface ServiceFeign1 {
+    
+    }
+    
+    @FeignClient(name = "service", contextId = "service2")
+    public interface ServiceFeign2 {
+    
+    }
+    ```
