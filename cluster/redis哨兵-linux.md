@@ -14,6 +14,7 @@
 ```bash
 # vim /etc/redis/6379.conf
 bind 0.0.0.0
+masterauth "password"
 requirepass "password"
 ```
 
@@ -41,14 +42,14 @@ service redis_6379 start
 
 主从服务器启动成功后，使用如下命令查看主从状态：
 
-1. 查看主服务器状态
+1. 查看主服务器的状态
     ```bash
     127.0.0.1:6379> info replication
     # Replication
     role:master
     connected_slaves:1
     ```
-2. 查看从服务器状态
+2. 查看从服务器的状态
     ```bash
     127.0.0.1:6379> info replication
     # Replication
@@ -87,5 +88,69 @@ sentinel auth-pass mymaster password
 启动主从服务器哨兵的命令相同：
 
 ```bash
-# redis-server /etc/redis/sentinel.conf --sentinel &
+redis-server /etc/redis/sentinel.conf --sentinel &
 ```
+
+## 验证哨兵模式
+
+1. 在 ```192.168.5.163``` 写入数据
+    ```bash
+    127.0.0.1:6379> set a1:b1:c1 10
+    OK
+    ```
+2. 在 ```192.168.5.164``` 写入数据
+    ```bash
+    127.0.0.1:6379> get a1:b1:c1
+    "10"
+    
+    127.0.0.1:6379> set a1:b1:c1 100
+    (error) READONLY You can't write against a read only replica.
+    ```
+3. 停止 ```192.168.5.163``` 服务
+4. 查看 ```192.168.5.164``` 的状态，此时从服务器变成了主服务器并且 ```connected_slaves:0```
+    ```bash
+    127.0.0.1:6379> info replication
+    # Replication
+    role:master
+    connected_slaves:0
+    
+    127.0.0.1:6379> set a1:b1:c1 100
+    OK
+    ```
+5. 查看 ```192.168.5.164``` 的配置文件
+    ```bash
+    # vim /etc/redis/6379.conf
+    bind 0.0.0.0
+    masterauth "password"
+    requirepass "password"
+    ```
+6. 启动  ```192.168.5.163``` 服务
+7. 查看  ```192.168.5.163``` 的状态，此时主服务器变成了从服务器
+    ```bash
+    127.0.0.1:6379> info replication
+    # Replication
+    role:slave
+    master_host:192.168.5.164
+    master_port:6379
+
+    127.0.0.1:6379> get a1:b1:c1
+    "100"
+
+    127.0.0.1:6379> set a1:b1:c1 100
+    (error) READONLY You can't write against a read only replica.
+    ```
+8. 查看  ```192.168.5.163``` 的配置文件
+    ```bash
+    # vim /etc/redis/6379.conf
+    bind 0.0.0.0
+    masterauth "password"
+    requirepass "password"
+    replicaof 192.168.5.164 6379
+    ```
+9. 查看 ```192.168.5.164``` 的状态，此时 ```connected_slaves:1```
+    ```bash
+    127.0.0.1:6379> info replication
+    # Replication
+    role:master
+    connected_slaves:1
+    ```
