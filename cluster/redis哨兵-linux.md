@@ -68,6 +68,7 @@ sentinel auth-pass mymaster password
 ```
 
 - ```sentinel monitor``` 配置项语法：```sentinel monitor <master-name> <master-ip> <master-port> <quorum>```
+   - ```quorum```：在哨兵配置中，quorum参数定义了在故障转移时至少需要多少个 Sentinel 实例同意执行故障转移操作。如果 quorum 设置为 3，则需要至少有 3 个哨兵实例同意执行故障转移操作。为了保证 quorum 参数的正确性，建议将 quorum 参数设置为奇数值。
 - ```sentinel auth-pass``` 配置项语法：```sentinel auth-pass <master-name> <master-password>```
 
 ### 修改从服务器配置
