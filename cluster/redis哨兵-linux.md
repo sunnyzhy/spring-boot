@@ -117,7 +117,7 @@ redis-server /etc/redis/sentinel.conf --sentinel &
     127.0.0.1:6379> set a1:b1:c1 100
     OK
     ```
-5. 查看 ```192.168.5.164``` 的配置文件
+5. 查看 ```192.168.5.164``` 的配置文件，```replicaof``` 配置项已被自动移除
     ```bash
     # vim /etc/redis/6379.conf
     bind 0.0.0.0
@@ -139,7 +139,7 @@ redis-server /etc/redis/sentinel.conf --sentinel &
     127.0.0.1:6379> set a1:b1:c1 100
     (error) READONLY You can't write against a read only replica.
     ```
-8. 查看  ```192.168.5.163``` 的配置文件
+8. 查看  ```192.168.5.163``` 的配置文件，```replicaof``` 配置项已被自动添加
     ```bash
     # vim /etc/redis/6379.conf
     bind 0.0.0.0
