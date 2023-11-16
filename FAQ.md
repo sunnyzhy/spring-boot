@@ -660,3 +660,20 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
             <version>4.9.1</version>
         </dependency>
    ```
+
+## 17 JDK21 报错 java.lang.NoSuchFieldError: Class com.sun.tools.javac.tree.JCTree$JCImport does not have member field 'com.sun.tools.javac.tree.JCTree qualid'
+
+原因：
+
+- lombok 版本兼容性的问题
+
+解决：
+
+- 更新 lombok 版本
+   ```xml
+   <dependency>
+       <groupId>org.projectlombok</groupId>
+       <artifactId>lombok</artifactId>
+       <version>1.18.30</version>
+   </dependency>
+   ```
