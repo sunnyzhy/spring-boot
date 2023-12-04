@@ -319,6 +319,48 @@ public static <T> T toObject(Object object, TypeReference<T> typeReference) {
         return null;
     }
 }
+
+/**
+ * 将JSON字符串转为复杂对象(List/Map)
+ * 需要自己逐层构造 JavaType
+ *
+ * @param json
+ * @param typeReference
+ * @return
+ */
+public static <T> T toObject(String json, JavaType javaType) {
+    if (StringUtils.isEmpty(json)) {
+        return null;
+    }
+    try {
+        return (T) (javaType.getClass().equals(String.class) ? (T) json
+                : objectMapper.readValue(json, javaType));
+    } catch (Exception e) {
+        log.warn(e.getMessage(), e);
+        return null;
+    }
+}
+
+/**
+ * 将Object对象转为具体类型的复杂对象(List/Map)
+ * 需要自己逐层构造 JavaType
+ *
+ * @param object
+ * @param javaType
+ * @param <T>
+ * @return
+ */
+public static <T> T toObject(Object object, JavaType javaType) {
+    if (object == null) {
+        return null;
+    }
+    try {
+        return objectMapper.convertValue(object, javaType);
+    } catch (Exception e) {
+        log.warn(e.getMessage(), e);
+        return null;
+    }
+}
 ```
 
 ## 单元测试
@@ -350,6 +392,11 @@ public class User1 {
         private String province;
         private String city;
     }
+}
+
+@Data
+public class JsonData<T> {
+    private T data;
 }
 ```
 
@@ -446,5 +493,47 @@ void json5() {
     Map<Integer, User1> map1 = JsonUtil.toObject(map, new TypeReference<Map<Integer, User1>>() {
     });
     System.out.println(map1);
+}
+
+@Test
+void json6() {
+    JsonData<Map<Object, List<Object>>> jsonData = new JsonData<>();
+    Map<Object, List<Object>> map = new HashMap<>();
+    for (int i = 1; i <= 5; i++) {
+        List<Object> list = new ArrayList<>();
+        for (int j = i; j <= 5; j++) {
+            User user = new User();
+            user.setId(i * j);
+            user.setName("user" + user.getId());
+            user.setAddress(new User.Address() {{
+                setCountry("cn");
+                setProvince("hb");
+                setCity("wh");
+            }});
+            list.add(user);
+        }
+        map.put(i, list);
+    }
+    jsonData.setData(map);
+
+    // 使用 JavaType 转换
+    // 获取 Type 的工厂
+    TypeFactory typeFactory = objectMapper.getTypeFactory();
+    // 由内到外，一层层地创建对应的类型
+    // 创建 List<User1> 类型
+    JavaType listType = typeFactory.constructCollectionType(List.class, User1.class);
+    // 创建 Integer 类型
+    JavaType integerType = typeFactory.constructType(Integer.class);
+    // 创建 Map<Integer, List<User1>> 类型
+    JavaType mapType = typeFactory.constructMapType(Map.class, integerType, listType);
+    // 创建Json<Map<Integer, List<User1>>> 类型
+    JavaType lastType = typeFactory.constructParametricType(JsonData.class, mapType);
+    JsonData<Map<Integer, List<User1>>> jsonData1 = JsonUtil.toObject(jsonData, lastType);
+    System.out.println(jsonData1);
+
+    // 使用 TypeReference<T> 转换
+    JsonData<Map<Integer, List<User1>>> jsonData2 = JsonUtil.toObject(jsonData, new TypeReference<JsonData<Map<Integer, List<User1>>>>() {
+    });
+    System.out.println(jsonData2);
 }
 ```
