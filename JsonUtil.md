@@ -1,5 +1,15 @@
 # JsonUtil
 
+## 前言
+
+- 泛型擦除，即在运行时不存在泛型类型：
+   - ```List<String>``` 在编译后的代码中最终成为 ```List```
+   - ```new TypeReference<List<T>>()``` 在编译后的代码中最终成为 ```new TypeReference<List>()```
+- 保留泛型：
+   - ```Class``` 无法保留泛型信息
+   - 使用 ```TypeReference``` 的匿名实现类来保留泛型信息
+   - 使用 ```JavaType``` 由内到外逐层创建完整的类来保留泛型信息
+
 ## 初始化 ObjectMapper
 
 ```java
@@ -322,7 +332,7 @@ public static <T> T toObject(Object object, TypeReference<T> typeReference) {
 
 /**
  * 将JSON字符串转为复杂对象(List/Map)
- * 需要自己逐层构造 JavaType
+ * 需要由内到外逐层创建完整的类
  *
  * @param json
  * @param typeReference
@@ -343,7 +353,7 @@ public static <T> T toObject(String json, JavaType javaType) {
 
 /**
  * 将Object对象转为具体类型的复杂对象(List/Map)
- * 需要自己逐层构造 JavaType
+ * 需要由内到外逐层创建完整的类
  *
  * @param object
  * @param javaType
