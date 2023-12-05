@@ -4,6 +4,7 @@
 
 - 泛型擦除，即在运行时不存在泛型类型：
    - ```List<String>``` 在编译后的代码中最终成为 ```List```
+   - ```List<T>``` 在编译后的代码中最终成为 ```List```
    - ```new TypeReference<List<T>>()``` 在编译后的代码中最终成为 ```new TypeReference<List>()```
 - 保留泛型：
    - ```Class``` 无法保留泛型信息
