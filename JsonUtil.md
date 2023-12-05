@@ -405,16 +405,35 @@ public class JsonData<T> {
 ```java
 @Test
 void json1() {
-    User user = new User();
-    user.setId(1);
-    user.setName("user");
-    user.setAddress(new User.Address() {{
-        setCountry("cn");
-        setProvince("hb");
-        setCity("wh");
-    }});
-    User1 user1 = JsonUtil.toObject(user, User1.class);
-    System.out.println(user1);
+    {
+        User user = new User();
+        user.setId(1);
+        user.setName("user");
+        user.setAddress(new User.Address() {{
+            setCountry("cn");
+            setProvince("hb");
+            setCity("wh");
+        }});
+        User1 user1 = JsonUtil.toObject(user, User1.class);
+        System.out.println(user1);
+    }
+
+    {
+        User[] list = new User[5];
+        for (int i = 1; i <= list.length; i++) {
+            User user = new User();
+            user.setId(i);
+            user.setName("user" + i);
+            user.setAddress(new User.Address() {{
+                setCountry("cn");
+                setProvince("hb");
+                setCity("wh");
+            }});
+            list[i - 1] = user;
+        }
+        User1[] list1 = JsonUtil.toObject(list, User1[].class);
+        System.out.println(list1);
+    }
 }
 
 @Test
