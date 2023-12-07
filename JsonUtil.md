@@ -195,49 +195,49 @@ public static <T> Collection<T> toCollection(String json, Class<? extends Collec
 }
 
 /**
- * 将List转为成员是简单对象的List
+ * 将Object转为成员是简单对象的List
  * 如果成员是复杂对象的请使用 T toObject(Object object, TypeReference<T> typeReference)
  *
- * @param list
+ * @param object
  * @param clazz
  * @param <T>
  * @return
  */
-public static <T> List<T> toList(List list, Class<T> clazz) {
-    if (list == null || list.isEmpty()) {
-        return new ArrayList<>();
-    }
-    try {
-        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
-        return objectMapper.convertValue(list, listType);
-    } catch (Exception e) {
-        log.warn(e.getMessage(), e);
-        return new ArrayList<>();
-    }
-}
+ public static <T> List<T> toList(Object object, Class<T> clazz) {
+     if (object == null) {
+         return new ArrayList<>();
+     }
+     try {
+         CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(ArrayList.class, clazz);
+         return objectMapper.convertValue(object, listType);
+     } catch (Exception e) {
+         log.warn(e.getMessage(), e);
+         return new ArrayList<>();
+     }
+ }
 
 /**
- * 将List转为成员是简单对象的Collection
+ * 将Object转为成员是简单对象的Collection
  * 如果成员是复杂对象的请使用 T toObject(Object object, TypeReference<T> typeReference)
  *
- * @param list
+ * @param object
  * @param collectionClass
  * @param elementClass
  * @param <T>
  * @return
  */
-public static <T> Collection<T> toCollection(List list, Class<? extends Collection> collectionClass, Class<T> elementClass) {
-    if (list == null || list.isEmpty()) {
-        return null;
-    }
-    try {
-        CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
-        return objectMapper.convertValue(list, listType);
-    } catch (Exception e) {
-        log.warn(e.getMessage(), e);
-        return null;
-    }
-}
+ public static <T> Collection<T> toCollection(Object object, Class<? extends Collection> collectionClass, Class<T> elementClass) {
+     if (object == null) {
+         return new ArrayList<>();
+     }
+     try {
+         CollectionType listType = objectMapper.getTypeFactory().constructCollectionType(collectionClass, elementClass);
+         return objectMapper.convertValue(object, listType);
+     } catch (Exception e) {
+         log.warn(e.getMessage(), e);
+         return null;
+     }
+ }
 
 /**
  * 将JSON字符串转为成员是简单对象的Map
