@@ -88,6 +88,27 @@ public static <T> T toObject(String json, Class<T> clazz) {
     }
 }
 
+ /**
+  * 将字节数组转为具体类型的简单对象
+  *
+  * @param buffer
+  * @param clazz
+  * @param <T>
+  * @return
+  */
+ public static <T> T toObject(byte[] buffer, Class<T> clazz) {
+     if (buffer == null || buffer.length == 0) {
+         return null;
+     }
+     try {
+         String s = new String(buffer, Charset.forName("utf-8"));
+         return objectMapper.readValue(s, clazz);
+     } catch (Exception e) {
+         log.warn(e.getMessage(), e);
+         return null;
+     }
+ }
+
 /**
  * 将Object对象转为具体类型的简单对象
  *
@@ -139,7 +160,7 @@ public static <T> T toObject(File file, Class<T> clazz) {
  */
 public static <T> byte[] toBytes(T t) {
     if (t == null) {
-        return null;
+        return new byte[]{};
     }
     try {
         return objectMapper.writeValueAsBytes(t);
