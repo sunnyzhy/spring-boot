@@ -1,4 +1,3 @@
-```java
 @Slf4j
 public class JsonUtil {
 
@@ -383,4 +382,3 @@ public class JsonUtil {
         }
     }
 }
-```
