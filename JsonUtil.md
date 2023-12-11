@@ -97,11 +97,24 @@ public static <T> T toObject(String json, Class<T> clazz) {
   * @return
   */
  public static <T> T toObject(byte[] buffer, Class<T> clazz) {
+     T t = toObject(buffer, Charset.forName("utf-8"), clazz);
+     return t;
+ }
+
+ /**
+  * 将字节数组转为具体类型的简单对象
+  * @param buffer
+  * @param charset
+  * @param clazz
+  * @return
+  * @param <T>
+  */
+ public static <T> T toObject(byte[] buffer, Charset charset, Class<T> clazz) {
      if (buffer == null || buffer.length == 0) {
          return null;
      }
      try {
-         String s = new String(buffer, Charset.forName("utf-8"));
+         String s = new String(buffer, charset);
          return objectMapper.readValue(s, clazz);
      } catch (Exception e) {
          log.warn(e.getMessage(), e);
