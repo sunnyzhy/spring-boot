@@ -677,3 +677,17 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
        <version>1.18.30</version>
    </dependency>
    ```
+
+## 18 Feign 自动把 GET 请求转换为 POST
+
+原因：
+
+因为 Feign 默认使用的连接工具实现类，所以发现只要参数是对象，就会强制的把 GET 请求转换成 POST 请求。
+
+解决方案：
+
+- 方法一【推荐】，使用 ```@SpringQueryMap Entity entity```，可以把多个参数包装成对象，没有值的时候默认为 ```null```
+
+- 方法二，使用 ```@RequestParam Integer id, @RequestParam String name``` 指定请求的各个参数。缺点：有几个参数，就需要指定几个 ```@RequestParam```
+
+- 方法三【不推荐】，使用 ```@RequestParam Map<String, Object> map``` 把多个参数包装进 map。缺点：可读性不好
