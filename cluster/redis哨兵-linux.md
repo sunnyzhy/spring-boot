@@ -90,7 +90,7 @@ sentinel auth-pass mymaster password
 启动主从服务器哨兵的命令相同：
 
 ```bash
-redis-server /etc/redis/sentinel.conf --sentinel &
+nohup redis-server /etc/redis/sentinel.conf --sentinel &
 ```
 
 ## 验证哨兵模式
