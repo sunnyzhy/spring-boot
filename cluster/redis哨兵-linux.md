@@ -14,6 +14,7 @@
 ```bash
 # vim /etc/redis/6379.conf
 bind 0.0.0.0
+protected-mode no
 masterauth "password"
 requirepass "password"
 ```
@@ -23,6 +24,7 @@ requirepass "password"
 ```bash
 # vim /etc/redis/6379.conf
 bind 0.0.0.0
+protected-mode no
 masterauth "password"
 requirepass "password"
 replicaof 192.168.5.163 6379
