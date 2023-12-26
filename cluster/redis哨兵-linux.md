@@ -3,7 +3,8 @@
 ## 前言
 
 - ***本示例为一主一从一哨兵***
-- ***哨兵的个数必须是单数***
+- ***主节点可读可写，从节点只读***
+- ***哨兵也是一台 redis 服务器，只是不提供数据相关的服务，通常哨兵的数量配置为单数***
 
 |物理机IP|角色|
 |--|--|
@@ -206,10 +207,10 @@ root      145038  143886  0 15:35 pts/1    00:00:00 redis-server *:26379 [sentin
     master_host:192.168.5.163
     master_port:6379
 
-    127.0.0.1:6379> get a1:b1
+    127.0.0.1:6379> get a1:b1:c1
     "x"
 
-    127.0.0.1:6379> set a1:b1 10
+    127.0.0.1:6379> set a1:b1:c1 10
     (error) READONLY You can't write against a read only replica.
     ```
 17. 查看 ```192.168.5.163``` 的状态
@@ -219,3 +220,34 @@ root      145038  143886  0 15:35 pts/1    00:00:00 redis-server *:26379 [sentin
     connected_slaves:1
     slave0:ip=192.168.5.164,port=6379,state=send_bulk,offset=0,lag=0
     ```
+
+## 哨兵日志分析
+
+```
+# +sdown master mymaster 192.168.5.164 6379
+# +odown master mymaster 192.168.5.164 6379 #quorum 1/1
+# +new-epoch 2
+# +try-failover master mymaster 192.168.5.164 6379
+# +vote-for-leader 202acc3053b283fbfefefafefeb860373ff20cbb 2
+# +elected-leader master mymaster 192.168.5.164 6379
+# +failover-state-select-slave master mymaster 192.168.5.164 6379
+# +selected-slave slave 192.168.5.163:6379 192.168.5.163 6379 @ mymaster 192.168.5.164 6379
+* +failover-state-send-slaveof-noone slave 192.168.5.163:6379 192.168.5.163 6379 @ mymaster 192.168.5.164 6379
+* +failover-state-wait-promotion slave 192.168.5.163:6379 192.168.5.163 6379 @ mymaster 192.168.5.164 6379
+# +promoted-slave slave 192.168.5.163:6379 192.168.5.163 6379 @ mymaster 192.168.5.164 6379
+# +failover-state-reconf-slaves master mymaster 192.168.5.164 6379
+# +failover-end master mymaster 192.168.5.164 6379
+# +switch-master mymaster 192.168.5.164 6379 192.168.5.163 6379
+* +slave slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379
+# +sdown slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379
+# -sdown slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379
+* +convert-to-slave slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379
+```
+
+- ```+sdown```：主观下线，有一个哨兵监测到主节点不可用
+- ```+odown```：客观下线，其他哨兵去连接主节点以确定主节点是不是真的不可用了，当超过半数的哨兵认为主节点不可用，就会发起投票
+- ```+switch-master mymaster 192.168.5.164 6379 192.168.5.163 6379```：切换主节点，哨兵发起投票的结果，推选端口为 6379 的 192.168.5.163 服务为主节点
+- ```+slave slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379```：端口为 6379 的 192.168.5.164 从服务被哨兵识别并关联
+- ```+sdown slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379```：端口为 6379 的 192.168.5.164 从服务处于主观下线状态
+- ```-sdown slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379```：端口为 6379 的 192.168.5.164 从服务不再处于主观下线状态
+- ```+convert-to-slave slave 192.168.5.164:6379 192.168.5.164 6379 @ mymaster 192.168.5.163 6379```：切换从节点(原主节点降为从节点)，端口为 6379 的 192.168.5.164 服务切换为从节点
