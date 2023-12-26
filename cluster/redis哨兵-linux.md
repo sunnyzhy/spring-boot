@@ -53,6 +53,7 @@ service redis_6379 start
     127.0.0.1:6379> info replication
     role:master
     connected_slaves:1
+    slave0:ip=192.168.5.164,port=6379,state=send_bulk,offset=0,lag=0
     ```
 2. 查看从服务器的状态
     ```bash
@@ -132,19 +133,23 @@ root      145038  143886  0 15:35 pts/1    00:00:00 redis-server *:26379 [sentin
 5. 查看 ```192.168.5.164``` 的配置文件，```replicaof``` 配置项已被自动移除
     ```bash
     # vim /etc/redis/6379.conf
-    bind 0.0.0.0
-    masterauth "password"
-    requirepass "password"
-    
+    ```
+6. 查看 ```192.168.5.164``` 的哨兵配置文件
+    ```bash
     # vim /etc/redis/sentinel.conf
     sentinel monitor mymaster 192.168.5.164 6379 1
     sentinel known-replica mymaster 192.168.5.163 6379
     ```
-6. 启动  ```192.168.5.163``` 服务
+7. 启动  ```192.168.5.163``` 服务
     ```bash
     # service redis_6379 start
     ```
-7. 查看  ```192.168.5.163``` 的状态，此时主服务器变成了从服务器
+8. 查看  ```192.168.5.163``` 的配置文件，```replicaof``` 配置项已被自动添加
+    ```bash
+    # vim /etc/redis/6379.conf
+    replicaof 192.168.5.164 6379
+    ```
+9. 查看  ```192.168.5.163``` 的状态，此时主服务器变成了从服务器
     ```bash
     127.0.0.1:6379> info replication
     role:slave
@@ -154,47 +159,60 @@ root      145038  143886  0 15:35 pts/1    00:00:00 redis-server *:26379 [sentin
     127.0.0.1:6379> get a1:b1:c1
     "100"
 
-    127.0.0.1:6379> set a1:b1:c1 100
+    127.0.0.1:6379> set a1:b1:c1 x
     (error) READONLY You can't write against a read only replica.
     ```
-8. 查看  ```192.168.5.163``` 的配置文件，```replicaof``` 配置项已被自动添加
-    ```bash
-    # vim /etc/redis/6379.conf
-    bind 0.0.0.0
-    masterauth "password"
-    requirepass "password"
-    replicaof 192.168.5.164 6379
-    ```
-9. 查看 ```192.168.5.164``` 的状态，此时 ```connected_slaves:1```
+10. 查看 ```192.168.5.164``` 的状态
     ```bash
     127.0.0.1:6379> info replication
     role:master
     connected_slaves:1
+    slave0:ip=192.168.5.163,port=6379,state=send_bulk,offset=0,lag=0
     ```
-10. 停止 ```192.168.5.164``` 服务
+11. 停止 ```192.168.5.164``` 服务
     ```bash
     # kill -9 21089
     
     # rm -rf /var/run/redis_6379.pid
     ```
-11. 查看 ```192.168.5.163``` 的状态，此时从服务器变成了主服务器
+12. 查看 ```192.168.5.163``` 的状态，此时从服务器变成了主服务器
+    ```bash
+    127.0.0.1:6379> info replication
+    role:master
+    connected_slaves:0
+    
+    127.0.0.1:6379> set a1:b1:c1 x
+    OK
+    ```
+13. 查看 ```192.168.5.164``` 的哨兵配置文件
     ```bash
     # vim /etc/redis/sentinel.conf
     sentinel monitor mymaster 192.168.5.163 6379 1
     sentinel known-replica mymaster 192.168.5.164 6379
     ```
-12. 启动  ```192.168.5.164``` 服务
+14. 启动  ```192.168.5.164``` 服务
     ```bash
     # service redis_6379 start
     ```
-13. 查看 ```192.168.5.164``` 的状态
+15. 查看  ```192.168.5.164``` 的配置文件，```replicaof``` 配置项已被自动添加
+    ```bash
+    # vim /etc/redis/6379.conf
+    replicaof 192.168.5.163 6379
+    ```
+16. 查看 ```192.168.5.164``` 的状态
     ```bash
     127.0.0.1:6379> info replication
     role:slave
     master_host:192.168.5.163
     master_port:6379
+
+    127.0.0.1:6379> get a1:b1
+    "x"
+
+    127.0.0.1:6379> set a1:b1 10
+    (error) READONLY You can't write against a read only replica.
     ```
-14. 查看 ```192.168.5.163``` 的状态
+17. 查看 ```192.168.5.163``` 的状态
     ```bash
     127.0.0.1:6379> info replication
     role:master
