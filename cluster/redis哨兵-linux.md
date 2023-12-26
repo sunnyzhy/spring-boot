@@ -221,7 +221,45 @@ root      145038  143886  0 15:35 pts/1    00:00:00 redis-server *:26379 [sentin
     slave0:ip=192.168.5.164,port=6379,state=send_bulk,offset=0,lag=0
     ```
 
-## 哨兵日志分析
+## 哨兵日志解析
+
+格式中的 instance details 内容：
+
+```
+<instance-type> <name> <ip> <port> @ <master-name> <master-ip> <master-port>
+```
+
+- ```@``` 字符之后的内容用于指定主服务器
+
+|参数|描述|
+|--|--|
+|```+reset-master <instance details>```|主服务器已被重置。|
+|```+slave <instance details>```|一个新的从服务器已经被 Sentinel 识别并关联。|
+|```+failover-state-reconf-slaves <instance details>```|故障转移状态切换到了 reconf-slaves 状态。|
+|```+failover-detected <instance details>```|另一个 Sentinel 开始了一次故障转移操作，或者一个从服务器转换成了主服务器。|
+|```+slave-reconf-sent <instance details>```|领头（leader）的 Sentinel 向实例发送了 SLAVEOF 命令，为实例设置新的主服务器。|
+|```+slave-reconf-inprog <instance details>```|实例正在将自己设置为指定主服务器的从服务器，但相应的同步过程仍未完成。|
+|```+slave-reconf-done <instance details>```|从服务器已经成功完成对新主服务器的同步。|
+|```-dup-sentinel <instance details>```|对给定主服务器进行监视的一个或多个 Sentinel 已经因为重复出现而被移除 —— 当 Sentinel 实例重启的时候，就会出现这种情况。|
+|```+sentinel <instance details>```|一个监视给定主服务器的新 Sentinel 已经被识别并添加。|
+|```+sdown <instance details>```|给定的实例现在处于主观下线状态。|
+|```-sdown <instance details>```|给定的实例已经不再处于主观下线状态。|
+|```+odown <instance details>```|给定的实例现在处于客观下线状态。|
+|```-odown <instance details>```|给定的实例已经不再处于客观下线状态。|
+|```+new-epoch <instance details>```|当前的纪元（epoch）已经被更新。|
+|```+try-failover <instance details>```|一个新的故障迁移操作正在执行中，等待被大多数 Sentinel 选中（waiting to be elected by the majority）。|
+|```+elected-leader <instance details>```|赢得指定纪元的选举，可以进行故障迁移操作了。|
+|```+failover-state-select-slave <instance details>```|故障转移操作现在处于 select-slave 状态 —— Sentinel 正在寻找可以升级为主服务器的从服务器。|
+|```+no-good-slave <instance details>```|Sentinel 操作未能找到适合进行升级的从服务器。|Sentinel 会在一段时间之后再次尝试寻找合适的从服务器来进行升级，又或者直接放弃执行故障转移操作。|
+|```+selected-slave <instance details>```|Sentinel 顺利找到适合进行升级的从服务器。|
+|```+failover-state-send-slaveof-noone <instance details>```|Sentinel 正在将指定的从服务器升级为主服务器，等待升级功能完成。|
+|```+failover-end-for-timeout <instance details>```|故障转移因为超时而中止，不过最终所有从服务器都会开始复制新的主服务器（slaves will eventually be configured to replicate with the new master anyway）。|
+|```+failover-end <instance details>```|故障转移操作顺利完成。所有从服务器都开始复制新的主服务器了。|
+|```+switch-master <master name> <oldip> <oldport> <newip> <newport>```|配置变更，主服务器的 IP 和地址已经改变。| 
+|```+tilt```|进入 tilt 模式。|
+|```-tilt```|退出 tilt 模式。|
+
+示例：
 
 ```
 # +sdown master mymaster 192.168.5.164 6379
