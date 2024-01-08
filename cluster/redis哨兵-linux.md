@@ -83,7 +83,13 @@ sentinel auth-pass mymaster password
 启动哨兵的命令相同：
 
 ```bash
-nohup redis-server /etc/redis/sentinel.conf --sentinel &
+nohup redis-server /etc/redis/sentinel.conf --sentinel > /root/sentinel.log 2>&1 &
+```
+
+查看日志：
+
+```bash
+tail -f /root/sentinel.log
 ```
 
 查看主服务器 192.168.5.163 服务：
