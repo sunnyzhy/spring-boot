@@ -3,7 +3,7 @@
 1. 在 SpringBootApplication 启动类上添加注解 @EnableAsync
 2. 异步方法使用注解 @Async，返回值为 void 或者 Future，必须用 public 修饰
 3. 异步方法和调用方法一定要写在不同的类中，如果写在同一个类中，是没有效果的。**【易出错】**
-4. 没有经过 Spring 的代理类（如：@Service、@Component 等注解修饰的类）。因为 @Transactional 和 @Async 注解的实现都是基于 Spring 的 AOP ，而 AOP 的实现是基于动态代理模式实现的。如果调用方法的是对象本身而不是代理对象，因为没有经过 Spring 容器，所以注解无效。**【易出错】**
+4. 没有经过 Spring 的代理类（如：@Service、@Component 等注解修饰的类）。因为 @Transactional 和 @Async 注解的实现都是基于 Spring 的 AOP ，而 AOP 的实现是基于动态代理模式实现的。如果调用方法的是对象本身而不是代理对象，因为没有经过 Spring 容器，所以注解无效。总结成一句话就是，异步方法必须通过代理机制来触发。**【易出错】**
 
 解决方法如下：
 
