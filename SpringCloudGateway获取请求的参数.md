@@ -6,6 +6,16 @@
 https://docs.spring.io/spring-cloud-gateway/docs/3.1.4/reference/html/#the-cacherequestbody-gatewayfilter-factory
 ```
 
+添加依赖项：
+
+```xml
+<dependency>
+    <groupId>org.synchronoss.cloud</groupId>
+    <artifactId>nio-multipart-parser</artifactId>
+    <version>1.1.0</version>
+</dependency>
+```
+
 改进的代码如下：
 
 ```java
@@ -42,7 +52,16 @@ public class SessionAccessFilter implements GlobalFilter, Ordered {
 
 @Slf4j
 public class RequestParamUtil {
-    private final static List<HttpMessageReader<?>> defaultMessageReaders = HandlerStrategies.withDefaults().messageReaders();
+    private static final List<HttpMessageReader<?>> defaultMessageReaders;
+    private static final List<HttpMessageReader<?>> multipartMessageReaders;
+
+    static {
+        defaultMessageReaders = HandlerStrategies.withDefaults().messageReaders();
+        SynchronossPartHttpMessageReader synchronossPartHttpMessageReader = new SynchronossPartHttpMessageReader();
+        // 这里需要设置为-1
+        synchronossPartHttpMessageReader.setMaxInMemorySize(-1);
+        multipartMessageReaders = Collections.singletonList(new MultipartHttpMessageReader(synchronossPartHttpMessageReader));
+    }
 
     /**
      * ReadGetData
@@ -67,7 +86,7 @@ public class RequestParamUtil {
             }
         });
         if (!check) {
-            return MonoUtil.setFailedRequest(exchange, BaseResponseVoUtil.error(RestCodeConstants.SIGN_ERROR_CODE.getCode(), RestCodeConstants.SIGN_ERROR_CODE.getName()), HttpStatus.FORBIDDEN);
+            return setFailedRequest(exchange, "failed", HttpStatus.FORBIDDEN);
         }
         return chain.filter(exchange);
     }
@@ -80,7 +99,7 @@ public class RequestParamUtil {
      * @return
      */
     public static Mono<Void> readJsonData(ServerWebExchange exchange, GatewayFilterChain chain) {
-        Mono<Void> mono = doReadData(exchange, chain, new ParameterizedTypeReference<String>() {
+        Mono<Void> mono = doReadData(exchange, chain, defaultMessageReaders, new ParameterizedTypeReference<String>() {
         }, new AnalyseData() {
             @Override
             public void execute(ServerHttpRequest request, SortedMap<String, String> sortedMap) {
@@ -96,26 +115,6 @@ public class RequestParamUtil {
     }
 
     /**
-     * ReadNoJsonData
-     *
-     * @param exchange
-     * @param chain
-     * @return
-     */
-    public static Mono<Void> readNoJsonData(ServerWebExchange exchange, GatewayFilterChain chain) {
-        boolean check = checkSign(exchange, new AnalyseData() {
-            @Override
-            public void execute(ServerHttpRequest request, SortedMap<String, String> sortedMap) {
-
-            }
-        });
-        if (!check) {
-            return MonoUtil.setFailedRequest(exchange, BaseResponseVoUtil.error(RestCodeConstants.SIGN_ERROR_CODE.getCode(), RestCodeConstants.SIGN_ERROR_CODE.getName()), HttpStatus.FORBIDDEN);
-        }
-        return chain.filter(exchange);
-    }
-
-    /**
      * ReadFormData
      *
      * @param exchange
@@ -123,7 +122,7 @@ public class RequestParamUtil {
      * @return
      */
     public static Mono<Void> readFormData(ServerWebExchange exchange, GatewayFilterChain chain) {
-        Mono<Void> mono = doReadData(exchange, chain, new ParameterizedTypeReference<MultiValueMap<String, String>>() {
+        Mono<Void> mono = doReadData(exchange, chain, defaultMessageReaders, new ParameterizedTypeReference<MultiValueMap<String, String>>() {
         }, new AnalyseData() {
             @Override
             public void execute(ServerHttpRequest request, SortedMap<String, String> sortedMap) {
@@ -152,7 +151,7 @@ public class RequestParamUtil {
      * @return
      */
     public static Mono<Void> readMultipartData(ServerWebExchange exchange, GatewayFilterChain chain) {
-        Mono<Void> mono = doReadData(exchange, chain, new ParameterizedTypeReference<MultiValueMap<String, Part>>() {
+        Mono<Void> mono = doReadData(exchange, chain, multipartMessageReaders, new ParameterizedTypeReference<MultiValueMap<String, Part>>() {
         }, new AnalyseData() {
             @Override
             public void execute(ServerHttpRequest request, SortedMap<String, String> sortedMap) {
@@ -179,17 +178,17 @@ public class RequestParamUtil {
         return mono;
     }
 
-    private static <T> Mono<Void> doReadData(ServerWebExchange exchange, GatewayFilterChain chain, ParameterizedTypeReference<T> typeReference, AnalyseData analyseData) {
+    private static <T> Mono<Void> doReadData(ServerWebExchange exchange, GatewayFilterChain chain, List<HttpMessageReader<?>> messageReaders, ParameterizedTypeReference<T> typeReference, AnalyseData analyseData) {
         Mono<Void> mono = ServerWebExchangeUtils.cacheRequestBodyAndRequest(exchange, (serverHttpRequest) -> {
             final ServerRequest serverRequest = ServerRequest
-                    .create(exchange.mutate().request(serverHttpRequest).build(), defaultMessageReaders);
+                    .create(exchange.mutate().request(serverHttpRequest).build(), messageReaders);
             return serverRequest.bodyToMono(typeReference)
                     .doOnNext(objectValue -> {
                         exchange.getAttributes().put(ServerWebExchangeUtils.CACHED_REQUEST_BODY_ATTR, objectValue);
                     }).then(Mono.defer(() -> {
                         boolean check = checkSign(exchange, analyseData);
                         if (!check) {
-                            return MonoUtil.setFailedRequest(exchange, BaseResponseVoUtil.error(RestCodeConstants.SIGN_ERROR_CODE.getCode(), RestCodeConstants.SIGN_ERROR_CODE.getName()), HttpStatus.FORBIDDEN);
+                            return setFailedRequest(exchange, "failed", HttpStatus.FORBIDDEN);
                         }
                         ServerHttpRequest cachedRequest = exchange
                                 .getAttribute(CACHED_SERVER_HTTP_REQUEST_DECORATOR_ATTR);
@@ -208,6 +207,16 @@ public class RequestParamUtil {
 
     private static boolean isEmpty(String content) {
         return StringUtils.isEmpty(content) || content.equals("undefined") || content.equals("null");
+    }
+
+    private static Mono<Void> setFailedRequest(ServerWebExchange exchange, String body, HttpStatus status) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.getHeaders().add("Content-Type", "text/html;charset=UTF-8");
+        response.setStatusCode(status);
+        ResponseEntity<String> failed = ResponseEntity.badRequest().body(body);
+        byte[] responseByte = JsonUtil.toBytes(failed);
+        DataBuffer buffer = response.bufferFactory().wrap(responseByte);
+        return response.writeWith(Mono.just(buffer));
     }
 
     interface AnalyseData {
