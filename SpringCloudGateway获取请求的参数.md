@@ -52,10 +52,12 @@ public class SessionAccessFilter implements GlobalFilter, Ordered {
 
 @Slf4j
 public class RequestParamUtil {
+    private static ObjectMapper objectMapper;
     private static final List<HttpMessageReader<?>> defaultMessageReaders;
     private static final List<HttpMessageReader<?>> multipartMessageReaders;
 
     static {
+        objectMapper = new ObjectMapper();
         defaultMessageReaders = HandlerStrategies.withDefaults().messageReaders();
         SynchronossPartHttpMessageReader synchronossPartHttpMessageReader = new SynchronossPartHttpMessageReader();
         // 这里需要设置为-1
@@ -206,7 +208,27 @@ public class RequestParamUtil {
     }
 
     private static boolean isEmpty(String content) {
-        return StringUtils.isEmpty(content) || content.equals("undefined") || content.equals("null");
+        if (StringUtils.isEmpty(content)) {
+            return true;
+        }
+        if (content.trim().equalsIgnoreCase("undefined")) {
+            return true;
+        }
+        if (content.trim().equalsIgnoreCase("null")) {
+            return true;
+        }
+        // 判断数组是否为空，对象是否为空
+        if ((content.contains("[") && content.contains("]")) || (content.contains("{") && content.contains("}"))) {
+            JsonNode rootNode = null;
+            try {
+                rootNode = objectMapper.readTree(content);
+            } catch (JsonProcessingException e) {
+                log.error(e.getMessage(), e);
+                return false;
+            }
+            return rootNode.isEmpty();
+        }
+        return false;
     }
 
     private static Mono<Void> setFailedRequest(ServerWebExchange exchange, String body, HttpStatus status) {
