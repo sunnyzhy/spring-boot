@@ -52,7 +52,7 @@ public class SessionAccessFilter implements GlobalFilter, Ordered {
 
 @Slf4j
 public class RequestParamUtil {
-    private static ObjectMapper objectMapper;
+    private static final ObjectMapper objectMapper;
     private static final List<HttpMessageReader<?>> defaultMessageReaders;
     private static final List<HttpMessageReader<?>> multipartMessageReaders;
 
