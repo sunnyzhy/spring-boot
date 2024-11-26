@@ -112,7 +112,7 @@ private AFeign aFeign;
 public Mono<String> testA(@RequestBody Entity entity) {
     return aFeign.add(entity).flatMap(s->{
             try {
-                return Mono.just(new ObjectMapper().writeValueAsString(s));
+                return Mono.just(objectMapper.writeValueAsString(s));
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
