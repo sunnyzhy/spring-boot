@@ -60,6 +60,18 @@ public class WebClientConfiguration {
                         })
                         .build())
                 .filter(reactiveHeaderFilter)
+                // 或者使用ExchangeFilterFunction.ofRequestProcessor
+//                .filter(ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
+//                    Mono<ClientRequest> clientRequestMono = ReactiveRequestContextHolder.getRequest().flatMap(request -> {
+//                        HttpHeaders headers = request.getHeaders();
+//                        ClientRequest clientRequest1 = ClientRequest.from(clientRequest)
+//                                .header("userName", headers.getFirst("userName"))
+//                                .header("userId", headers.getFirst("userId"))
+//                                .build();
+//                        return Mono.just(clientRequest1);
+//                    });
+//                    return clientRequestMono;
+//                }))
                 .build();
         HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory
                 .builder()
@@ -80,6 +92,18 @@ public class WebClientConfiguration {
                         })
                         .build())
                 .filter(reactiveHeaderFilter)
+                // 或者使用ExchangeFilterFunction.ofRequestProcessor
+//                .filter(ExchangeFilterFunction.ofRequestProcessor(clientRequest -> {
+//                    Mono<ClientRequest> clientRequestMono = ReactiveRequestContextHolder.getRequest().flatMap(request -> {
+//                        HttpHeaders headers = request.getHeaders();
+//                        ClientRequest clientRequest1 = ClientRequest.from(clientRequest)
+//                                .header("userName", headers.getFirst("userName"))
+//                                .header("userId", headers.getFirst("userId"))
+//                                .build();
+//                        return Mono.just(clientRequest1);
+//                    });
+//                    return clientRequestMono;
+//                }))
                 .build();
         HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory
                 .builder()
