@@ -9,6 +9,25 @@
 - 替代OpenFeign
 
 ```java
+/**
+ * 服务间调用时，根据上下文动态添加请求头的参数
+ */
+@Component
+public class ReactiveHeaderFilter implements ExchangeFilterFunction {
+    @Override
+    public Mono<ClientResponse> filter(ClientRequest clientRequest, ExchangeFunction nextFilter) {
+        return ReactiveRequestContextHolder.getRequest().flatMap(request->{
+            HttpHeaders headers = request.getHeaders();
+            ClientRequest modifiedRequest = ClientRequest
+                    .from(clientRequest)
+                    .header("userName", headers.getFirst("userName"))
+                    .header("userId", headers.getFirst("userId"))
+                    .build();
+            return nextFilter.exchange(modifiedRequest);
+        });
+    }
+}
+
 @Configuration
 public class WebClientConfiguration {
     @Bean
@@ -16,6 +35,9 @@ public class WebClientConfiguration {
     public WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
+
+    @Resource
+    ReactiveHeaderFilter reactiveHeaderFilter;
 
     @Bean
     public ObjectMapper objectMapper() {
@@ -37,11 +59,7 @@ public class WebClientConfiguration {
                                     .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper(), MediaType.APPLICATION_JSON)); // 自定义Jackson反序列化时对时间的处理
                         })
                         .build())
-                .defaultHeaders(headers ->
-                {
-                    headers.add("userId", "1");
-                    headers.add("userName", "admin");
-                })
+                .filter(reactiveHeaderFilter)
                 .build();
         HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory
                 .builder()
@@ -61,11 +79,7 @@ public class WebClientConfiguration {
                                     .jackson2JsonDecoder(new Jackson2JsonDecoder(objectMapper(), MediaType.APPLICATION_JSON)); // 自定义Jackson反序列化时对时间的处理
                         })
                         .build())
-                .defaultHeaders(headers ->
-                {
-                    headers.add("userId", "1");
-                    headers.add("userName", "admin");
-                })
+                .filter(reactiveHeaderFilter)
                 .build();
         HttpServiceProxyFactory proxyFactory = HttpServiceProxyFactory
                 .builder()
@@ -100,7 +114,7 @@ public interface BFeign {
 }
 ```
 
-单元测试:
+Controller:
 
 ```java
 @Resource
@@ -136,4 +150,20 @@ public Mono<String> testB() {
                 }
             }).doOnError(e-> System.out.println(e.getMessage()));
 }
+```
+
+Test:
+
+```
+POST http://localhost:8080/a
+Content-Type: application/json
+userId: 1
+userName: admin
+
+{
+  "id": 100,
+  "name": "demo",
+  "tags": ""
+}
+###
 ```
