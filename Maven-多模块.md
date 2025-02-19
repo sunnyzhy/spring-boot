@@ -401,7 +401,13 @@
        <maven.install.skip>true</maven.install.skip>
    </properties>
    ```
-7. spring-boot-maven-plugin 的正确使用方法:
+7. 如果不想把某个子模块安装到私有仓库，可以在子模块的 pom 中添加:
+   ```xml
+   <properties>
+       <maven.deploy.skip>true</maven.deploy.skip>
+   </properties>
+   ```
+8. spring-boot-maven-plugin 的正确使用方法:
    - spring-boot-maven-plugin 依赖
       ```xml
       <plugin>
@@ -411,4 +417,46 @@
       ```
    - spring-boot-maven-plugin 打包的 jar 文件是可以直接用 "java -jar name.jar" 运行的，而 demo-common 模块只是作为一个可供其他模块依赖的公共模块来使用的，并不需要有启动类，也不需要运行
    - **spring-boot-maven-plugin 依赖只需添加到可运行的模块(比如 demo-service )的 pom 里，而无需添加到非运行的模块(比如 demo 和 demo-common )的 pom 里**
-   
+
+### 7.7 发布公共模块到私有仓库
+
+先搭建 nexus 私有仓库。参考 [搭建 nexus 私有仓库](https://github.com/sunnyzhy/maven/blob/master/nexus%E6%90%AD%E5%BB%BA%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93.md)
+
+#### 在 maven 的 settings.xml 里添加 server 配置
+
+```xml
+  <servers>
+    <!-- -->
+    
+    <server>
+        <id>maven-releases</id>
+        <username>admin</username>
+        <password>admin@123</password>
+    </server>
+    
+    <!-- -->
+  </servers>
+```
+
+#### 在父模块的 pom.xml 里添加仓库配置
+
+```xml
+    <distributionManagement>
+        <repository>
+            <id>maven-releases</id>
+            <url>http://nexus:8080/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+```
+
+#### 在 hosts 文件里添加 nexus 映射
+
+```
+192.168.0.10  nexus
+```
+
+域名映射的地址可以在hosts文件里动态修改，而无需修改项目的pom.xml文件。  
+
+#### 发布公共模块到私有仓库
+
+直接执行 maven 的 deploy 插件，就可以把公共模块发到私有仓库。
