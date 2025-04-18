@@ -288,7 +288,36 @@ mapper 的配置文件
 </if>
 ```
 
-## 判断 list 是否为空
+## 判断参数是否为空
+
+### 判断 string 是否为空
+
+```xml
+<if test="name!= null and name!= ''">  
+     AND `name`=#{name}
+</if>
+```
+
+### 判断 int 是否为空
+
+```xml
+<if test="age!= null">  
+     AND age=#{age}
+</if>
+```
+
+### 判断 list 是否为空
+
+```xml
+<if test="list != null and list.size() > 0">
+    AND id IN
+    <foreach close=")" collection="list" item="item" open="(" separator=",">
+	#{item}
+    </foreach>
+</if>
+```
+
+### 判断 list 是否为空
 
 ```xml
 <if test="list != null and list.size() > 0">
