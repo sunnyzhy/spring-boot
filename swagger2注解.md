@@ -29,3 +29,26 @@
 
 @ApiModelProperty：描述一个model的属性
 ```
+
+Swagger 和 SpringDoc 注解的对应关系：
+
+***GET 请求，如果使用对象接收 Query 参数，那么在对象参数前需使用 ```@ParameterObject``` 注解，如：***
+
+```java
+@GetMapping
+@Operation(summary = "使用对象接收 Query 参数")
+public Response getList(@ParameterObject EntityForm form)
+```
+
+|Swagger|SpringDoc|
+|--|--|
+|@Api|@Tag|
+|@ApiIgnore|@Parameter(hidden = true) or @Operation(hidden=false) or @Hidden|
+|@ApiImplicitParam|@Parameter|
+|@ApiImplicitParams|@Parameters|
+|@ApiModel|@Schema|
+|@ApiModelProperty(hidden = true)|@Schema(acc essMode = READ_ONLY)|
+|@ApiModelProperty|@Schema|
+|@ApiOperation(value = "foo", notes = "bar")|@Operation(summary = "foo", description = "bar")|
+|@ApiParam|@Parameter|
+|@ApiResponse(code = 404, message = "foo")|@ApiResponse(responseCode = "404", description = "foo")|
