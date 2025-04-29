@@ -691,3 +691,33 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
 - 方法二，使用 ```@RequestParam Integer id, @RequestParam String name``` 指定请求的各个参数。缺点：有几个参数，就需要指定几个 ```@RequestParam```
 
 - 方法三【不推荐】，使用 ```@RequestParam Map<String, Object> map``` 把多个参数包装进 map。缺点：可读性不好
+
+## 19 Mybatis Generator 插件
+
+### 生成所有数据库的所有表
+
+解决方法：将 ```jdbcConnection``` 的 ```nullCatalogMeansCurrent``` 属性设置为 ```true``` 即可，有两种方法：
+
+- 在数据库连接的 URL 中添加该属性 ```jdbc:mysql://192.168.0.1:3306/dbname?serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true```，如：
+   ```xml
+        <jdbcConnection connectionURL="jdbc:mysql://192.168.0.1:3306/dbname?serverTimezone=GMT%2B8&nullCatalogMeansCurrent=true"
+                        driverClass="com.mysql.cj.jdbc.Driver"
+                        userId="username"
+                        password="password">
+        </jdbcConnection>
+   ```
+- 配置 ```<property>``` 标签，如：
+   ```xml
+        <jdbcConnection connectionURL="jdbc:mysql://192.168.0.1:3306/dbname?serverTimezone=GMT%2B8"
+                        driverClass="com.mysql.cj.jdbc.Driver"
+                        userId="username"
+                        password="password">
+            <property name="nullCatalogMeansCurrent" value="true"/>
+        </jdbcConnection>
+   ```
+
+### selectByPrimaryKey 无法根据主键查询
+
+原因：当实体类未设置主键时，tk-mybatis 会将所有字段当成联合主键进行查询。
+
+解决方案：在引入 ```@Id``` 注解时，应该导入 ```import javax.persistence.Id```，而不是其他 ```import jakarta.persistence.Id```
