@@ -49,7 +49,7 @@
        location / {
             proxy_pass http://minio;
             
-            # Host 必须配置为 $http_host（不要配置成了 $host）
+            # Host 必须配置为 $http_host（不要配置成了 $host），关于两者的区别，请参考 nginx 仓库里的 《$http_host与$host.md》
             proxy_set_header Host $http_host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -65,7 +65,7 @@
        location / {
             proxy_pass http://minio_console;
 
-            # Host 必须配置为 $http_host（不要配置成了 $host）
+            # Host 必须配置为 $http_host（不要配置成了 $host），关于两者的区别，请参考 nginx 仓库里的 《$http_host与$host.md》
             proxy_set_header Host $http_host;
             proxy_set_header X-Real-IP $remote_addr;
             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
