@@ -41,6 +41,17 @@
         server 192.168.0.12:9001;
    }
 
+    server {
+        listen       80;
+        server_name  localhost;
+
+        location /file/ {
+            proxy_set_header Host $http_host;
+            proxy_set_header Authorization "";
+            proxy_pass http://minio/;
+        }
+    }
+
     # 配置 Minio API 代理
     server {
        listen       9000;
@@ -99,7 +110,8 @@ minio:
     secret-key: admin
 ```
 
-如果同时满足以下两点，就说明 nginx 反向代理配置成功：
+如果同时满足以下三点，就说明 nginx 反向代理配置成功：
 
 1. 后台调用 ```http://192.168.0.10:9000``` 的 API 跟调用 ```http://192.168.0.11/12:9000``` 的 API 是一样的效果
 2. 前端访问 ```http://192.168.0.10:9001``` 跟访问 ```http://192.168.0.11/12:9001``` 是一样的效果
+3. 前端访问 ```http://192.168.0.10/file/{bucket_name}/{path}/{file_name}``` 可以下载相应的文件
