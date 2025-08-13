@@ -1,8 +1,11 @@
-# 前言
+# springboot 整合 elasticsearch 集群
+
+## 前言
 - **本示例用的是 elasticsearch7.1.1**
 - **不推荐使用 Spring Data Elasticsearch( https://spring.io/projects/spring-data-elasticsearch )，即 maven 仓库里的 spring-boot-starter-data-elasticsearch。因为 Spring Data Elasticsearch 所支持的 elasticsearch 版本比 elasticsearch 官网的最新版本要低得多。在写这篇笔记的时候，Spring Data Elasticsearch 稳定版(3.2.0)只支持到 Elasticsearch 6.8.1。**
 
-# pom.xml
+## pom.xml
+
 ```xml
 <properties>
     <java.version>1.8</java.version>
@@ -26,7 +29,8 @@
 </dependency>
 ```
 
-# application.yml
+## application.yml
+
 ```
 elasticsearch:
   hosts:
@@ -35,7 +39,8 @@ elasticsearch:
     - 192.168.0.12:9200
 ````
 
-# ElasticsearchConfig 类
+## ElasticsearchConfig 类
+
 ```java
 @Component
 @ConfigurationProperties(prefix = "elasticsearch")
@@ -63,8 +68,10 @@ public class ElasticsearchConfig {
 }
 ```
 
-# 单元测试
-## 示例代码
+## 单元测试
+
+### 示例代码
+
 ```java
 @Autowired
 private RestHighLevelClient restHighLevelClient;
