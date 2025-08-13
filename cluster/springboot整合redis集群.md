@@ -1,4 +1,7 @@
-# pom.xml
+# springboot 整合 redis 集群
+
+## pom.xml
+
 ```xml
 <dependency>
     <groupId>org.springframework.boot</groupId>
@@ -6,7 +9,8 @@
 </dependency>
 ```
 
-# application.yml
+## application.yml
+
 ```
 spring:
   redis:
@@ -28,8 +32,10 @@ spring:
         min-idle: 20
 ````
 
-# 单元测试
-## 示例代码
+## 单元测试
+
+### 示例代码
+
 ```java
 @Autowired
 private RedisTemplate<String, Object> redisTemplate;
@@ -53,7 +59,7 @@ zhy
 21
 ```
 
-## 用命令行查看
+### 用命令行查看
 ```
 >redis-cli -h 127.0.0.1 -c -p 6300
 
