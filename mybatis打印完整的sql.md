@@ -108,7 +108,11 @@ public class SqlInterceptor implements Interceptor {
         }
         // 字符串类型添加单引号，特殊字符转义
         if (value instanceof String || value instanceof Character) {
-            String strVal = value.toString().replace("'", "''");
+            String strVal = value.toString();
+            if (strVal.contains("$")) {
+                strVal = strVal.replace("$", "\\$");
+            }
+            strVal = strVal.replace("'", "''");
             return sql.replaceFirst("\\?", "'" + strVal + "'");
         }
         // 日期类型格式化
@@ -272,7 +276,11 @@ public class SqlInterceptor implements Interceptor {
         }
         // 字符串类型添加单引号，特殊字符转义
         if (value instanceof String || value instanceof Character) {
-            String strVal = value.toString().replace("'", "''");
+            String strVal = value.toString();
+            if (strVal.contains("$")) {
+                strVal = strVal.replace("$", "\\$");
+            }
+            strVal = strVal.replace("'", "''");
             return sql.replaceFirst("\\?", "'" + strVal + "'");
         }
         // 日期类型格式化
