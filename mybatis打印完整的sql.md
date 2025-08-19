@@ -201,7 +201,7 @@ import java.util.regex.Matcher;
  * @author zhy
  * @date 2025/8/14 16:35
  */
-@ConditionalOnProperty(value = "mybatis.print-sql", havingValue = "true")
+@ConditionalOnProperty(value = "mybatis.show_sql", havingValue = "true")
 @Component
 @Slf4j
 @Intercepts({
@@ -220,8 +220,6 @@ public class SqlInterceptor implements Interceptor {
 
         // 生成带参数的完整SQL
         String fullSql = getFullSql(config, boundSql);
-        // 打印SQL信息
-        log.info("===>\nSQL ID: {}\nFull SQL: {}", ms.getId(), fullSql);
 
         // 记录开始时间
         long startTime = System.currentTimeMillis();
@@ -229,8 +227,9 @@ public class SqlInterceptor implements Interceptor {
         Object result = invocation.proceed();
         // 计算执行时间
         long costTime = System.currentTimeMillis() - startTime;
+
         // 打印SQL信息
-        log.info("===>\nExecute Time: {} ms", costTime);
+        log.info("===>\nSQL ID: {}\nFull SQL: {}\nExecute Time: {} ms", ms.getId(), fullSql, costTime);
 
         return result;
     }
