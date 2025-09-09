@@ -42,18 +42,20 @@ public class SqlInterceptor implements Interceptor {
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
-        if (showSql) {
-            // 获取SQL相关对象
-            MappedStatement ms = (MappedStatement) invocation.getArgs()[0];
-            Object parameter = invocation.getArgs().length > 1 ? invocation.getArgs()[1] : null;
-            BoundSql boundSql = ms.getBoundSql(parameter);
-            Configuration config = ms.getConfiguration();
-
-            // 生成带参数的完整SQL
-            String fullSql = getFullSql(config, boundSql);
-            // 打印SQL信息
-            log.info("===>\nSQL ID: {}\nFull SQL: {}", ms.getId(), fullSql);
+        if (!showSql) {
+            return invocation.proceed();
         }
+        
+        // 获取SQL相关对象
+        MappedStatement ms = (MappedStatement) invocation.getArgs()[0];
+        Object parameter = invocation.getArgs().length > 1 ? invocation.getArgs()[1] : null;
+        BoundSql boundSql = ms.getBoundSql(parameter);
+        Configuration config = ms.getConfiguration();
+
+        // 生成带参数的完整SQL
+        String fullSql = getFullSql(config, boundSql);
+        // 打印SQL信息
+        log.info("===>\nSQL ID: {}\nFull SQL: {}", ms.getId(), fullSql);
 
         // 记录开始时间
         long startTime = System.currentTimeMillis();
@@ -61,11 +63,8 @@ public class SqlInterceptor implements Interceptor {
         Object result = invocation.proceed();
         // 计算执行时间
         long costTime = System.currentTimeMillis() - startTime;
-
-        if (showSql) {
-            // 打印SQL信息
-            log.info("===>\nExecute Time: {} ms", costTime);
-        }
+        // 打印SQL信息
+        log.info("===>\nExecute Time: {} ms", costTime);
 
         return result;
     }
@@ -89,13 +88,19 @@ public class SqlInterceptor implements Interceptor {
         for (ParameterMapping pm : parameterMappings) {
             String propertyName = pm.getProperty();
             if (metaObject.hasGetter(propertyName)) {
+                // 反射获取Bean属性, 通过Getter方法获取参数值
                 Object value = metaObject.getValue(propertyName);
                 sql = replacePlaceholder(sql, value);
             } else if (boundSql.hasAdditionalParameter(propertyName)) {
+                // 检查动态SQL参数（如<if>标签中的附加参数）, 从boundSql中获取附加参数值
                 Object value = boundSql.getAdditionalParameter(propertyName);
                 sql = replacePlaceholder(sql, value);
+            } else {
+                // 当参数是基本类型或无法解析属性时, 直接返回参数值
+                sql = replacePlaceholder(sql, parameterObject);
             }
         }
+
         return sql;
     }
 
@@ -205,7 +210,7 @@ import java.util.regex.Matcher;
  * @author zhy
  * @date 2025/8/14 16:35
  */
-@ConditionalOnProperty(value = "mybatis.show_sql", havingValue = "true")
+@ConditionalOnProperty(value = "mybatis.print-sql", havingValue = "true")
 @Component
 @Slf4j
 @Intercepts({
@@ -257,13 +262,19 @@ public class SqlInterceptor implements Interceptor {
         for (ParameterMapping pm : parameterMappings) {
             String propertyName = pm.getProperty();
             if (metaObject.hasGetter(propertyName)) {
+                // 反射获取Bean属性, 通过Getter方法获取参数值
                 Object value = metaObject.getValue(propertyName);
                 sql = replacePlaceholder(sql, value);
             } else if (boundSql.hasAdditionalParameter(propertyName)) {
+                // 检查动态SQL参数（如<if>标签中的附加参数）, 从boundSql中获取附加参数值
                 Object value = boundSql.getAdditionalParameter(propertyName);
                 sql = replacePlaceholder(sql, value);
+            } else {
+                // 当参数是基本类型或无法解析属性时, 直接返回参数值
+                sql = replacePlaceholder(sql, parameterObject);
             }
         }
+
         return sql;
     }
 
