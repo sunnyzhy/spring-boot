@@ -721,3 +721,35 @@ C:\Users\Administrator\AppData\Local\Temp\tomcat.8702.692273666709752187\work\To
 原因：当实体类未设置主键时，tk-mybatis 会将所有字段当成联合主键进行查询。
 
 解决方案：在引入 ```@Id``` 注解时，应该导入 ```import javax.persistence.Id```，而不是其他 ```import jakarta.persistence.Id```
+
+## 20 查看运行中的 Spring Boot JAR 应用里 Controller 暴露的 URL 路径
+
+1. 确保项目添加了 actuator 依赖:
+   ```xml
+   <dependency>
+       <groupId>org.springframework.boot</groupId>
+       <artifactId>spring-boot-starter-actuator</artifactId>
+   </dependency>
+   ```
+2. 配置暴露 mappings 端点
+   在 ```application.properties``` 或 ```application.yml``` 中添加：
+   
+   ```properties
+   # 暴露所有端点（生产环境建议只暴露需要的）
+   management.endpoints.web.exposure.include=*
+   # 或仅暴露 mappings 端点
+   management.endpoints.web.exposure.include=mappings
+   ```
+
+3. 重启应用后，通过 HTTP 请求获取 URL 信息
+   ```bash
+   # 假设应用端口为 8080，发送请求到 mappings 端点
+   curl http://localhost:8080/actuator/mappings
+   ```
+
+   返回结果是 JSON 格式，包含所有 Controller 的 URL 路径、请求方法（GET/POST 等）、对应的处理方法等信息。可通过 grep 筛选关键信息：
+   
+   ```bash
+   # 筛选包含 "controller" 的 URL 信息
+   curl -s http://localhost:8080/actuator/mappings | grep -i "controller"
+   ```
