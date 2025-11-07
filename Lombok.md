@@ -58,7 +58,7 @@ public class Child extends Parent {
 }
 ```
 
-在这种情况下，```equals()``` 和 ```hashCode()``` 方法除了比较 Child 类的 name 字段，还会比较 Parent 类的 code 字段。这才能够正确地比较父类对象和子类对象。
+在这种情况下，```equals()``` 和 ```hashCode()``` 方法除了比较 Child 类的 name 字段，还会比较 Parent 类的 code 字段。这样才能够正确地比较父类对象和子类对象。
 
 单元测试输出:
 
