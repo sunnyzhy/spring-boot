@@ -14,6 +14,11 @@ Log4j2 的初始化发生在 JVM 启动过程中，远早于 Spring Boot 容器�
 - ***Log4j2 总是在 Spring Boot 启动之前加载，这是由 JVM 的类加载顺序决定的，是无法改变的。***
 - ***多环境配置文件尽量不要包含 ```log4j2-test.xml```，这是因为 ```log4j2-test.xml``` 是 log4j2 默认的配置文件，如果包含了 ```log4j2-test.xml``` 的话，log4j2 自始至终都会加载```log4j2-test.xml```，这明显不符合多环境启动的预期。***
 
+## JVM 命令行
+
+- ```-Dspring.profiles.active=dev```: 设置环境变量(dev/test/prod)
+- ```-Dlog4j2.debug=true```: 开启 Log4j2 调试日志
+
 ## 正确配置 Log4j2 多环境
 
 ### 在公共模块添加多环境配置文件
