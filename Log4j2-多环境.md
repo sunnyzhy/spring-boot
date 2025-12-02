@@ -49,7 +49,7 @@ Log4j2 的初始化发生在 JVM 启动过程中，远早于 Spring Boot 容器�
         </console>
 
         <rollingFile name="file" fileName="${LOG_PATH}/app.dev.log"
-                     filePattern="${LOG_PATH}/app.%d{yyyyMMdd}.%i.log.gz">
+                     filePattern="${LOG_PATH}/app.dev.%d{yyyyMMdd}.%i.log.gz">
             <patternLayout pattern="${LOG_PATTERN}"/>
             <policies>
                 <sizeBasedTriggeringPolicy size="10MB"/>
@@ -73,11 +73,19 @@ Log4j2 的初始化发生在 JVM 启动过程中，远早于 Spring Boot 容器�
 ```
 
 ```xml
-<!-- log4j2-env-test.xml 略-->
+<!-- log4j2-env-test.xml -->
+<!-- 略-->
+        <rollingFile name="file" fileName="${LOG_PATH}/app.test.log"
+                     filePattern="${LOG_PATH}/app.test.%d{yyyyMMdd}.%i.log.gz">
+<!-- 略-->
 ```
 
 ```xml
-<!-- log4j2-env-prod.xml 略-->
+<!-- log4j2-env-prod.xml -->
+<!-- 略-->
+        <rollingFile name="file" fileName="${LOG_PATH}/app.prod.log"
+                     filePattern="${LOG_PATH}/app.prod.%d{yyyyMMdd}.%i.log.gz">
+<!-- 略-->
 ```
 
 ### 方案一：使用系统属性/环境变量直接指定
