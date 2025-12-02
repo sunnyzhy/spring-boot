@@ -16,12 +16,14 @@ Log4j2 的初始化发生在 JVM 启动过程中，远早于 Spring Boot 容器�
 
 ## JVM 命令行
 
-- ```-Dspring.profiles.active=dev```: 设置环境变量(dev/test/prod)
+- ```-Dspring.profiles.active=dev```: 设置环境变量(```dev/test/prod```)，也可以通过 ```application.yml``` 配置实现
 - ```-Dlog4j2.debug=true```: 开启 Log4j2 调试日志
 
 ## 正确配置 Log4j2 多环境
 
-### 在公共模块添加多环境配置文件
+### 通过公共模块实现
+
+#### 在公共模块添加多环境配置文件
 
 - log4j2-env-dev.xml
 - log4j2-env-test.xml
@@ -88,7 +90,7 @@ Log4j2 的初始化发生在 JVM 启动过程中，远早于 Spring Boot 容器�
 <!-- 略-->
 ```
 
-### 方案一：使用系统属性/环境变量直接指定
+#### 方案一：使用系统属性/环境变量直接指定
 
 ```bash
 # 方法1: 启动时直接指定
@@ -104,7 +106,7 @@ ENV=${SPRING_PROFILES_ACTIVE:-dev}
 java -Dlog4j.configurationFile=classpath:log4j2-env-${ENV}.xml -jar app.jar
 ```
 
-### 方案二：通过 Spring 中转 spring.profiles.active 为系统参数
+#### 方案二：通过 Spring 中转 spring.profiles.active 为系统参数
 
 实现 EnvironmentPostProcessor，中转 ```spring.profiles.active``` 为系统参数：
 
@@ -148,3 +150,98 @@ public class ApplicationEnvironmentListener implements ApplicationListener<Appli
 ```
 org.springframework.context.ApplicationListener=com.zhy.listener.ApplicationEnvironmentListener
 ```
+
+### 通过 SpringProfile 标签实现
+
+```xml
+<!-- log4j2.xml 或 log4j2-spring.xml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <!-- 全局属性定义 -->
+    <Properties>
+        <Property name="LOG_EXCEPTION_CONVERSION_WORD">%xwEx</Property>
+        <Property name="LOG_LEVEL_PATTERN">%5p</Property>
+        <Property name="LOG_DATEFORMAT_PATTERN">yyyy-MM-dd'T'HH:mm:ss.SSSXXX</Property>
+        <Property name="CONSOLE_LOG_PATTERN">%clr{%d{${sys:LOG_DATEFORMAT_PATTERN}}}{faint} %clr{${sys:LOG_LEVEL_PATTERN}} %clr{%pid}{magenta} %clr{--- %esb{${sys:APPLICATION_NAME:-}}%esb{${sys:APPLICATION_GROUP:-}}[%15.15t] ${sys:LOG_CORRELATION_PATTERN:-}}{faint}%clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="FILE_LOG_PATTERN">%d{${sys:LOG_DATEFORMAT_PATTERN}} ${sys:LOG_LEVEL_PATTERN} %pid --- %esb{${sys:APPLICATION_NAME:-}}%esb{${sys:APPLICATION_GROUP:-}}[%t] ${sys:LOG_CORRELATION_PATTERN:-}%-40.40c{1.} : %m%n${sys:LOG_EXCEPTION_CONVERSION_WORD}</Property>
+        <Property name="LOG_PATH">./logs</Property>
+    </Properties>
+
+    <Appenders>
+        <!-- 1. 开发环境（dev）：滚动文件 + 详细输出到控制台 -->
+        <SpringProfile name="dev">
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${CONSOLE_LOG_PATTERN}" />
+            </Console>
+            <RollingFile name="RollingFile"
+                         fileName="${LOG_PATH}/app-dev.log"
+                         filePattern="${LOG_PATH}/app-dev-%d{yyyy-MM-dd}.log">
+                <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
+                <Policies>
+                    <TimeBasedTriggeringPolicy/>
+                </Policies>
+            </RollingFile>
+        </SpringProfile>
+
+        <!-- 2. 生产环境（prod）：滚动文件 + 控制台只输出错误 -->
+        <SpringProfile name="prod">
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${CONSOLE_LOG_PATTERN}" />
+                <!-- 生产环境控制台只打印WARN及以上级别 -->
+                <ThresholdFilter level="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+            </Console>
+            <RollingFile name="RollingFile"
+                         fileName="${LOG_PATH}/app-prod.log"
+                         filePattern="${LOG_PATH}/app-prod-%d{yyyy-MM-dd}-%i.log.gz">
+                <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
+                <Policies>
+                    <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                    <SizeBasedTriggeringPolicy size="100 MB"/>
+                </Policies>
+                <DefaultRolloverStrategy max="10"/>
+            </RollingFile>
+        </SpringProfile>
+
+        <!-- 3. 测试环境（test）：滚动文件 + 输出到文件 -->
+        <SpringProfile name="test">
+            <Console name="Console" target="SYSTEM_OUT">
+                <PatternLayout pattern="${CONSOLE_LOG_PATTERN}" />
+            </Console>
+            <RollingFile name="RollingFile"
+                         fileName="${LOG_PATH}/app-test.log"
+                         filePattern="${LOG_PATH}/app-test-%d{yyyy-MM-dd}.log">
+                <PatternLayout pattern="${FILE_LOG_PATTERN}"/>
+                <Policies>
+                    <TimeBasedTriggeringPolicy/>
+                </Policies>
+            </RollingFile>
+        </SpringProfile>
+    </Appenders>
+
+    <Loggers>
+        <!-- 第三方框架日志级别控制 -->
+        <Logger name="org.springframework" level="INFO" additivity="false"/>
+        <!-- 根日志配置 -->
+        <Root level="INFO">
+            <!-- 根据激活的Profile，自动引用对应的Appender -->
+            <SpringProfile name="dev">
+                <AppenderRef ref="Console"/>
+                <AppenderRef ref="RollingFile"/>
+            </SpringProfile>
+            <SpringProfile name="prod">
+                <AppenderRef ref="Console"/>
+                <AppenderRef ref="RollingFile"/>
+            </SpringProfile>
+            <SpringProfile name="test">
+                <AppenderRef ref="Console"/>
+                <AppenderRef ref="RollingFile"/>
+            </SpringProfile>
+        </Root>
+    </Loggers>
+</Configuration>
+```
+
+应用：
+
+1. 激活Profile：通过启动参数（如 ```-Dspring.profiles.active=prod```）、环境变量或在 ```application.properties``` 中设置 ```spring.profiles.active``` 来指定环境。
+2. 启动应用：启动你的 Spring Boot 应用。Log4j2 会读取 ```log4j2.xml/log4j2-spring.xml``` 并根据激活的 Profile 应用对应的日志配置。
